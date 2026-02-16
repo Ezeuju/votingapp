@@ -1,0 +1,140 @@
+.judgesSection {
+  background-color: #050505; /* Deep stage black */
+  padding: 100px 5%;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 60px;
+}
+
+.eyebrow {
+  color: #008751; /* Brand Green */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+}
+
+.greenText {
+  color: #008751;
+}
+
+/* Flexbox Grid */
+.judgesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.judgeCard {
+  flex: 1 1 300px;
+  max-width: 350px;
+  background: #111;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  border-bottom: 4px solid #008751;
+}
+
+.judgeCard:hover {
+  transform: translateY(-10px);
+}
+
+/* Image Hover Effect */
+.imageWrapper {
+  position: relative;
+  height: 350px;
+  overflow: hidden;
+}
+
+.judgeImage {
+  width: 60%;
+  height: 60%;
+ 
+  transition: filter 0.3s ease;
+ 
+  display: flex;
+  margin: auto;
+  margin-top: 3rem;
+  align-items: center;
+}
+
+.judgeImage img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.socialOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 135, 81, 0.8); /* Translucent Green */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.imageWrapper:hover .socialOverlay {
+  opacity: 1;
+}
+
+.socialOverlay a {
+  color: white;
+  font-size: 1.8rem;
+  transition: transform 0.3s;
+}
+
+.socialOverlay a:hover {
+  transform: scale(1.2);
+  color: #ffcc00; /* Gold accent */
+}
+
+/* Info Section */
+.info {
+  padding: 25px;
+}
+
+.info h3 {
+  font-size: 1.4rem;
+  margin-bottom: 5px;
+}
+
+.title {
+  color: #008751;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.country {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .judgesGrid {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .judgeCard {
+    width: 100%;
+  }
+}

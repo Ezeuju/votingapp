@@ -1,0 +1,105 @@
+.contactPage {
+  background-color: #fcfcfc;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4%;
+}
+
+.highlight { color: #008751; }
+
+/* Hero */
+.contactHero {
+  background-color: #001a0d;
+  color: white;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.contactHero h1 { font-size: 3rem; margin-bottom: 10px; }
+.contactHero p { font-size: 1.1rem; opacity: 0.8; }
+
+/* Grid Layout */
+.mainContent { padding: 80px 0; margin-top: -40px; }
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+}
+
+/* Info Cards */
+.infoColumn { display: flex; flex-direction: column; gap: 30px; }
+
+.infoCard {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.location { margin-top: 30px; }
+.location h4 { color: #008751; margin-bottom: 5px; }
+
+.mapContainer {
+  margin-top: 15px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #eee;
+}
+
+.emailBlock {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px dashed #ddd;
+}
+
+/* Form Styles */
+.formWrapper {
+  background: white;
+  padding: 50px;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.formWrapper h2 { margin-bottom: 30px; font-size: 2rem; }
+
+.form { display: flex; flex-direction: column; gap: 20px; }
+
+.inputGroup { display: flex; flex-direction: column; gap: 8px; }
+
+.inputGroup label { font-weight: 600; font-size: 0.9rem; }
+
+.inputGroup input, .inputGroup select, .inputGroup textarea {
+  padding: 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  font-family: inherit;
+  transition: border 0.3s;
+}
+
+.inputGroup input:focus { border-color: #008751; outline: none; }
+
+.sendBtn {
+  background: #008751;
+  color: white;
+  padding: 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sendBtn:hover { background: #005f39; transform: translateY(-2px); }
+
+.disclaimer { font-size: 0.8rem; color: #777; margin-top: 10px; text-align: center; }
+
+@media (max-width: 992px) {
+  .contentGrid { grid-template-columns: 1fr; }
+  .mainContent { margin-top: 0; }
+}

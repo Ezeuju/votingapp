@@ -1,0 +1,181 @@
+.heroContainer {
+  position: relative;
+  width: 100%;
+ 
+  height: 95vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out, visibility 1.2s;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.content {
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  z-index: 10;
+  padding-bottom: 80px;
+  /* Text Animation */
+  opacity: 0;
+  margin-top: 5rem;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out 0.5s; /* Delay text until image fades in */
+}
+
+.active .content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.badge {
+  color: #00ff00;
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+}
+
+.mainTitle {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  color: white;
+  margin-bottom: 1.5rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+/* This targets the .highlight span we added in the JS */
+.mainTitle :global(.highlight) {
+  color: #008751;
+}
+
+.description {
+  color: #dddddd;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  max-width: 750px;
+  margin-inline: auto;
+}
+
+/* BUTTONS - GREEN & WHITE ONLY */
+.ctaGroup {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.primaryBtn {
+  background: #008751;
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+a{
+  color: white;
+  text-decoration: none;
+}
+
+.seasonTitle{
+    color: #FFD700;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+}
+
+.secondaryBtn {
+  background: white;
+  color: #008751;
+  border: 2px solid white;
+  padding: 16px 32px;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.primaryBtn:hover {
+  background: #006b40;
+  transform: translateY(-2px);
+}
+
+.secondaryBtn:hover {
+  background: transparent;
+  color: white;
+}
+
+/* INDICATORS */
+.indicators {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.dotIndicator {
+  width: 12px;
+  height: 12px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.activeDot {
+  background: #008751;
+  width: 30px;
+  border-radius: 10px;
+}
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+  .heroContainer {
+    height: 100vh;
+  }
+
+  .content {
+    padding-bottom: 100px;
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .primaryBtn, .secondaryBtn {
+    width: 85%;
+    padding: 18px;
+  }
+
+  .mainTitle {
+    font-size: 2.2rem;
+  }
+}

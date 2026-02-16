@@ -1,0 +1,154 @@
+.ticketSection {
+  background-color: #050505;
+  padding: 100px 5%;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 60px;
+}
+
+.eyebrow {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+}
+
+.greenText { color: #008751; }
+
+.ticketContainer {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 25px;
+}
+
+.ticketCard {
+  background: #111;
+  border: 1px solid #333;
+  padding: 50px 30px;
+  border-radius: 25px;
+  flex: 1;
+  max-width: 380px;
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.ticketCard:hover {
+  transform: translateY(-15px);
+  border-color: #008751;
+}
+
+/* VIP Card Highlight */
+.vipCard {
+  border: 2px solid #008751;
+  background: linear-gradient(145deg, #0a1a0f, #111);
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+.popularBadge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #008751;
+  color: white;
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tierName {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #008751;
+  margin: 20px 0;
+}
+
+.benefitsList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 40px;
+  text-align: left;
+  flex-grow: 1; /* Pushes button to bottom */
+}
+
+.benefitsList li {
+  margin-bottom: 15px;
+  color: #bbb;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.buyBtn, .buyBtnGold {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.buyBtn {
+  background: transparent;
+  color: white;
+  border: 1px solid #444;
+}
+
+.buyBtn:hover {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+.buyBtnGold {
+  background: #008751;
+  color: white;
+  border: none;
+}
+
+.buyBtnGold:hover {
+  background: #fff;
+  color: #008751;
+}
+
+.footerNote {
+  margin-top: 60px;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .ticketContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .ticketCard {
+    width: 100%;
+    max-width: 450px;
+    transform: scale(1) !important;
+  }
+}

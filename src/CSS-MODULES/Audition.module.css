@@ -1,0 +1,156 @@
+.auditionSection {
+  background-color: #050505;
+  padding: 20px 5%;
+  color: #fff;
+  text-align: center;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Countdown Styles */
+.countdownWrapper {
+  background: linear-gradient(145deg, #0a1a0f, #000);
+  padding: 60px 40px;
+  border-radius: 30px;
+  border: 1px solid #008751;
+  margin-bottom: 80px;
+  
+}
+
+.eyebrow {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.timer {
+  
+  width: 30%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  
+ 
+}
+
+.timeUnit {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 15px;
+  
+}
+
+.timeUnit span {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #008751;
+}
+
+.mainRegisterBtn {
+  background: #008751;
+  color: white;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+
+/* Plan Grid - One Row on Desktop */
+.planContainer {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 50px;
+}
+
+.planCard {
+  flex: 1;
+  background: #111;
+  padding: 40px 25px;
+  border-radius: 20px;
+  border: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.planCard:hover {
+  transform: translateY(-10px);
+  border-color: #008751;
+}
+
+.featured {
+  border: 2px solid #008751;
+  position: relative;
+  transform: scale(1.05);
+}
+
+.popularTag {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #008751;
+  padding: 4px 15px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 20px;
+}
+
+.price {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #FFD700;
+  margin: 20px 0;
+  margin-top: auto; /* Pushes price/button to bottom */
+}
+
+.planBtn {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.goldBtn {
+  background: #008751;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+ 
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1000px) {
+  .planContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  .planCard {
+    width: 80%;
+    max-width: 400px;
+    transform: scale(1) !important;
+  }
+  .timer {
+    gap: 10px;
+  }
+  .timeUnit {
+    padding: 10px;
+  }
+  .timeUnit span {
+    font-size: 1.5rem;
+  }
+}

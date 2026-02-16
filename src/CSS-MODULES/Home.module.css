@@ -1,0 +1,171 @@
+
+
+/* 4. Live Ticker */
+.liveTicker {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  z-index: 999;
+}
+
+.tickerLabel {
+  background: #B22222;
+  padding: 10px 20px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.tickerContent {
+  width: 100%;
+  padding: 10px;
+  font-weight: 500;
+}
+
+/* Video Grid */
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 2rem 10%;
+}
+
+.videoCard {
+  background: #1a1a1a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.thumbnailPlaceholder {
+  height: 180px;
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+
+/*ABOUT PAGE */
+.aboutPage {
+  background-color: #fcfcfc;
+  color: #222;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+ 
+}
+
+/* Header */
+.headerSection {
+  background: linear-gradient(135deg, #004d00 0%, #008751 100%);
+  color: white;
+  padding: 100px 5%;
+  text-align: center;
+}
+
+.mainTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.greenText {
+  color: #00ff88;
+}
+
+/* Flex Container General */
+.flexRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Evolution */
+.evolutionSection {
+  padding: 30px 5%;
+  display: flex;
+  align-items: center;
+  
+}
+
+.evolutionText {
+  flex: 1;
+  min-width: 300px;
+}
+
+.evolutionText h2 {
+  color: #008751;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.evolutionText p {
+  line-height: 1.7;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.rewardCard {
+  flex: 0 1 px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  text-align: center;
+  border-top: 5px solid #008751;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #008751;
+  margin: 15px 0;
+}
+
+/* Cards Section */
+.aboutCards {
+  padding: 60px 5%;
+  background-color: #f4f4f4;
+}
+
+.cardFlex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.infoCard {
+  flex: 1 1 300px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-10px);
+}
+
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+
+
+@media screen and (max-width: 1000px) {
+ .evolutionSection {
+  
+  
+   flex-direction: column;
+ }
+  
+}

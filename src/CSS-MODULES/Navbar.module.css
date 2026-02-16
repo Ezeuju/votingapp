@@ -1,0 +1,136 @@
+.navbar {
+  width: 100%;
+  height: 80px;
+  background: #000;
+  border-bottom: 3px solid #008751;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.navContainer {
+  width: 92%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 50px;
+  border-radius: 4px;
+}
+
+/* Desktop Navigation */
+.navContent {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navLinks {
+  display: flex;
+  list-style: none;
+  gap: 1.2rem;
+}
+
+.navLinks a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.goldLink {
+  color: #FFD700 !important;
+  font-weight: 700 !important;
+}
+
+.authBox {
+  display: flex;
+  gap: 10px;
+}
+
+.signInBtn {
+  background: none;
+  border: 1px solid white;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.joinBtn {
+  background: #008751;
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+
+.hamburger {
+  display: none; /* Hidden on Desktop */
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: white;
+  transition: 0.3s;
+}
+
+@media (max-width: 1024px) {
+  .hamburger {
+    display: flex;
+    z-index: 1001;
+  }
+
+  .navContent {
+    position: fixed;
+    top: 80px;
+    right: -100%; /* Hidden by default */
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: #000;
+    flex-direction: column;
+    padding: 40px 0;
+    transition: 0.4s ease-in-out;
+    border-top: 1px solid #333;
+  }
+
+  .navContent.showMenu {
+    right: 0; /* Slide in */
+  }
+
+  .navLinks {
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .navLinks a {
+    font-size: 1.2rem;
+  }
+
+  .authBox {
+    flex-direction: column;
+    width: 80%;
+    margin-top: 2rem;
+  }
+
+  .joinBtn, .signInBtn {
+    width: 100%;
+    padding: 15px;
+  }
+}

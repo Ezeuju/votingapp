@@ -1,0 +1,104 @@
+.sponsorWrapper {
+  background-color: #fff;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.greenText { color: #008751; }
+
+/* Hero */
+.hero {
+  background-color: #001a0d;
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.hero p { max-width: 700px; margin: 20px auto; opacity: 0.9; }
+
+.heroBtns { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+
+.primaryBtn { background: #008751; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; }
+.secondaryBtn { border: 1px solid #fff; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; }
+
+/* Benefits */
+.benefitsSection { padding: 80px 0; background: #f9f9f9; }
+
+.sectionTitle { text-align: center; margin-bottom: 50px; color: #001a0d; }
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.benefitCard {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-top: 4px solid #008751;
+}
+
+/* Tier Table */
+.tierSection { padding: 80px 0; }
+
+.tableResponsive { overflow-x: auto; }
+
+.tierTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tierTable th { background: #008751; color: white; padding: 15px; text-align: left; }
+.tierTable td { padding: 20px; border-bottom: 1px solid #eee; }
+
+/* Form */
+.formSection { padding: 80px 0; background: #001a0d; }
+
+.formCard {
+  background: white;
+  padding: 50px;
+  border-radius: 20px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+
+.field input, .field select, .field textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.submitBtn {
+  background: #008751;
+  color: white;
+  padding: 18px;
+  border: none;
+  width: 100%;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Footer */
+.contactFooter { padding: 60px 0; text-align: center; background: #f4f4f4; }
+.contactGrid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-bottom: 40px; }
+
+@media (max-width: 768px) {
+  .formGrid, .heroBtns { flex-direction: column; }
+  .formCard { padding: 20px; }
+}

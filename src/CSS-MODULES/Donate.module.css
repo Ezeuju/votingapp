@@ -1,0 +1,277 @@
+/* --- Global & Layout --- */
+.donatePage {
+  background-color: #fff;
+  color: #333;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.greenText {
+  color: #008751;
+}
+
+/* --- Hero Section --- */
+.hero {
+  background: #001a0d;
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.badge {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: 20px auto;
+  opacity: 0.8;
+  font-size: 1.1rem;
+}
+
+.primaryBtn {
+  background: #008751;
+  color: white;
+  padding: 15px 40px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* --- Impact Cards Section --- */
+.impactSection {
+  padding: 80px 0;
+  background: #f9f9f9;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2rem;
+  color: #001a0d;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.impactCard {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+/* --- Tier Cards (With Buttons) --- */
+.tierSection {
+  padding: 80px 0;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2rem;
+  color: #001a0d;
+}
+
+.tierGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.tierCard {
+  background: white;
+  border: 1px solid #eee;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.tierCard:hover {
+  border-color: #008751;
+  transform: translateY(-8px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.tierIcon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.tierPrice {
+  font-weight: 800;
+  color: #008751;
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.cardDonateBtn {
+  margin-top: auto;
+  background: transparent;
+  border: 2px solid #008751;
+  color: #008751;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cardDonateBtn:hover {
+  background: #008751;
+  color: white;
+}
+
+/* --- Form Section --- */
+.formSection {
+  padding: 100px 0;
+  background: #001a0d;
+  color: white;
+}
+
+.dualGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 50px;
+}
+
+.formCard {
+  background: white;
+  color: #333;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.paystackHint {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form input {
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #f9f9f9;
+}
+
+.paystackLogoBox {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: #f1f9f5;
+  border-radius: 10px;
+}
+
+.psLogo {
+  height: 25px;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.donateBtn {
+  background: #008751;
+  color: white;
+  padding: 18px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.donateBtn:hover {
+  background: #006b40;
+}
+
+/* Bank Details Card */
+.bankCard {
+  padding: 20px;
+}
+
+.bankDetails {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.perksBox {
+  margin-top: 40px;
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.perksBox ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+/* --- Footer --- */
+.donateFooter {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.contactBtn {
+  background: transparent;
+  border: 2px solid #008751;
+  color: #008751;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+/* --- Responsive Queries --- */
+@media (max-width: 900px) {
+  .dualGrid {
+    grid-template-columns: 1fr;
+  }
+}

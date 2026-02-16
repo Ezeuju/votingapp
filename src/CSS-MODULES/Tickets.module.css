@@ -1,0 +1,127 @@
+.ticketSection {
+  background-color: #0a1a0f; /* Deep Naija Green/Black */
+  padding: 100px 8%;
+  color: white;
+  text-align: center;
+}
+
+.header {
+  margin-bottom: 60px;
+}
+
+.eyebrow {
+  color: #ffcc00; /* Brand Gold */
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+}
+
+.ticketContainer {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  
+}
+
+.ticketCard {
+  background: #111;
+  border: 1px solid #333;
+  padding: 50px 30px;
+  border-radius: 25px;
+  width: 350px;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.ticketCard:hover {
+  transform: translateY(-10px);
+  border-color: #ffcc00;
+}
+
+.vip {
+  border: 2px solid #ffcc00;
+  position: relative;
+  background: linear-gradient(145deg, #111, #1a1a1a);
+  transform: scale(1.05);
+}
+
+.popularBadge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffcc00;
+  color: black;
+  padding: 5px 20px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.tierName {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ddd;
+}
+
+.price {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #ffcc00;
+  margin: 25px 0;
+}
+
+.benefits {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.benefits li {
+  margin-bottom: 12px;
+  color: #bbb;
+  font-size: 0.95rem;
+}
+
+.buyBtn {
+  width: 100%;
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.buyBtn:hover {
+  background: white;
+  color: black;
+}
+
+.buyBtnGold {
+  width: 100%;
+  background: #ffcc00;
+  color: black;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media(max-width: 1000px) {
+  
+  .ticketContainer {
+    flex-direction: column;
+    
+  }
+  .ticketCard{
+    width: 80%;
+  }
+  
+ 
+  
+}

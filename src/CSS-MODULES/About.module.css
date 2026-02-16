@@ -1,0 +1,217 @@
+.aboutPage {
+  background-color: #fcfcfc;
+  color: #222;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Header */
+.headerSection {
+  background: linear-gradient(135deg, #004d00 0%, #008751 100%);
+  color: white;
+  padding: 100px 5%;
+  text-align: center;
+}
+
+.mainTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.greenText {
+  color: #00ff88;
+}
+
+/* Flex Container General */
+.flexRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+/* Evolution */
+.evolutionSection {
+  padding: 80px 5%;
+}
+
+.evolutionText {
+  flex: 1;
+  min-width: 300px;
+}
+
+.evolutionText h2 {
+  color: #008751;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.evolutionText p {
+  line-height: 1.7;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.rewardCard {
+  flex: 0 1 20px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  text-align: center;
+  border-top: 5px solid #008751;
+}
+
+.amount {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #008751;
+  margin: 15px 0;
+}
+
+/* Cards Section */
+.aboutCards {
+  padding: 60px 5%;
+  background-color: #f4f4f4;
+}
+
+.cardFlex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.infoCard {
+  flex: 1 1 300px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-10px);
+}
+
+.icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+/* Presence Section */
+.presenceSection {
+  padding: 80px 5%;
+  text-align: center;
+}
+
+.presenceFlex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.presenceBox {
+  flex: 1 1 400px;
+  background: #001a0d;
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.presenceBox h4 {
+  color: #00ff88;
+  margin-bottom: 10px;
+}
+
+.ownerInfo {
+  background: #eef7f2;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Goals Section */
+.goalsSection {
+  padding: 80px 5%;
+  background: white;
+}
+
+.goalsBox, .benefitsBox {
+  flex: 1;
+  min-width: 300px;
+}
+
+.goalsBox h3, .benefitsBox h3 {
+  color: #008751;
+  border-left: 4px solid #008751;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+.goalsSection ul {
+  list-style: none;
+  padding: 0;
+}
+
+.goalsSection li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-weight: 500;
+}
+
+.goalsSection li::before {
+  content: "✔";
+  color: #008751;
+  margin-right: 10px;
+}
+
+/* Footer CTA */
+.ctaFooter {
+  background: #001a0d;
+  color: white;
+  padding: 80px 5%;
+  text-align: center;
+}
+
+.applyBtn {
+  background: #008751;
+  color: white;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: 0.3s;
+}
+
+.applyBtn:hover {
+  background: #00ff88;
+  color: #001a0d;
+  transform: scale(1.05);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .flexRow {
+    flex-direction: column;
+  }
+  
+  .headerSection {
+    padding: 60px 5%;
+  }
+
+  .mainTitle {
+    font-size: 2.2rem;
+  }
+}
