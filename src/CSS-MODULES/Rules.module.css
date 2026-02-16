@@ -1,0 +1,120 @@
+.rulesSection {
+  background-color: #f9f9f9;
+  padding: 80px 5%;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.tag {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.greenText { color: #008751; }
+
+.intro {
+  color: #555;
+  font-size: 1.1rem;
+  margin-top: 15px;
+  line-height: 1.6;
+}
+
+/* Accordion Logic */
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card.active {
+  border-color: #008751;
+  box-shadow: 0 10px 20px rgba(0, 135, 81, 0.05);
+}
+
+.trigger {
+  width: 100%;
+  padding: 25px;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #222;
+  cursor: pointer;
+  text-align: left;
+}
+
+.chevron {
+  color: #008751;
+  font-size: 1.5rem;
+}
+
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background: #fafafa;
+}
+
+.active .content {
+  max-height: 600px; /* Adjust as needed */
+  border-top: 1px solid #eee;
+}
+
+.list {
+  padding: 25px 40px;
+  margin: 0;
+  list-style: none;
+}
+
+.list li {
+  margin-bottom: 15px;
+  position: relative;
+  line-height: 1.6;
+  color: #444;
+}
+
+.list li::before {
+  content: "✓";
+  color: #008751;
+  position: absolute;
+  left: -25px;
+  font-weight: bold;
+}
+
+.footerNote {
+  margin-top: 50px;
+  padding: 30px;
+  background: #eef7f2;
+  border-radius: 12px;
+  border-left: 5px solid #008751;
+  font-size: 0.95rem;
+  color: #001a0d;
+}
+
+@media (max-width: 600px) {
+  .trigger { font-size: 1.1rem; padding: 20px; }
+  .list { padding: 20px 30px; }
+}

@@ -1,0 +1,99 @@
+.partnersSection {
+  background-color: #ffffff;
+  padding: 60px 0;
+  overflow: hidden;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header {
+  margin-bottom: 40px;
+  padding: 0 5%;
+}
+
+.eyebrow {
+  color: #008751; /* Brand Green */
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.greenText {
+  color: #008751;
+}
+
+/* MARQUEE CORE LOGIC */
+.marqueeWrapper {
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  user-select: none;
+}
+
+.marqueeContent {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 60px; /* Space between logos */
+  padding: 20px 0;
+  /* Adjust timing (30s) based on number of logos */
+  animation: scrollMarquee 30s linear infinite;
+}
+
+/* PAUSE ON HOVER */
+.marqueeWrapper:hover .marqueeContent {
+  animation-play-state: paused;
+}
+
+.logoBox {
+  flex: 0 0 auto;
+  width: 150px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: grayscale(100%); /* Keeps branding clean and unified */
+  opacity: 0.6;
+  transition: 0.3s ease;
+}
+
+.logoBox:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.logoBox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ANIMATION KEYFRAMES */
+@keyframes scrollMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%); /* Scroll exactly half the width */
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .logoBox {
+    width: 120px;
+    height: 60px;
+  }
+  .marqueeContent {
+    gap: 40px;
+    animation-duration: 20s; /* Faster scroll for mobile */
+  }
+}

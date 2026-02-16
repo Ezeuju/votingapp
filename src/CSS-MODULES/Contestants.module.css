@@ -1,0 +1,172 @@
+.contestantSection {
+  background-color: #050505;
+  padding: 80px 5%;
+  color: white;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.badge {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
+
+.greenText { color: #008751; }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.searchBox, .filterDrop {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid #222;
+  background: #111;
+  color: white;
+  min-width: 250px;
+}
+
+/* Grid logic */
+.contestantGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.contestantCard {
+  background: #111;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #222;
+}
+
+.imageWrapper {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.5s;
+}
+
+.contestantCard:hover .photo {
+  transform: scale(1.1);
+}
+
+.idBadge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #008751;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Vote Overlay on Hover */
+.voteOverlay {
+  position: absolute;
+  bottom: -60px;
+  width: 100%;
+  background: rgba(0, 135, 81, 0.9);
+  padding: 15px;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+}
+
+.contestantCard:hover .voteOverlay {
+  bottom: 0;
+}
+
+.voteBtnQuick {
+  background: white;
+  color: #008751;
+  border: none;
+  padding: 8px 25px;
+  font-weight: 900;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.details { padding: 20px; }
+
+.nameRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.voteTally {
+  font-size: 0.8rem;
+  background: #222;
+  padding: 4px 10px;
+  border-radius: 20px;
+  color: #008751;
+  font-weight: bold;
+}
+
+.talentTag { color: #008751; font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; }
+
+.loc { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
+
+.profileBtn {
+  width: 100%;
+  background: transparent;
+  color: white;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profileBtn:hover {
+  background: white;
+  color: black;
+}
+
+/* Load More Section */
+.loadMoreWrapper {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.loadMoreBtn {
+  background: #008751;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  font-weight: 800;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: 0.3s;
+}
+
+.loadMoreBtn:hover {
+  background: #fff;
+  color: #008751;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}

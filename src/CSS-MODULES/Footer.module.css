@@ -1,0 +1,124 @@
+.footer {
+  background-color: #050505;
+  color: #ffffff;
+  padding: 80px 5% 40px;
+  border-top: 3px solid #008751;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footerGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+/* Section Widths */
+.brandSection { flex: 2; min-width: 250px; }
+.linkSection { flex: 1; min-width: 150px; }
+.presenceSection { flex: 1.5; min-width: 200px; }
+
+.footerLogo {
+  height: 60px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.mission {
+  color: #aaa;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+/* Social Icons */
+.socialIcons {
+  display: flex;
+  gap: 15px;
+}
+
+.socialIcons a {
+  color: white;
+  font-size: 1.5rem;
+  transition: color 0.3s;
+}
+
+.socialIcons a:hover {
+  color: #008751;
+}
+
+/* Links */
+.linkSection h4, .presenceSection h4 {
+  color: #008751;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.linkSection ul {
+  list-style: none;
+  padding: 0;
+}
+
+.linkSection li {
+  margin-bottom: 12px;
+}
+
+.linkSection a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.linkSection a:hover {
+  color: white;
+}
+
+.presenceSection p {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.office {
+  margin-top: 15px;
+  border-top: 1px solid #333;
+  padding-top: 10px;
+}
+
+/* Bottom Bar */
+.bottomBar {
+  text-align: center;
+  border-top: 1px solid #222;
+  padding-top: 40px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.producer {
+  margin-top: 10px;
+  font-weight: 700;
+  color: #888;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .footerGrid {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .socialIcons {
+    justify-content: center;
+  }
+
+  .linkSection h4 {
+    margin-top: 20px;
+  }
+}
