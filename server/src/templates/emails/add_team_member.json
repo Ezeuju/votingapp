@@ -1,0 +1,4 @@
+{
+    "subject": "Your {{project_title}} Admin Account Has Been Created",
+    "body": "Dear {{first_name}} {{last_name}},<br><br>An administrator account has been created for you on <b>{{project_title}}</b>, associated with this email address.<br><br><b>Your temporary login credentials are:</b><br>Email: {{email}}<br>Temporary Password: {{generatedPassword}}<br><br>Please sign in using the link below:<br>{{login_link}}<br><br>For security reasons, you will need to change your password the first time you log in.<br><br>If you experience any issues or require assistance, please contact our support team at {{support_email}}.<br><br>Kind regards,<br>The {{project_title}} Team"
+}

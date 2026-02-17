@@ -1,0 +1,4 @@
+{
+  "subject": "Verify Your Email Address",
+  "body": "Hello,<br><br> Thank you for registering with {{project_title}}! To complete your registration, please verify your email address by entering the following One-Time Password (OTP): <br><br> <strong>{{verification_code}}</strong> <br><br> This OTP is valid for <strong>10 minutes</strong>, so we recommend verifying your account right away to start exploring {{project_title}}.<br><br> If you did not attempt to register for a {{project_title}} account, please ignore this email.<br><br> For any assistance, feel free to reach out to us at {{support_email}}.<br><br> With regards,<br> The {{project_title}} Team"
+}
