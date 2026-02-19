@@ -1,0 +1,58 @@
+.adminWrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar Branding (Green) */
+.sidebar {
+  width: 280px;
+  background-color: #001a0d; /* Deep Forest Green */
+  color: white;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo { font-size: 1.8rem; font-weight: 900; color: #008751; margin-bottom: 40px; }
+.logo span { color: #FFD700; font-size: 0.8rem; margin-left: 5px; }
+
+.nav { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+
+.nav button {
+  background: none; border: none; color: #ccc; padding: 15px;
+  text-align: left; border-radius: 10px; cursor: pointer; transition: 0.3s;
+  display: flex; align-items: center; gap: 12px; font-size: 1rem;
+}
+
+.nav button:hover, .activeTab {
+  background-color: #008751 !important;
+  color: white !important;
+}
+
+/* Header and Content */
+.mainContent { flex: 1; padding: 40px; }
+.topHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+.topHeader h1 { color: #001a0d; }
+
+.tableCard, .formCard {
+  background: white; padding: 30px; border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 4px solid #FFD700; /* Gold Accent */
+}
+
+/* Table Styling */
+.adminTable { width: 100%; border-collapse: collapse; margin-top: 20px; }
+.adminTable th { text-align: left; padding: 15px; color: #888; border-bottom: 1px solid #eee; }
+.adminTable td { padding: 15px; border-bottom: 1px solid #f9f9f9; color: #333; }
+
+/* Buttons */
+.actionBtn { background: #008751; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; }
+.goldActionBtn { background: #FFD700; color: #001a0d; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+.logoutBtn { background: #e63946; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+
+@media (max-width: 1024px) {
+  .sidebar { width: 80px; }
+  .nav button { font-size: 0; padding: 15px; justify-content: center; }
+}

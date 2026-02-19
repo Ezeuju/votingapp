@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from '../CSS-MODULES/Donate.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
+import paystack from   "../assets/paystack.png"
 
 const Donate = () => {
   // FIXED: Consolidated state to match your inputs
@@ -9,6 +10,7 @@ const Donate = () => {
     fullName: '',
     email: '',
     amount: '',
+    phone: "",
     isMonthly: false
   });
 
@@ -133,6 +135,17 @@ const Donate = () => {
                     required 
                   />
                 </div>
+                <div className={styles.inputGroup}>
+                  <label>Phone Number</label>
+                  <input 
+                    type="phone" 
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="07020323290" 
+                    required 
+                  />
+                </div>
 
                 <div className={styles.inputGroup}>
                   <label>Amount (₦)</label>
@@ -150,7 +163,7 @@ const Donate = () => {
 
                 <div className={styles.paystackLogoBox}>
                   <span>Payment Gateway:</span>
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Paystack_logo.png" alt="Paystack" className={styles.psLogo} />
+                  <img src={paystack} alt="Paystack" className={styles.psLogo} />
                 </div>
 
                 <label className={styles.checkRow}>

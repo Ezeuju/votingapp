@@ -3,7 +3,7 @@ import styles from '../CSS-MODULES/gallery.module.css';
 
 const Gallery = () => {
   const [filter, setFilter] = useState('all');
-  const scrollRef = useRef(null);
+  
 
   const mediaItems = [
     // YouTube Video - Now handled by the getEmbedUrl helper

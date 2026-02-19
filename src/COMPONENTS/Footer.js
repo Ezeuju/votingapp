@@ -18,10 +18,10 @@ const Footer = () => {
               talents onto the world stage.
             </p>
             <div className={styles.socialIcons}>
-              <a href="#"><FaInstagram /></a>
-              <a href="#"><FaTwitter /></a>
-              <a href="#"><FaFacebook /></a>
-              <a href="#"><FaTiktok /></a>
+              <a href="/"><FaInstagram /></a>
+              <a href="/"><FaTwitter /></a>
+              <a href="/"><FaFacebook /></a>
+              <a href="/"><FaTiktok /></a>
             </div>
           </div>
 
@@ -29,7 +29,7 @@ const Footer = () => {
           <div className={styles.linkSection}>
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="#home">Home</a></li>
+              <li><a href="/">Home</a></li>
               <li><a href="/contestants">Contestants</a></li>
               <li><a href="/auditiony">Audition Roadmap</a></li>
               <li><a href="/tickets">Buy Tickets</a></li>

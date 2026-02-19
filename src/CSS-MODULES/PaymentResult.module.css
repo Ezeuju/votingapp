@@ -1,0 +1,101 @@
+.resultPage {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 500px;
+  width: 100%;
+}
+
+.card {
+  background: white;
+  padding: 50px 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border-top: 8px solid;
+}
+
+.successBorder { border-color: #008751; }
+.failBorder { border-color: #e63946; }
+
+/* Icons */
+.iconCircleSuccess, .iconCircleFail {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin: 0 auto 25px;
+  color: white;
+}
+
+.iconCircleSuccess { background: #008751; box-shadow: 0 0 20px rgba(0, 135, 81, 0.3); }
+.iconCircleFail { background: #e63946; box-shadow: 0 0 20px rgba(230, 57, 70, 0.3); }
+
+/* Typography */
+.successText { color: #001a0d; font-size: 2rem; margin-bottom: 10px; }
+.failText { color: #001a0d; font-size: 2rem; margin-bottom: 10px; }
+
+.detailsBox, .errorBox {
+  background: #f4fcf8;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 25px 0;
+  text-align: left;
+}
+
+.errorBox { background: #fff5f5; color: #666; font-size: 0.9rem; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.nextSteps {
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.nextSteps h4 { color: #008751; margin-bottom: 5px; }
+
+/* Buttons */
+.btnHome, .btnRetry {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btnHome, .btnRetry { background: #008751; color: white; }
+.btnHome:hover { background: #001a0d; }
+
+.btnGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.btnSupport {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btnSupport:hover { background: #eee; }

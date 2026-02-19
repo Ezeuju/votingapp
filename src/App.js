@@ -13,6 +13,9 @@ import Faq from './Screens/Faq';
 import Join from './Screens/Join';
 import Gallery from './Screens/Gallery';
 import Privacy from './Screens/Privacy';
+import PaymentResult from './COMPONENTS/PaymentResult'; 
+import Dashboard from './COMPONENTS/DashboardScreens/Dashboard';
+import PublicProfile from './Screens/PublicProfile';
 
 function App() {
   return (
@@ -30,7 +33,10 @@ function App() {
         <Route path="/join" element={<Join />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/PaymentResult" element={<PaymentResult />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/PublicProfile" element={<PublicProfile />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
 
 
 
