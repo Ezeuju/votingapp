@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../CSS-MODULES/Audition.module.css';
 import { planApi } from '../services';
 
 const Audition = () => {
+  const navigate = useNavigate();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +65,10 @@ const Audition = () => {
                 <h3>{plan.title}</h3>
                 <p>{plan.description}</p>
                 <div className={styles.price}>₦{plan.amount?.toLocaleString()}</div>
-                <button className={plan.title?.toLowerCase().includes('gold') ? styles.goldBtn : styles.planBtn}>
+                <button 
+                  className={plan.title?.toLowerCase().includes('gold') ? styles.goldBtn : styles.planBtn}
+                  onClick={() => navigate(`/auditiony?plan=${plan._id}`)}
+                >
                   {plan.title?.toLowerCase().includes('vip') ? 'Apply as VIP' : 
                    plan.title?.toLowerCase().includes('gold') ? 'Get Gold Pass' : 'Register Now'}
                 </button>

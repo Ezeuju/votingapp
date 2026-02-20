@@ -35,8 +35,14 @@ const AuditionRegistration = () => {
 
   useEffect(() => {
     const reference = searchParams.get('reference');
+    const planId = searchParams.get('plan');
+    
     if (reference) {
       verifyPayment(reference);
+    }
+    
+    if (planId) {
+      setStep(2);
     }
   }, [searchParams]);
 
@@ -48,7 +54,11 @@ const AuditionRegistration = () => {
         const response = await planApi.getAll('audition');
         const fetchedPlans = response?.data?.data || response?.data || [];
         setPlans(fetchedPlans);
-        if (fetchedPlans.length > 0) {
+        
+        const planId = searchParams.get('plan');
+        if (planId) {
+          setFormData(prev => ({ ...prev, audition_plan_id: planId }));
+        } else if (fetchedPlans.length > 0) {
           setFormData(prev => ({ ...prev, audition_plan_id: fetchedPlans[0]._id }));
         }
       } catch (err) {
@@ -59,7 +69,7 @@ const AuditionRegistration = () => {
       }
     };
     fetchPlans();
-  }, []);
+  }, [searchParams]);
 
   const verifyPayment = async (reference) => {
     setLoading(true);
