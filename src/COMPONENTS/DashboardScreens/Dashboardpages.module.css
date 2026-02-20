@@ -1,0 +1,259 @@
+
+/* ─── Page-specific styles: Dashboard grid, Announcements, Live Updates,   ─── */
+/* ─── Auditions timeline, Contestants cards                                 ─── */
+
+/* ── DASHBOARD OVERVIEW ─────────────────────────────────────────────────── */
+.dashGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 4px;
+}
+
+/* ── ANNOUNCEMENTS ──────────────────────────────────────────────────────── */
+.annCard {
+  background: rgba(0, 20, 10, 0.6);
+  border: 1px solid rgba(0, 135, 81, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.annCardPinned {
+  border-color: rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.03);
+}
+
+.annHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.annTitle  { font-weight: 600; color: #e8f5e8; font-size: 14px; margin-bottom: 6px; }
+.annBody   { font-size: 13px; color: rgba(232, 245, 232, 0.65); line-height: 1.55; }
+.annMeta   { font-size: 11px; color: rgba(232, 245, 232, 0.35); margin-top: 8px; }
+
+.annActions { display: flex; gap: 8px; flex-shrink: 0; }
+.pinIcon    { color: #FFD700; }
+
+/* ── LIVE UPDATES ───────────────────────────────────────────────────────── */
+.liveHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.liveDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ff4444;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+
+.liveLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ff4444;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.liveSubtitle {
+  font-size: 13px;
+  color: rgba(232, 245, 232, 0.4);
+  margin: 6px 0 20px;
+}
+
+.updateList { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+
+.updateItem {
+  background: rgba(0, 20, 10, 0.6);
+  border: 1px solid rgba(0, 135, 81, 0.2);
+  border-left: 3px solid #008751;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.updateItemPinned {
+  border-left-color: #FFD700;
+  background: rgba(255, 215, 0, 0.04);
+}
+
+.updateContent { flex: 1; }
+.updateText    { font-size: 14px; color: #e8f5e8; line-height: 1.5; }
+.updateMeta    { font-size: 11px; color: rgba(232, 245, 232, 0.4); margin-top: 4px; }
+.updateActions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* ── AUDITIONS TIMELINE ─────────────────────────────────────────────────── */
+.auditionTimeline {
+  position: relative;
+  padding-left: 24px;
+}
+
+.auditionTimeline::before {
+  content: '';
+  position: absolute;
+  left: 7px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #008751, transparent);
+}
+
+.auditionItem {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.auditionItem::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #008751;
+  border: 2px solid #0a0f0a;
+}
+
+.auditionItemDone::before { background: #FFD700; }
+
+.auditionCard {
+  background: rgba(0, 20, 10, 0.6);
+  border: 1px solid rgba(0, 135, 81, 0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 0.2s;
+}
+
+.auditionCard:hover { border-color: rgba(0, 135, 81, 0.4); }
+
+.auditionTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.auditionName   { font-weight: 600; color: #e8f5e8; font-size: 14px; }
+.auditionTime   { font-size: 12px; color: rgba(255, 215, 0, 0.6); }
+.auditionDetail { font-size: 13px; color: rgba(232, 245, 232, 0.55); }
+.auditionScore  { font-size: 13px; color: #FFD700; font-weight: 600; }
+
+.auditionCardActions { display: flex; gap: 8px; margin-top: 10px; }
+
+/* ── CONTESTANTS GRID ───────────────────────────────────────────────────── */
+.contestantsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.contestantCard {
+  background: linear-gradient(135deg, rgba(0, 30, 15, 0.9), rgba(0, 20, 10, 1));
+  border: 1px solid rgba(0, 135, 81, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.contestantCard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 215, 0, 0.35);
+}
+
+.contestantCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #008751, #FFD700);
+}
+
+.medal { position: absolute; top: 10px; right: 10px; font-size: 16px; }
+
+.contestantAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #008751, #FFD700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 auto 12px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.contestantName {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e8f5e8;
+  margin-bottom: 4px;
+}
+
+.contestantTag     { font-size: 11px; color: rgba(255, 215, 0, 0.6); margin-bottom: 10px; }
+
+.contestantVoteSection { margin-top: 12px; }
+
+.contestantVotes {
+  font-size: 22px;
+  font-weight: 700;
+  color: #FFD700;
+  font-family: 'Playfair Display', serif;
+}
+
+.contestantVotesLabel {
+  font-size: 10px;
+  color: rgba(232, 245, 232, 0.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.voteBarWrap {
+  background: rgba(0, 135, 81, 0.15);
+  border-radius: 4px;
+  height: 6px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.voteBar {
+  height: 100%;
+  background: linear-gradient(90deg, #008751, #FFD700);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.contestantActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+/* ── DONATION STATS GRID (3-col) ────────────────────────────────────────── */
+.statsGrid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}

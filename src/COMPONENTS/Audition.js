@@ -72,7 +72,7 @@ const Audition = () => {
                   {plan.title?.toLowerCase().includes('vip') ? 'Apply as VIP' : 
                    plan.title?.toLowerCase().includes('gold') ? 'Get Gold Pass' : 'Register Now'}
                 </button>
-              </div>
+              </div>››
             ))
           )}
         </div>
