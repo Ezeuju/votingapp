@@ -9,8 +9,8 @@ const paymentController = {
   }),
 
   verify: asyncControllerWrapper(async (req, res) => {
-    await PaymentService.verifyPayment(req.query);
-    sendResponse(200, "Successfully.")(req, res);
+    const data = await PaymentService.verifyPayment(req.query);
+    sendResponse(200, data.message, { status: data.status })(req, res);
   }),
 
   webhook: asyncControllerWrapper(async (req, res) => {

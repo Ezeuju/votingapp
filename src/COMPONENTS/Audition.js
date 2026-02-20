@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../CSS-MODULES/Audition.module.css';
+import { planApi } from '../services';
 
 const Audition = () => {
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await planApi.getAll('audition');
+        setPlans(response.data?.data || []);
+      } catch (error) {
+        console.error('Error fetching plans:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlans();
+  }, []);
+
   return (
     <section className={styles.auditionSection} id="auditions">
       <div className={styles.container}>
@@ -31,30 +49,27 @@ const Audition = () => {
         </div>
 
         <div className={styles.planContainer}>
-          {/* Silver Pass */}
-          <div className={styles.planCard}>
-            <h3>Silver Audition Pass</h3>
-            <p>Standard audition access for individuals ready to showcase their talent on the NAIJA TALENT SHOW stage.</p>
-            <div className={styles.price}>₦2,000</div>
-            <button className={styles.planBtn}>Register Now</button>
-          </div>
-
-          {/* Gold Pass - Featured */}
-          <div className={`${styles.planCard} ${styles.featured}`}>
-            <div className={styles.popularTag}>Priority Screening</div>
-            <h3>Gold Audition Pass</h3>
-            <p>Premium audition access with priority screening and added exposure opportunities.</p>
-            <div className={styles.price}>₦10,000</div>
-            <button className={styles.goldBtn}>Get Gold Pass</button>
-          </div>
-
-          {/* VVIP Pass */}
-          <div className={styles.planCard}>
-            <h3>VIP Audition Pass</h3>
-            <p>Exclusive access designed for serious talents seeking maximum visibility and professional advantage.</p>
-            <div className={styles.price}>₦50,000</div>
-            <button className={styles.planBtn}>Apply as VIP</button>
-          </div>
+          {loading ? (
+            <p>Loading plans...</p>
+          ) : (
+            plans.map((plan) => (
+              <div 
+                key={plan._id} 
+                className={`${styles.planCard} ${plan.title?.toLowerCase().includes('gold') ? styles.featured : ''}`}
+              >
+                {plan.title?.toLowerCase().includes('gold') && (
+                  <div className={styles.popularTag}>Priority Screening</div>
+                )}
+                <h3>{plan.title}</h3>
+                <p>{plan.description}</p>
+                <div className={styles.price}>₦{plan.amount?.toLocaleString()}</div>
+                <button className={plan.title?.toLowerCase().includes('gold') ? styles.goldBtn : styles.planBtn}>
+                  {plan.title?.toLowerCase().includes('vip') ? 'Apply as VIP' : 
+                   plan.title?.toLowerCase().includes('gold') ? 'Get Gold Pass' : 'Register Now'}
+                </button>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>

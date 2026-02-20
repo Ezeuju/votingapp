@@ -48,13 +48,16 @@ app.use(
 );
 
 const whitelist = [
-  // add your allowed URLs here excluding localhost
+  "http://localhost:3000",
+  "https://vqbzgpsf-3901.euw.devtunnels.ms"
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
     // allow requests with no origin like mobile apps or curl
     if (!origin) return callback(null, true);
+    // In development, allow all origins
+    if (environment === "development") return callback(null, true);
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {

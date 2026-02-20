@@ -84,7 +84,7 @@ class PaymentService {
       metadata: {
         ...metadata,
         email,
-        audition_plan_id,
+        audition_plan_id, 
       },
     });
 
@@ -145,7 +145,6 @@ class PaymentService {
 
   // VERIFY ENDPOINT: Triggered by frontend redirect
   verifyPayment = asyncLibWrapper(async (params) => {
-    // 1. Validation (Keep this first)
     const { error } = validation.verify(params);
     if (error) throw new AppError(400, error.details[0].message);
 
@@ -156,9 +155,9 @@ class PaymentService {
       throw new AppError(404, "Payment reference not found in our records");
     }
 
-    // check if webhook already processed the payment and return true
+    // check if webhook already processed the payment
     if (payment.status === "success") {
-      return;
+      return { status: "success", message: "Payment already verified" };
     }
 
     const paystackResponse = await paystackService.verifyTransaction(reference);
@@ -170,10 +169,10 @@ class PaymentService {
       payment.gateway_response = psData;
       await payment.save();
 
-      throw new AppError(
-        400,
-        `Payment verification failed: ${psData.gateway_response}`,
-      );
+      return { 
+        status: psData.status, 
+        message: `Payment ${psData.status}: ${psData.gateway_response}` 
+      };
     }
 
     payment.status = "success";
@@ -181,11 +180,10 @@ class PaymentService {
     payment.paid_at = psData.paid_at;
     await payment.save();
 
-    // 7. Grant access using shared logic
-    // Pass the full payment object or reference to your shared service.
-    const result = await this._grantAccessToUser(reference);
+    // Grant access using shared logic
+    await this._grantAccessToUser(reference);
 
-    return result;
+    return { status: "success", message: "Payment verified and account created" };
   });
 
   // // WEBHOOK ENDPOINT: Triggered by Paystack servers
@@ -218,6 +216,7 @@ class PaymentService {
 
   //   return true;
   // });
+  
 
   // WEBHOOK ENDPOINT: Triggered by Paystack servers
   handleWebhook = asyncLibWrapper(async (payload, signature) => {

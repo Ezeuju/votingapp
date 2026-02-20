@@ -2,9 +2,8 @@
 module.exports = {
     // Development configuration
     development: {
-        enabled: false,
-        origins: [
-        ],
+        enabled: true,
+        origins: ["*"],
         credentials: false,
         allowedHeaders: ['Content-Type', 'Authorization'],
         exposedHeaders: [],
