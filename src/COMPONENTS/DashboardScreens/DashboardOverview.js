@@ -42,7 +42,7 @@ const DashboardOverview = ({ data }) => {
               <tbody>
                 {data.donations.slice(0, 4).map(d => (
                   <tr key={d.id}>
-                    <td>{d.donor}</td>
+                    <td>{d.fullName}</td>
                     <td className={styles.tdGold}>{d.amount}</td>
                     <td>
                       <span className={`${styles.badge} ${styles[STATUS_MAP[d.status]]}`}>

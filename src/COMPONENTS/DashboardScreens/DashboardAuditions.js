@@ -110,9 +110,9 @@ const DashboardAuditions = ({ data, setData }) => {
       {/* ── Header ── */}
       <div className={styles.sectionHeader}>
         <span className={styles.sectionTitle}>🎤 <span>Audition Registrations</span></span>
-        <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => setModal(true)}>
+        {/* <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => setModal(true)}>
           + Add Registration
-        </button>
+        </button> */}
       </div>
 
       {/* ── Search ── */}

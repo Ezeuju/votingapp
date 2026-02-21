@@ -24,10 +24,8 @@ export const PAGE_TITLES = {
 export const STATUS_MAP = {
   Confirmed:  'badgeSuccess',
   Pending:    'badgeWarning',
-  Refunded:   'badgeDanger',
   Active:     'badgeSuccess',
   Used:       'badgeInfo',
-  Cancelled:  'badgeDanger',
   Passed:     'badgeSuccess',
   Failed:     'badgeDanger',
   Scheduled:  'badgeInfo',
@@ -37,18 +35,18 @@ export const STATUS_MAP = {
 
 export const INIT_DATA = {
   donations: [
-    { id: 1, donor: 'Emeka Okafor',  amount: '₦50,000', contestant: 'Amara Joy',     method: 'Bank Transfer', date: 'Feb 18, 2026', status: 'Confirmed' },
-    { id: 2, donor: 'Ngozi Eze',     amount: '₦25,000', contestant: 'Kelvin Bright',  method: 'Card',          date: 'Feb 17, 2026', status: 'Confirmed' },
-    { id: 3, donor: 'Anonymous',     amount: '₦10,000', contestant: 'Sade Olu',       method: 'USSD',          date: 'Feb 17, 2026', status: 'Pending'   },
-    { id: 4, donor: 'Bello Adamu',   amount: '₦75,000', contestant: 'Chisom Uche',    method: 'Bank Transfer', date: 'Feb 16, 2026', status: 'Confirmed' },
-    { id: 5, donor: 'Fatima Musa',   amount: '₦15,000', contestant: 'Amara Joy',      method: 'Card',          date: 'Feb 15, 2026', status: 'Refunded'  },
+    { id: 1, fullName: 'Emeka Okafor',  email: 'emeka@mail.com',  phone: '+234 801 234 5678', amount: '₦50,000', monthly: true,  date: 'Feb 18, 2026', status: 'Confirmed' },
+    { id: 2, fullName: 'Ngozi Eze',     email: 'ngozi@mail.com',  phone: '+234 802 345 6789', amount: '₦25,000', monthly: false, date: 'Feb 17, 2026', status: 'Confirmed' },
+    { id: 3, fullName: 'Anonymous',     email: 'anon@mail.com',   phone: '+234 803 456 7890', amount: '₦10,000', monthly: false, date: 'Feb 17, 2026', status: 'Pending'   },
+    { id: 4, fullName: 'Bello Adamu',   email: 'bello@mail.com',  phone: '+234 804 567 8901', amount: '₦75,000', monthly: true,  date: 'Feb 16, 2026', status: 'Confirmed' },
+    { id: 5, fullName: 'Fatima Musa',   email: 'fatima@mail.com', phone: '+234 805 678 9012', amount: '₦15,000', monthly: true,  date: 'Feb 15, 2026', status: 'Pending'   },
   ],
   tickets: [
-    { id: 'TKT-001', holder: 'Ada Nwosu',   type: 'VIP',     event: 'Auditions – Day 1', seat: 'A12',    date: 'Mar 1, 2026',  status: 'Active'    },
-    { id: 'TKT-002', holder: 'Seun Bello',  type: 'Regular', event: 'Grand Finale',       seat: 'C34',    date: 'Apr 15, 2026', status: 'Active'    },
-    { id: 'TKT-003', holder: 'Tunde Alli',  type: 'VVIP',    event: 'Semi-Finals',        seat: 'VIP-03', date: 'Apr 1, 2026',  status: 'Used'      },
-    { id: 'TKT-004', holder: 'Grace Okeke', type: 'Regular', event: 'Auditions – Day 2', seat: 'B07',    date: 'Mar 2, 2026',  status: 'Cancelled' },
-    { id: 'TKT-005', holder: 'Chidi Obi',   type: 'VIP',     event: 'Grand Finale',       seat: 'A05',    date: 'Apr 15, 2026', status: 'Active'    },
+    { id: 'TKT-001', fullName: 'Ada Nwosu',   email: 'ada@mail.com',   type: 'Standard Access',    date: 'Mar 1, 2026',  status: 'Active' },
+    { id: 'TKT-002', fullName: 'Seun Bello',  email: 'seun@mail.com',  type: 'VIP Access',         date: 'Apr 15, 2026', status: 'Active' },
+    { id: 'TKT-003', fullName: 'Tunde Alli',  email: 'tunde@mail.com', type: 'All Access Gold Pass',date: 'Apr 1, 2026',  status: 'Used'   },
+    { id: 'TKT-004', fullName: 'Grace Okeke', email: 'grace@mail.com', type: 'Standard Access',    date: 'Mar 2, 2026',  status: 'Active' },
+    { id: 'TKT-005', fullName: 'Chidi Obi',   email: 'chidi@mail.com', type: 'All Access Gold Pass',date: 'Apr 15, 2026', status: 'Used'   },
   ],
   announcements: [
     { id: 1, title: 'Auditions now open!',              body: 'Applications for Season 3 auditions are now officially open. Interested candidates should visit our website to register.',                              date: 'Feb 15, 2026', author: 'Admin', pinned: true  },

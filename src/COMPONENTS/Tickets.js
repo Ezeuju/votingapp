@@ -14,7 +14,7 @@ const Tickets = () => {
         {/* Tier 1: Standard */}
         <div className={styles.ticketCard}>
           <div className={styles.tierName}>Standard Access</div>
-          <div className={styles.price}>₦25,000</div>
+          <div className={styles.price}>₦2000</div>
           <ul className={styles.benefits}>
             <li>✓ Live Show Entry</li>
             <li>✓ 10 Voting Points</li>
@@ -27,8 +27,8 @@ const Tickets = () => {
         {/* Tier 2: VIP - Featured */}
         <div className={`${styles.ticketCard} ${styles.vip}`}>
           <div className={styles.popularBadge}>Most Requested</div>
-          <div className={styles.tierName}>VIP Experience</div>
-          <div className={styles.price}>₦100,000</div>
+          <div className={styles.tierName}>VIP Access</div>
+          <div className={styles.price}>₦10000</div>
           <ul className={styles.benefits}>
             <li>✓ Premium Front-Row Seating</li>
             <li>✓ 50 Voting Points</li>
@@ -41,8 +41,8 @@ const Tickets = () => {
 
         {/* Tier 3: VVIP Table */}
         <div className={styles.ticketCard}>
-          <div className={styles.tierName}>VVIP Table (8 Guests)</div>
-          <div className={styles.price}>₦1,500,000</div>
+          <div className={styles.tierName}>All Access Gold Pass</div>
+          <div className={styles.price}>₦50,000</div>
           <ul className={styles.benefits}>
             <li>✓ Private Table Service</li>
             <li>✓ 500 Voting Points</li>

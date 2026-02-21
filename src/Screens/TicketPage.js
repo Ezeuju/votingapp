@@ -7,7 +7,7 @@ const Tickets = () => {
   const ticketTiers = [
     {
       name: "Standard Access",
-      price: "₦25,000",
+      price: "₦2000",
       type: "regular",
       benefits: [
         "Live Show Entry",
@@ -18,8 +18,8 @@ const Tickets = () => {
       buttonText: "Purchase Ticket"
     },
     {
-      name: "VIP Experience",
-      price: "₦100,000",
+      name: "VIP Access",
+      price: "₦10000",
       type: "vip",
       badge: "Most Requested",
       benefits: [
@@ -32,8 +32,8 @@ const Tickets = () => {
       buttonText: "Get VIP Access"
     },
     {
-      name: "VVIP Table (8 Guests)",
-      price: "₦1,500,000",
+      name: "General Access Gold Pass",
+      price: "₦50,000",
       type: "vvip",
       benefits: [
         "Private Table Service",
