@@ -177,7 +177,6 @@ class PaymentService extends BaseService {
           email: metadata.email,
           country: metadata.country,
           street_address: metadata.street_address,
-          town: metadata.town,
           state: metadata.state,
           audition_plan_id: metadata.audition_plan_id,
           phone: metadata.phone,
