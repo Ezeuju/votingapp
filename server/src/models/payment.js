@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const paymentModel = new mongoose.Schema(
   {
+    is_archived: {
+      type: Boolean,
+      default: false,
+    },
     reference: {
       type: String,
       required: true,
@@ -15,6 +19,14 @@ const paymentModel = new mongoose.Schema(
       type: String,
       enum: ["pending", "success", "failed", "abandoned", "reversed"],
       default: "pending",
+    },
+    audition_plan_id: {
+      type: mongoose.Types.ObjectId,
+      ref: "plan",
+    },
+    ticket_plan_id: {
+      type: mongoose.Types.ObjectId,
+      ref: "plan",
     },
     payment_gateway: {
       type: String,

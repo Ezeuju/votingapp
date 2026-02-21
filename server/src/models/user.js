@@ -38,7 +38,6 @@ const userModel = new mongoose.Schema(
       lowercase: true,
       trim: true,
       required: true,
-      unique: true,
     },
     phone: {
       type: String,
@@ -63,25 +62,39 @@ const userModel = new mongoose.Schema(
       enum: ["Applicant", "Contestant"],
       default: "Applicant",
     },
+    account_status: {
+      type: String,
+      enum: ["Pending", "Confirmed"],
+      default: "Pending",
+    },
     country: {
       type: String,
-      required: true
     },
     street_address: {
       type: String,
-      required: true,
     },
     town: {
       type: String,
-      required: true,
     },
     state: {
       type: String,
-      required: true,
     },
     audition_plan_id: {
       type: mongoose.Types.ObjectId,
       ref: "Plan",
+    },
+    audition_date: {
+      type: Date,
+    },
+    audition_time: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    created_by_admin: {
+      type: Boolean,
+      default: false,
     },
     device_id: {
       type: String,

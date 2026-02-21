@@ -4,11 +4,16 @@ const paystackService = require("../thirdParty/paystack");
 const { asyncLibWrapper } = require("../utils/wrappers");
 const { AppError } = require("../middleware/error");
 const randomstring = require("randomstring");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const logger = require("../logger");
+const BaseService = require("./base");
+const helpers = require("../utils/helpers");
 
-class PaymentService {
+class PaymentService extends BaseService {
+  constructor() {
+    super(paymentModel, validation);
+  }
   // SHARED LOGIC: Process successful payment and create user
   _grantAccessToUser = async (reference) => {
     // Find payment record
@@ -16,12 +21,13 @@ class PaymentService {
     if (!payment) throw new AppError(404, "Payment not found");
 
     // Create user account
+    // const tempPassword = randomstring.generate(12);
+    // const hashedPassword = await bcrypt.hash(
+    //   tempPassword,
+    //   parseInt(process.env.SALT_ROUND),
+    // );
+
     const { metadata } = payment;
-    const tempPassword = randomstring.generate(12);
-    const hashedPassword = await bcrypt.hash(
-      tempPassword,
-      parseInt(process.env.SALT_ROUND),
-    );
 
     const user = await userModel.create({
       first_name: metadata.first_name,
@@ -32,31 +38,42 @@ class PaymentService {
       town: metadata.town,
       state: metadata.state,
       audition_plan_id: metadata.audition_plan_id,
-      password: hashedPassword,
       account_type: "Applicant",
     });
-    
+
+    // update user record to pending while updating record from admin
+    // const updated_user = await userModel.findByIdAndUpdate(
+    //   payment.user_id,
+    //   { account_status: "Pending" },
+    //   { new: true },
+    // );
+
     // Update payment record
-    payment.status = "success";
     payment.user_id = user._id;
+    payment.status = "success";
     await payment.save();
 
-    // TODO: Send welcome email with temporary password
+    // TODO: Send welcome email
 
     return user;
   };
 
   // SHARED LOGIC: Revoke access on refund/reversal
   _revokeAccessFromUser = async (reference) => {
-    const payment = await paymentModel.findOne({ reference });
+    const payment = await this.model.findOne({ reference });
     if (!payment || !payment.user_id) return;
 
     // Deactivate user account
-    await userModel.findByIdAndDelete(payment.user_id);
+    await userModel.findByIdAndUpdate(payment.user_id, {
+      status: false,
+      account_status: "Pending",
+    });
 
     // TODO: Send refund notification email
 
-    logger.info(`Access revoked for user ${payment.user_id} due to refund/reversal`);
+    logger.info(
+      `Access revoked for user ${payment.user_id} due to refund/reversal`,
+    );
   };
 
   initializePayment = asyncLibWrapper(async (params) => {
@@ -67,7 +84,15 @@ class PaymentService {
 
     // Check if email already exists
     const existingUser = await userModel.findOne({ email });
-    if (existingUser) throw new AppError(400, "Email already registered.");
+    if (
+      existingUser &&
+      existingUser.account_status == "Confirmed" &&
+      existingUser.audition_plan_id.toString() === audition_plan_id.toString()
+    )
+      throw new AppError(
+        400,
+        "This email is already registered for an audition with the selected plan, please select another plan.",
+      );
 
     // Get plan details
     const plan = await planModel.findById(audition_plan_id);
@@ -76,15 +101,19 @@ class PaymentService {
     // Generate unique reference
     const reference = `PAY_${Date.now()}_${randomstring.generate(10)}`;
 
+    // // Create pending applicant user record
+    // const user = await userModel.create({ ...metadata, audition_plan_id, email });
+
     // Create payment record
-    const payment = await paymentModel.create({
+    const payment = await this.model.create({
       reference,
       amount: plan.amount,
       status: "pending",
+      audition_plan_id,
       metadata: {
         ...metadata,
         email,
-        audition_plan_id, 
+        audition_plan_id,
       },
     });
 
@@ -106,43 +135,6 @@ class PaymentService {
     };
   });
 
-  // // VERIFY ENDPOINT: Triggered by frontend redirect
-  // verifyPayment = asyncLibWrapper(async (params) => {
-  //   const { error } = validation.verify(params);
-  //   if (error) throw new AppError(400, error.details[0].message);
-
-  //   const { reference } = params;
-
-  //   // Verify with Paystack first
-  //   const paystackResponse = await paystackService.verifyTransaction(reference);
-
-  //   const payment = await paymentModel.findOne({ reference });
-  //   if (!payment) throw new AppError(404, "Payment not found");
-
-  //   if (paystackResponse.data.status !== "success") {
-  //     payment.status = "failed";
-  //     payment.gateway_response = paystackResponse.data;
-  //     await payment.save();
-  //     throw new AppError(400, "Payment verification failed");
-  //   }
-
-  //   // Store gateway response
-  //   payment.gateway_response = paystackResponse.data;
-  //   await payment.save();
-
-  //   // Grant access using shared logic
-  //   const result = await this._grantAccessToUser(reference);
-
-  //   return {
-  //     message: result.alreadyProcessed
-  //       ? "Payment already verified"
-  //       : "Payment verified and account created successfully",
-  //     user_id: result.user_id,
-  //     temp_password: result.temp_password,
-  //   };
-  // });
-
-
   // VERIFY ENDPOINT: Triggered by frontend redirect
   verifyPayment = asyncLibWrapper(async (params) => {
     const { error } = validation.verify(params);
@@ -150,7 +142,7 @@ class PaymentService {
 
     const { reference } = params;
 
-    const payment = await paymentModel.findOne({ reference });
+    const payment = await this.model.findOne({ reference });
     if (!payment) {
       throw new AppError(404, "Payment reference not found in our records");
     }
@@ -169,9 +161,9 @@ class PaymentService {
       payment.gateway_response = psData;
       await payment.save();
 
-      return { 
-        status: psData.status, 
-        message: `Payment ${psData.status}: ${psData.gateway_response}` 
+      return {
+        status: psData.status,
+        message: `Payment ${psData.status}: ${psData.gateway_response}`,
       };
     }
 
@@ -183,7 +175,10 @@ class PaymentService {
     // Grant access using shared logic
     await this._grantAccessToUser(reference);
 
-    return { status: "success", message: "Payment verified and account created" };
+    return {
+      status: "success",
+      message: "Payment verified and account created",
+    };
   });
 
   // // WEBHOOK ENDPOINT: Triggered by Paystack servers
@@ -216,7 +211,6 @@ class PaymentService {
 
   //   return true;
   // });
-  
 
   // WEBHOOK ENDPOINT: Triggered by Paystack servers
   handleWebhook = asyncLibWrapper(async (payload, signature) => {
@@ -234,7 +228,7 @@ class PaymentService {
     const reference = data.reference;
 
     // 2. Locate the payment in your DB
-    const payment = await paymentModel.findOne({ reference });
+    const payment = await this.model.findOne({ reference });
     if (!payment) {
       logger.error(`Webhook Error: Payment ref ${reference} not found.`);
       return true;
@@ -270,8 +264,65 @@ class PaymentService {
         logger.error(`Unhandled Paystack event: ${event}`);
     }
 
-    return true; // Always tell Paystack you received it
+    return true;
   });
+
+  _getProjectionFields(download) {
+    return {
+      date: download
+        ? {
+            $dateToString: {
+              date: "$createdAt",
+              format: "%d-%m-%Y %H:%M",
+            },
+          }
+        : "$createdAt",
+      amount: 1,
+      metadata: 1,
+      status: 1,
+      audition_plan: "$audition_plan.title",
+    };
+  }
+
+  _getDefaultQuery() {
+    return {
+      is_archived: false,
+    };
+  }
+
+  _getLookups() {
+    return [
+      {
+        $lookup: {
+          from: "plans",
+          localField: "metadata.audition_plan_id",
+          foreignField: "_id",
+          as: "audition_plan",
+        },
+      },
+      {
+        $unwind: {
+          path: "$audition_plan",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ];
+  }
+
+  _buildSearchStage(searchTerm) {
+    const searchRegex = new RegExp(helpers.escapeRegex(searchTerm), "i");
+    return {
+      $match: {
+        $or: [
+          { "metadata.email": searchRegex },
+          { "metadata.first_name": searchRegex },
+          { "metadata.last_name": searchRegex },
+          { "metadata.country": searchRegex },
+          { audition_plan: searchRegex },
+        ],
+      },
+    };
+  }
 }
 
 module.exports = new PaymentService();
