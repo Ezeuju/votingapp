@@ -40,6 +40,7 @@ const paymentModel = new mongoose.Schema(
       street_address: String,
       town: String,
       state: String,
+      phone: String,
       audition_plan_id: {
         type: mongoose.Types.ObjectId,
         ref: "plan",

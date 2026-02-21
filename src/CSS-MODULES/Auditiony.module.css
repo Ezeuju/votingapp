@@ -105,6 +105,9 @@
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  appearance: auto;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
 }
 
 .summaryRow {

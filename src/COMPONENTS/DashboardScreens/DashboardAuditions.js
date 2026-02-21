@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
 import { STATUS_MAP } from './Dashboarddata';
+import { useTableData } from '../../hooks/useTableData';
+import { adminApi } from '../../services/adminApi';
 
 const PLANS = [
   { id: 'silver-pass', label: 'Silver Audition Pass' },
@@ -27,48 +29,65 @@ const EMPTY_FORM = {
   date: '', time: '', planId: 'silver-pass',
 };
 
-const DashboardAuditions = ({ data, setData }) => {
-  const [modal, setModal]       = useState(false);
+const DashboardAuditions = ({ data: dashboardData, setData: setDashboardData }) => {
+  const [modal, setModal] = useState(false);
   const [viewEntry, setViewEntry] = useState(null);
-  const [search, setSearch]     = useState('');
-  const [form, setForm]         = useState(EMPTY_FORM);
+  const [viewDetails, setViewDetails] = useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [searchInput, setSearchInput] = useState('');
+  const [stats, setStats] = useState(null);
 
-  const field = (key, e) => setForm(p => ({ ...p, [key]: e.target.value }));
+  const { data, metadata, loading, error, setPage, setSearch, refetch } = useTableData(
+    adminApi.getUsers,
+    { account_type: 'Applicant' }
+  );
 
-  const handleAdd = () => {
-    if (!form.firstName || !form.lastName || !form.email) return;
-    const entry = { id: Date.now(), ...form, status: 'Pending' };
-    setData(prev => ({ ...prev, auditions: [entry, ...prev.auditions] }));
-    setForm(EMPTY_FORM);
-    setModal(false);
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await adminApi.getAuditionStats();
+        setStats(response.data);
+      } catch (err) {
+        console.error('Failed to fetch stats:', err);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setSearch(searchInput), 500);
+    return () => clearTimeout(timer);
+  }, [searchInput, setSearch]);
+
+  const getLocation = (user) => {
+    if (user.state) return `${user.state}, ${user.country}`;
+    if (user.location) return `${user.location}, ${user.country}`;
+    return user.country;
   };
 
-  const handleRemove = id =>
-    setData(prev => ({ ...prev, auditions: prev.auditions.filter(a => a.id !== id) }));
+  const getPlanBadge = (plan) => {
+    if (plan?.includes('Silver')) return 'badgeInfo';
+    if (plan?.includes('Gold')) return 'badgeWarning';
+    if (plan?.includes('VIP')) return 'badgeGreen';
+    return 'badgeInfo';
+  };
 
-  const handleStatus = (id, status) =>
-    setData(prev => ({
-      ...prev,
-      auditions: prev.auditions.map(a => a.id === id ? { ...a, status } : a),
-    }));
-
-  const filtered = data.auditions.filter(a => {
-    const q = search.toLowerCase();
-    return (
-      `${a.firstName} ${a.lastName}`.toLowerCase().includes(q) ||
-      a.email.toLowerCase().includes(q) ||
-      a.country.toLowerCase().includes(q) ||
-      PLAN_LABEL[a.planId]?.toLowerCase().includes(q)
-    );
-  });
+  const handleViewDetails = async (userId) => {
+    try {
+      const response = await adminApi.getUserById(userId);
+      setViewDetails(response.data);
+    } catch (err) {
+      console.error('Failed to fetch user details:', err);
+    }
+  };
 
   const counts = {
-    total:     data.auditions.length,
-    silver:    data.auditions.filter(a => a.planId === 'silver-pass').length,
-    gold:      data.auditions.filter(a => a.planId === 'gold-pass').length,
-    vip:       data.auditions.filter(a => a.planId === 'vip-pass').length,
-    confirmed: data.auditions.filter(a => a.status === 'Confirmed').length,
-    pending:   data.auditions.filter(a => a.status === 'Pending').length,
+    total: stats?.total_registrations || 0,
+    silver: stats?.total_silver || 0,
+    gold: stats?.total_gold || 0,
+    vip: stats?.total_vip || 0,
+    confirmed: stats?.total_confirmed || 0,
+    pending: stats?.total_pending || 0,
   };
 
   return (
@@ -121,196 +140,143 @@ const DashboardAuditions = ({ data, setData }) => {
         <input
           className={styles.searchInput}
           placeholder="Search by name, email, country or plan..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
+          value={searchInput}
+          onChange={e => setSearchInput(e.target.value)}
         />
       </div>
 
-      {/* ── Table ── */}
-      <div className={styles.tableWrap}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Country / Location</th>
-              <th>Date & Time</th>
-              <th>Plan</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(a => (
-              <tr key={a.id}>
-                <td className={styles.tdBold}>{a.firstName} {a.lastName}</td>
-                <td className={styles.tdMuted}>{a.email}</td>
-                <td className={styles.tdMuted}>{a.phone}</td>
-                <td>{a.country}{a.location ? `, ${a.location}` : ''}</td>
-                <td className={styles.tdMuted}>
-                  {a.date}
-                  <br />
-                  <span style={{ color: '#FFD700', fontSize: 11 }}>{a.time}</span>
-                </td>
-                <td>
-                  <span className={`${styles.badge} ${styles[PLAN_BADGE[a.planId]]}`}>
-                    {PLAN_LABEL[a.planId]}
-                  </span>
-                </td>
-                <td>
-                  <span className={`${styles.badge} ${styles[STATUS_MAP[a.status]]}`}>
-                    {a.status}
-                  </span>
-                </td>
-                <td>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    <button
-                      className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
-                      onClick={() => setViewEntry(a)}
-                    >
-                      View
-                    </button>
-                    {a.status === 'Pending' && (
-                      <button
-                        className={`${styles.btn} ${styles.btnGreen} ${styles.btnSm}`}
-                        onClick={() => handleStatus(a.id, 'Confirmed')}
-                      >
-                        Confirm
-                      </button>
-                    )}
-                    <button
-                      className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                      onClick={() => handleRemove(a.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 && (
-              <tr>
-                <td colSpan={8} className={styles.emptyRow}>No audition registrations found</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      {loading && <div style={{ textAlign: 'center', padding: '20px', color: '#FFD700' }}>Loading...</div>}
+      {error && <div style={{ textAlign: 'center', padding: '20px', color: '#ff4444' }}>{error}</div>}
 
-      {/* ── Add Registration Modal ── */}
-      {modal && (
-        <DashboardModal
-          title="Add Audition Registration"
-          onClose={() => { setModal(false); setForm(EMPTY_FORM); }}
-        >
-          <div className={styles.formGrid}>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>First Name</label>
-              <input className={styles.input} placeholder="e.g. Amara"
-                value={form.firstName} onChange={e => field('firstName', e)} />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Last Name</label>
-              <input className={styles.input} placeholder="e.g. Joy"
-                value={form.lastName} onChange={e => field('lastName', e)} />
-            </div>
-            <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
-              <label className={styles.label}>Email Address</label>
-              <input className={styles.input} type="email" placeholder="e.g. amara@email.com"
-                value={form.email} onChange={e => field('email', e)} />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Country</label>
-              <input className={styles.input} placeholder="e.g. Nigeria"
-                value={form.country} onChange={e => field('country', e)} />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Phone Number</label>
-              <input className={styles.input} placeholder="e.g. +234 801 234 5678"
-                value={form.phone} onChange={e => field('phone', e)} />
-            </div>
-            <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
-              <label className={styles.label}>Location / City</label>
-              <input className={styles.input} placeholder="e.g. Lagos"
-                value={form.location} onChange={e => field('location', e)} />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Audition Date</label>
-              <input className={styles.input} type="date"
-                value={form.date} onChange={e => field('date', e)} />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Audition Time</label>
-              <input className={styles.input} type="time"
-                value={form.time} onChange={e => field('time', e)} />
-            </div>
-            <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
-              <label className={styles.label}>Audition Plan</label>
-              <select className={styles.select}
-                value={form.planId} onChange={e => field('planId', e)}>
-                {PLANS.map(p => (
-                  <option key={p.id} value={p.id}>{p.label}</option>
+      {/* ── Table ── */}
+      {!loading && (
+        <>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Country / Location</th>
+                  <th>Date & Time</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map(a => (
+                  <tr key={a._id}>
+                    <td className={styles.tdBold}>{a.first_name} {a.last_name}</td>
+                    <td className={styles.tdMuted}>{a.email}</td>
+                    <td className={styles.tdMuted}>{a.phone || 'N/A'}</td>
+                    <td>{getLocation(a)}</td>
+                    <td className={styles.tdMuted}>
+                      {new Date(a.date).toLocaleDateString()}
+                      <br />
+                      <span style={{ color: '#FFD700', fontSize: 11 }}>
+                        {new Date(a.date).toLocaleTimeString()}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`${styles.badge} ${styles[getPlanBadge(a.audition_plan)]}`}>
+                        {a.audition_plan || 'N/A'}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`${styles.badge} ${styles[STATUS_MAP[a.account_status]]}`}>
+                        {a.account_status}
+                      </span>
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        <button
+                          className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                          onClick={() => handleViewDetails(a._id)}
+                        >
+                          View
+                        </button>
+                        <button
+                          className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                 ))}
-              </select>
+                {data.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className={styles.emptyRow}>No audition registrations found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ── Pagination ── */}
+          {metadata.pages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
+              <button
+                className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                onClick={() => setPage(metadata.page - 1)}
+                disabled={metadata.page === 1}
+              >
+                Previous
+              </button>
+              <span style={{ color: '#FFD700' }}>
+                Page {metadata.page} of {metadata.pages} ({metadata.total} total)
+              </span>
+              <button
+                className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                onClick={() => setPage(metadata.page + 1)}
+                disabled={metadata.page === metadata.pages}
+              >
+                Next
+              </button>
             </div>
-          </div>
-          <div className={styles.modalActions}>
-            <button
-              className={`${styles.btn} ${styles.btnOutline}`}
-              onClick={() => { setModal(false); setForm(EMPTY_FORM); }}
-            >
-              Cancel
-            </button>
-            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleAdd}>
-              Add Registration
-            </button>
-          </div>
-        </DashboardModal>
+          )}
+        </>
       )}
 
-      {/* ── View Entry Modal ── */}
-      {viewEntry && (
-        <DashboardModal title="Registrant Details" onClose={() => setViewEntry(null)}>
+
+
+      {/* ── View Details Modal ── */}
+      {viewDetails && (
+        <DashboardModal title="Registrant Details" onClose={() => setViewDetails(null)}>
+          {viewDetails.photo && (
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+              <img src={viewDetails.photo} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }} />
+            </div>
+          )}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 24px' }}>
             {[
-              { label: 'First Name',  value: viewEntry.firstName },
-              { label: 'Last Name',   value: viewEntry.lastName  },
-              { label: 'Email',       value: viewEntry.email     },
-              { label: 'Phone',       value: viewEntry.phone     },
-              { label: 'Country',     value: viewEntry.country   },
-              { label: 'Location',    value: viewEntry.location  },
-              { label: 'Date',        value: viewEntry.date      },
-              { label: 'Time',        value: viewEntry.time      },
+              { label: 'First Name', value: viewDetails.first_name },
+              { label: 'Last Name', value: viewDetails.last_name },
+              { label: 'Email', value: viewDetails.email },
+              { label: 'Phone', value: viewDetails.phone },
+              { label: 'Country', value: viewDetails.country },
+              { label: 'State', value: viewDetails.state },
+              { label: 'Town', value: viewDetails.town },
+              { label: 'Street Address', value: viewDetails.street_address },
+              { label: 'Account Type', value: viewDetails.account_type },
+              { label: 'Role', value: viewDetails.role },
             ].map(row => (
               <div key={row.label}>
                 <div className={styles.label} style={{ marginBottom: 4 }}>{row.label}</div>
-                <div style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{row.value || '—'}</div>
+                <div style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{row.value || 'N/A'}</div>
               </div>
             ))}
             <div style={{ gridColumn: '1 / -1' }}>
-              <div className={styles.label} style={{ marginBottom: 6 }}>Audition Plan</div>
-              <span className={`${styles.badge} ${styles[PLAN_BADGE[viewEntry.planId]]}`}>
-                {PLANS.find(p => p.id === viewEntry.planId)?.label}
-              </span>
-            </div>
-            <div style={{ gridColumn: '1 / -1' }}>
               <div className={styles.label} style={{ marginBottom: 6 }}>Status</div>
-              <span className={`${styles.badge} ${styles[STATUS_MAP[viewEntry.status]]}`}>
-                {viewEntry.status}
+              <span className={`${styles.badge} ${styles[STATUS_MAP[viewDetails.account_status]]}`}>
+                {viewDetails.account_status}
               </span>
             </div>
           </div>
           <div className={styles.modalActions}>
-            {viewEntry.status === 'Pending' && (
-              <button
-                className={`${styles.btn} ${styles.btnGreen}`}
-                onClick={() => { handleStatus(viewEntry.id, 'Confirmed'); setViewEntry(null); }}
-              >
-                ✓ Confirm Registration
-              </button>
-            )}
-            <button className={`${styles.btn} ${styles.btnOutline}`} onClick={() => setViewEntry(null)}>
+            <button className={`${styles.btn} ${styles.btnOutline}`} onClick={() => setViewDetails(null)}>
               Close
             </button>
           </div>

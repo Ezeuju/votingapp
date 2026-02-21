@@ -10,6 +10,9 @@ exports.initialize = (model) => {
       "any.required": "Last name is required.",
       "string.empty": "Last name is required.",
     }),
+    phone: Joi.string().trim().optional().messages({
+      "string.empty": "Phone cannot be empty",
+    }),
     email: Joi.string().email().lowercase().trim().required().messages({
       "any.required": "Email is required.",
       "string.empty": "Email is required.",

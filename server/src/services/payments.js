@@ -38,6 +38,7 @@ class PaymentService extends BaseService {
       town: metadata.town,
       state: metadata.state,
       audition_plan_id: metadata.audition_plan_id,
+      phone: metadata.phone,
       account_type: "Applicant",
     });
 
@@ -81,7 +82,7 @@ class PaymentService extends BaseService {
     if (error) throw new AppError(400, error.details[0].message);
 
     const { email, audition_plan_id, ...metadata } = params;
-
+  
     // Check if email already exists
     const existingUser = await userModel.findOne({ email });
     if (
@@ -105,6 +106,11 @@ class PaymentService extends BaseService {
     // const user = await userModel.create({ ...metadata, audition_plan_id, email });
 
     // Create payment record
+    // format phone number before saving
+    if (metadata.phone) {
+      metadata.phone = helpers.formatPhoneNumber(metadata.phone.trim());
+    }
+
     const payment = await this.model.create({
       reference,
       amount: plan.amount,
@@ -112,6 +118,7 @@ class PaymentService extends BaseService {
       audition_plan_id,
       metadata: {
         ...metadata,
+        phone: metadata.phone,
         email,
         audition_plan_id,
       },
