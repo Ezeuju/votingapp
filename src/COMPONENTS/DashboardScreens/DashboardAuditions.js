@@ -5,35 +5,8 @@ import { STATUS_MAP } from './Dashboarddata';
 import { useTableData } from '../../hooks/useTableData';
 import { adminApi } from '../../services/adminApi';
 
-const PLANS = [
-  { id: 'silver-pass', label: 'Silver Audition Pass' },
-  { id: 'gold-pass',   label: 'Gold Audition Pass'   },
-  { id: 'vip-pass',    label: 'VIP Audition Pass'    },
-];
-
-const PLAN_LABEL = {
-  'silver-pass': 'Silver Pass',
-  'gold-pass':   'Gold Pass',
-  'vip-pass':    'VIP Pass',
-};
-
-const PLAN_BADGE = {
-  'silver-pass': 'badgeInfo',
-  'gold-pass':   'badgeWarning',
-  'vip-pass':    'badgeGreen',
-};
-
-const EMPTY_FORM = {
-  firstName: '', lastName: '', email: '',
-  country: '', phone: '', location: '',
-  date: '', time: '', planId: 'silver-pass',
-};
-
 const DashboardAuditions = ({ data: dashboardData, setData: setDashboardData }) => {
-  const [modal, setModal] = useState(false);
-  const [viewEntry, setViewEntry] = useState(null);
   const [viewDetails, setViewDetails] = useState(null);
-  const [form, setForm] = useState(EMPTY_FORM);
   const [searchInput, setSearchInput] = useState('');
   const [stats, setStats] = useState(null);
 

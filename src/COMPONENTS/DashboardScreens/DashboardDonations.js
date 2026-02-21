@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
-import pageStyles from '../DashboardScreens/Dashboardpages.module.css';
 import DashboardModal from './Dashboardmodal';
 import { STATUS_MAP } from './Dashboarddata';
 
