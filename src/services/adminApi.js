@@ -14,5 +14,9 @@ export const adminApi = {
 
   getAuditionStats: () => {
     return api.get('/users/audition/stats/admin');
+  },
+
+  deleteAudition: (userId) => {
+    return api.delete(`/users/${userId}/audition/admin`);
   }
 };

@@ -81,6 +81,17 @@ const DashboardAuditions = ({ data: dashboardData, setData: setDashboardData }) 
     }
   };
 
+  const handleDelete = async (userId) => {
+    if (!window.confirm('Are you sure you want to delete this audition registration?')) return;
+    try {
+      await adminApi.deleteAudition(userId);
+      refetch();
+    } catch (err) {
+      console.error('Failed to delete audition:', err);
+      alert('Failed to delete audition registration');
+    }
+  };
+
   const counts = {
     total: stats?.total_registrations || 0,
     silver: stats?.total_silver || 0,
@@ -199,6 +210,7 @@ const DashboardAuditions = ({ data: dashboardData, setData: setDashboardData }) 
                         </button>
                         <button
                           className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
+                          onClick={() => handleDelete(a._id)}
                         >
                           Delete
                         </button>

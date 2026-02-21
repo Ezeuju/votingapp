@@ -164,9 +164,30 @@ class PaymentService extends BaseService {
 
     /// Handle Failed/Abandoned Payments
     if (psData.status !== "success") {
-      payment.status = psData.status; // e.g., 'failed' or 'abandoned'
+      payment.status = psData.status;
       payment.gateway_response = psData;
       await payment.save();
+
+      if (psData.status === "failed" || psData.status === "abandoned") {
+        const { metadata } = payment;
+
+        const user = await userModel.create({
+          first_name: metadata.first_name,
+          last_name: metadata.last_name,
+          email: metadata.email,
+          country: metadata.country,
+          street_address: metadata.street_address,
+          town: metadata.town,
+          state: metadata.state,
+          audition_plan_id: metadata.audition_plan_id,
+          phone: metadata.phone,
+          account_type: "Applicant",
+          account_status: "Pending",
+        });
+
+        payment.user_id = user._id;
+        await payment.save();
+      }
 
       return {
         status: psData.status,
@@ -252,6 +273,34 @@ class PaymentService extends BaseService {
 
           // Grant user access
           await this._grantAccessToUser(reference);
+        }
+        break;
+
+      case "charge.failed":
+      case "charge.abandoned":
+        payment.status = data.status;
+        payment.gateway_response = data;
+        await payment.save();
+
+        if (!payment.user_id) {
+          const { metadata } = payment;
+
+          const user = await userModel.create({
+            first_name: metadata.first_name,
+            last_name: metadata.last_name,
+            email: metadata.email,
+            country: metadata.country,
+            street_address: metadata.street_address,
+            town: metadata.town,
+            state: metadata.state,
+            audition_plan_id: metadata.audition_plan_id,
+            phone: metadata.phone,
+            account_type: "Applicant",
+            account_status: "Pending"
+          });
+
+          payment.user_id = user._id;
+          await payment.save();
         }
         break;
 

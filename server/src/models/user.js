@@ -65,7 +65,7 @@ const userModel = new mongoose.Schema(
     account_status: {
       type: String,
       enum: ["Pending", "Confirmed"],
-      default: "Pending",
+      default: "Confirmed",
     },
     country: {
       type: String,
