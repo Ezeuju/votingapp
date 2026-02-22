@@ -66,7 +66,7 @@ const AFRICAN_COUNTRIES = [
 ];
 
 const AuditionRegistration = () => {
-  const navigate = useNavigate();
+ const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { showToast } = useToast();
   const [step, setStep] = useState(1);
