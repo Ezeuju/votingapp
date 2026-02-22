@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/votingapp/static/css/main.1bf876c3.css",
+    "main.js": "/votingapp/static/js/main.5b7503ae.js",
+    "static/js/453.40dffc34.chunk.js": "/votingapp/static/js/453.40dffc34.chunk.js",
+    "static/media/talentlogo.jpeg": "/votingapp/static/media/talentlogo.8757ad2845e3edde4b1e.jpeg",
+    "static/media/judge1.webp": "/votingapp/static/media/judge1.5d4971c3e82d04e05418.webp",
+    "static/media/judge3.webp": "/votingapp/static/media/judge3.9229e8d87acd57b29ceb.webp",
+    "static/media/paystack.png": "/votingapp/static/media/paystack.ce2abc1a7ac06ebf36e6.png",
+    "static/media/judge2.webp": "/votingapp/static/media/judge2.e11e6fb5e06b04638d6e.webp",
+    "index.html": "/votingapp/index.html",
+    "main.1bf876c3.css.map": "/votingapp/static/css/main.1bf876c3.css.map",
+    "main.5b7503ae.js.map": "/votingapp/static/js/main.5b7503ae.js.map",
+    "453.40dffc34.chunk.js.map": "/votingapp/static/js/453.40dffc34.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1bf876c3.css",
+    "static/js/main.5b7503ae.js"
+  ]
+}
