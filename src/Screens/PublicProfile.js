@@ -3,7 +3,7 @@ import judge1 from '../assets/judge1.webp';
 import styles from '../CSS-MODULES/PublicProfile.module.css';
 
 const PublicProfile = () => {
-  const [votes, setVotes] = useState(1600);
+  const [votes] = useState(1600);
   const profileLink = window.location.href;
 
   const handleCopy = () => {

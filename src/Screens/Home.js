@@ -86,11 +86,11 @@ const Home = () => {
       <div className={styles.liveTicker}>
         <div className={styles.tickerLabel}>LIVE UPDATES</div>
         <div className={styles.tickerContent}>
-          <marquee scrollamount="8">
+          {/* <marquee scrollamount="8">
             Next Live Audition: FECA Eket Chapter Auditorium - Feb 20th | 
             Breaking: "The Comedian" advances to Semi-Finals! | 
             Standard Tickets now available from ₦25,000! — Join the movement today!
-          </marquee>
+          </marquee> */}
         </div>
       </div> 
       

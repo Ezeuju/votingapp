@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import styles from '../CSS-MODULES/gallery.module.css';
 
 const Gallery = () => {
