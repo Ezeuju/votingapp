@@ -277,6 +277,7 @@ const DashboardTickets = ({ data, setData }) => {
             >
               Revoke Ticket
             </button>
+            
             <button className={`${styles.btn} ${styles.btnOutline}`} onClick={() => setViewEntry(null)}>
               Close
             </button>
