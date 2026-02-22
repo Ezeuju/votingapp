@@ -59,7 +59,7 @@ const Hero = () => {
             
 
             <div className={styles.ctaGroup}>
-              <button className={styles.primaryBtn}><a href="/audition" >Register for Auditions</a></button>
+              <button className={styles.primaryBtn}><a href="/auditiony" >Register for Auditions</a></button>
               <button className={styles.secondaryBtn}>Get Your Tickets</button>
               <button className={styles.secondaryBtn}>Vote Now</button>
             </div>
