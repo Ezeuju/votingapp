@@ -1,4 +1,0 @@
-{
-  "subject": "Your {{project_title}} Account Has Been Reactivated",
-  "body": "Dear {{first_name}},<br><br> We are pleased to inform you that your account has been reactivated. <br><br> You now have access to the platform.<br><br> If you have questions, our support team is here to help. Feel free to reach out at {{support_email}}.<br><br> With regards,<br> The {{project_title}} Team."
-}

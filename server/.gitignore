@@ -1,9 +1,0 @@
-node_modules/
-newrelic_agent.log
-.infisical.json
-*.production
-.env.development
-.env.uat
-.env.production
-postman
-.env
