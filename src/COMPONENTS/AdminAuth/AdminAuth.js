@@ -1,0 +1,71 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './AdminAuth.module.css';
+
+const AdminAuth = () => {
+  const [view, setView] = useState('login'); // login or forgot
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    // Secure Admin Login Logic
+    setTimeout(() => {
+      setLoading(false);
+      navigate('/dashboard'); 
+    }, 1500);
+  };
+
+  return (
+    <div className={styles.authPage}>
+      <div className={styles.authCard}>
+        <div className={styles.logoSection}>
+          <div className={styles.logo}>NTS<span>ADMIN</span></div>
+          <p>Official Control Portal</p>
+        </div>
+
+        {view === 'login' ? (
+          /* --- ADMIN LOGIN FORM --- */
+          <form className={styles.form} onSubmit={handleLogin}>
+            <h2>Internal Sign In</h2>
+            <div className={styles.inputGroup}>
+              <label>Admin Email</label>
+              <input type="email" placeholder="admin@naijatalentshow.com" required />
+            </div>
+            <div className={styles.inputGroup}>
+              <label>Security Password</label>
+              <input type="password" placeholder="••••••••" required />
+            </div>
+            <button type="submit" className={styles.loginBtn} disabled={loading}>
+              {loading ? "Authenticating..." : "Access Dashboard"}
+            
+            </button>
+            <p className={styles.toggleText} onClick={() => setView('forgot')}>
+              Trouble logging in? <span>Reset Access</span>
+            </p>
+          </form>
+        ) : (
+          /* --- FORGOT PASSWORD FORM --- */
+          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+            <h2>Reset Credentials</h2>
+            <p className={styles.formHint}>Enter your registered admin email to receive a secure reset link.</p>
+            <div className={styles.inputGroup}>
+              <label>Work Email</label>
+              <input type="email" placeholder="admin@naijatalentshow.com" required />
+            </div>
+            <button type="submit" className={styles.loginBtn}>Send Recovery Email</button>
+            <p className={styles.toggleText} onClick={() => setView('login')}>
+              Return to <span>Sign In</span>
+            </p>
+          </form>
+        )}
+      </div>
+      <footer className={styles.footer}>
+        &copy; 2026 Naija Talent Show | Secure Admin Environment
+      </footer>
+    </div>
+  );
+};
+
+export default AdminAuth;

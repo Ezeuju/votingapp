@@ -33,7 +33,7 @@ const Footer = () => {
               <li><a href="/contestants">Contestants</a></li>
               <li><a href="/auditiony">Audition Roadmap</a></li>
               <li><a href="/tickets">Buy Tickets</a></li>
-              <li><a href="/sponsors">Become a Partner</a></li>
+              <li><a href="/sponsor">Become a Partner</a></li>
               <li><a href="/mentors">Mentors</a></li>
             </ul>
           </div>

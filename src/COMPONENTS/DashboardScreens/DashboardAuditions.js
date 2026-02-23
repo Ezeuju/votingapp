@@ -5,7 +5,7 @@ import { STATUS_MAP } from './Dashboarddata';
 import { useTableData } from '../../hooks/useTableData';
 import { adminApi } from '../../services/adminApi';
 
-const DashboardAuditions = ({ data: dashboardData, setData: setDashboardData }) => {
+const DashboardAuditions = ({  setData: setDashboardData }) => {
   const [viewDetails, setViewDetails] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [stats, setStats] = useState(null);

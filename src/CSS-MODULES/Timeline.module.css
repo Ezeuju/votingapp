@@ -1,0 +1,163 @@
+/* --- Global & Hero --- */
+.timelinePage {
+  background-color: #ffffff;
+  color: #333;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.goldText { color: #FFD700; }
+
+.hero {
+  background: #001a0d;
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.badge {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+}
+
+/* --- Timeline Logic --- */
+.roadmapSection {
+  padding: 100px 0;
+  background: #f9f9f9;
+}
+
+.timelineWrapper {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Vertical center line */
+.timelineWrapper::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 100%;
+  background: #008751; /* Main Green */
+  border-radius: 2px;
+}
+
+.timelineItem {
+  display: flex;
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+/* Alternate Left/Right items */
+.timelineItem:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.dateSide {
+  width: 50%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 50px;
+  align-items: center;
+}
+
+.timelineItem:nth-child(even) .dateSide {
+  justify-content: flex-start;
+  padding-right: 0;
+  padding-left: 50px;
+}
+
+.dateCircle {
+  background: #FFD700; /* Gold */
+  color: #001a0d;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.contentSide {
+  width: 50%;
+  padding-left: 50px;
+}
+
+.timelineItem:nth-child(even) .contentSide {
+  padding-left: 0;
+  padding-right: 50px;
+  text-align: right;
+}
+
+.eventCard {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid #008751;
+  transition: transform 0.3s ease;
+}
+
+.eventCard:hover {
+  transform: translateY(-5px);
+}
+
+.eventCard h3 {
+  color: #001a0d;
+  margin-bottom: 10px;
+}
+
+/* --- CTA Section --- */
+.cta {
+  padding: 80px 0;
+  text-align: center;
+  background: #001a0d;
+  color: white;
+}
+
+.applyBtn {
+  background: #008751;
+  color: white;
+  padding: 18px 40px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 25px;
+  transition: background 0.3s;
+}
+
+.applyBtn:hover {
+  background: #005f39;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .timelineWrapper::before { left: 20px; }
+  
+  .timelineItem, .timelineItem:nth-child(even) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .dateSide, .contentSide, 
+  .timelineItem:nth-child(even) .dateSide, 
+  .timelineItem:nth-child(even) .contentSide {
+    width: 100%;
+    padding: 0 0 0 50px;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  
+  .dateSide { margin-bottom: 15px; }
+}

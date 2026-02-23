@@ -1,0 +1,292 @@
+/* src/CSS-MODULES/JoinTeam.module.css */
+/* ─── Join Our Team Dashboard Page ───────────────────────────────────────── */
+
+/* ── APPLICANT CARDS ─────────────────────────────────────────────────────── */
+.applicantsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.applicantCard {
+  background: linear-gradient(145deg, rgba(0, 22, 10, 0.95), rgba(0, 12, 6, 1));
+  border: 1px solid rgba(0, 135, 81, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s;
+}
+
+.applicantCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 135, 81, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.applicantCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #008751, #FFD700);
+}
+
+/* ── CARD HEADER ─────────────────────────────────────────────────────────── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.cardAvatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #008751, #FFD700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: #000;
+  flex-shrink: 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.cardName {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #e8f5e8;
+  margin-bottom: 2px;
+}
+
+.cardEmail {
+  font-size: 12px;
+  color: rgba(232, 245, 232, 0.45);
+}
+
+/* ── CARD BODY ───────────────────────────────────────────────────────────── */
+.cardDivider {
+  height: 1px;
+  background: rgba(0, 135, 81, 0.12);
+  margin: 10px 0;
+}
+
+.cardRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-bottom: 7px;
+  font-size: 12.5px;
+}
+
+.cardRowIcon { flex-shrink: 0; font-size: 13px; margin-top: 1px; }
+
+.cardRowLabel {
+  color: rgba(255, 215, 0, 0.6);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 64px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.cardRowValue {
+  color: rgba(232, 245, 232, 0.75);
+  flex: 1;
+  line-height: 1.45;
+}
+
+.cardExperience {
+  font-size: 12px;
+  color: rgba(232, 245, 232, 0.5);
+  font-style: italic;
+  line-height: 1.5;
+  padding: 8px 10px;
+  background: rgba(0, 135, 81, 0.07);
+  border-left: 2px solid rgba(0, 135, 81, 0.3);
+  border-radius: 0 4px 4px 0;
+  margin-top: 8px;
+}
+
+.portfolioLink {
+  color: #FFD700;
+  font-size: 12px;
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  word-break: break-all;
+}
+
+.portfolioLink:hover { opacity: 1; text-decoration: underline; }
+
+/* ── CARD ACTIONS ────────────────────────────────────────────────────────── */
+.cardActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ── STATUS BADGES ───────────────────────────────────────────────────────── */
+.statusNew {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(96, 165, 250, 0.12);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.25);
+}
+
+.statusReviewing {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 215, 0, 0.12);
+  color: #FFD700;
+  border: 1px solid rgba(255, 215, 0, 0.25);
+}
+
+.statusAccepted {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+}
+
+.statusDeclined {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 107, 107, 0.12);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.25);
+}
+
+/* ── POSITION BADGE ──────────────────────────────────────────────────────── */
+.positionBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(0, 135, 81, 0.15);
+  color: #00d97e;
+  border: 1px solid rgba(0, 135, 81, 0.25);
+  letter-spacing: 0.3px;
+}
+
+/* ── CV UPLOAD ───────────────────────────────────────────────────────────── */
+.uploadArea {
+  border: 2px dashed rgba(0, 135, 81, 0.35);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(0, 135, 81, 0.04);
+  position: relative;
+}
+
+.uploadArea:hover {
+  border-color: rgba(255, 215, 0, 0.4);
+  background: rgba(255, 215, 0, 0.03);
+}
+
+.uploadIcon  { font-size: 26px; margin-bottom: 5px; }
+.uploadText  { font-size: 13px; color: rgba(232, 245, 232, 0.5); margin-bottom: 3px; }
+.uploadSub   { font-size: 11px; color: rgba(232, 245, 232, 0.3); }
+
+.uploadInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.uploadedFile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(0, 135, 81, 0.1);
+  border: 1px solid rgba(0, 135, 81, 0.25);
+  border-radius: 8px;
+}
+
+.uploadedFileName {
+  flex: 1;
+  font-size: 13px;
+  color: #e8f5e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.uploadedRemove {
+  background: none;
+  border: none;
+  color: rgba(255, 107, 107, 0.7);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0 4px;
+  transition: color 0.2s;
+}
+
+.uploadedRemove:hover { color: #ff6b6b; }
+
+/* ── FILTER TABS ─────────────────────────────────────────────────────────── */
+.filterTabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filterTab {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 135, 81, 0.25);
+  background: transparent;
+  color: rgba(232, 245, 232, 0.5);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.filterTab:hover { border-color: rgba(255, 215, 0, 0.3); color: #e8f5e8; }
+
+.filterTabActive {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.35);
+  color: #FFD700;
+}
+
+/* ── EMPTY STATE ─────────────────────────────────────────────────────────── */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(232, 245, 232, 0.3);
+  font-size: 14px;
+}
+
+.emptyIcon { font-size: 36px; margin-bottom: 12px; }

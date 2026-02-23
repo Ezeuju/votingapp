@@ -7,7 +7,7 @@ import Tickets from '../COMPONENTS/Tickets';
 import Judges from '../COMPONENTS/Judges';
 import Audition from '../COMPONENTS/Audition';
 import Partners from '../COMPONENTS/Partners';
-import Contact from '../COMPONENTS/Contact';
+import Contacty from '../COMPONENTS/Contacty';
 import Footer from "../COMPONENTS/Footer"
 
 
@@ -75,7 +75,7 @@ const Home = () => {
        <Judges />
        <Audition />
        <Partners />
-       <Contact />
+       <Contacty />
        <Footer />
 
      

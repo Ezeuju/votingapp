@@ -12,6 +12,9 @@ import DashboardAnnouncements from './DashboardAnnouncements';
 import DashboardLiveUpdates  from './DashboardLiveUpdates';
 import DashboardAuditions    from './DashboardAuditions';
 import DashboardContestants  from './DashboardContestants';
+import DashboardSponsory  from './DashboardSponsory';
+import Dashboardjointeam  from './Dashboardjointeam';
+import Dashboardcontactus from './Dashboardcontactus';
 
 import { INIT_DATA, PAGE_TITLES } from './Dashboarddata';
 
@@ -30,6 +33,9 @@ const Dashboard = () => {
       case 'updates':       return <DashboardLiveUpdates   {...sharedProps} />;
       case 'auditions':     return <DashboardAuditions     {...sharedProps} />;
       case 'contestants':   return <DashboardContestants   {...sharedProps} />;
+      case 'sponsors':  return <DashboardSponsory />;
+      case 'jointeam':  return <Dashboardjointeam                           />;
+      case 'contact':   return <Dashboardcontactus                          />;
       default:              return <DashboardOverview      {...sharedProps} />;
     }
   };
@@ -49,7 +55,9 @@ const Dashboard = () => {
               🔔 Notifications
             </button>
             <button className={`${sharedStyles.btn} ${sharedStyles.btnGreen}`}>
+              <a href="/auth">
               ⚙ Settings
+              </a>
             </button>
           </div>
         </div>

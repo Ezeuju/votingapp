@@ -9,6 +9,9 @@ export const NAV_ITEMS = [
   { id: 'updates',       icon: '🔴', label: 'Live Updates',   badge: 4 },
   { id: 'auditions',     icon: '🎤', label: 'Auditions'      },
   { id: 'contestants',   icon: '🏆', label: 'Contestants'    },
+  { id: 'sponsors', icon: '🤝', label: 'Partners & Sponsors' },
+{ id: 'jointeam', icon: '👥', label: 'Join Our Team'       },
+{ id: 'contact',  icon: '💬', label: 'Contact Messages'    },
 ];
 
 export const PAGE_TITLES = {
@@ -19,6 +22,9 @@ export const PAGE_TITLES = {
   updates:       'Live Updates',
   auditions:     'Auditions',
   contestants:   'Contestants',
+  sponsors: 'Partners & Sponsors',
+  jointeam: 'Join Our Team',
+  contact:  'Contact Messages',
 };
 
 export const STATUS_MAP = {

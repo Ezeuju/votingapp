@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import styles from '../CSS-MODULES/Contact.module.css';
-import Navbar from './Navbar';
-import Footer from './Footer';
 
-const Contact = () => {
+
+const Contacty = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -24,7 +23,7 @@ const Contact = () => {
 
   return (
     <>
-    <Navbar />
+  
     <section className={styles.contactSection} id="contact">
       <div className={styles.container}>
         <div className={styles.header}>
@@ -89,9 +88,9 @@ const Contact = () => {
         </div>
       </div>
     </section>
-    <Footer />
+ 
     </>
   );
 };
 
-export default Contact;
+export default Contacty;

@@ -1,0 +1,289 @@
+/* --- Global & Layout Variables --- */
+.sponsorPage {
+  background-color: #ffffff;
+  color: #333333;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.goldText {
+  color: #FFD700;
+}
+
+/* --- Hero Section --- */
+.hero {
+  background: #001a0d;
+  color: #ffffff;
+  padding: 100px 0;
+  text-align: center;
+}
+
+.badge {
+  color: #008751;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin: 20px 0;
+  line-height: 1.2;
+}
+
+.heroBtns {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.primaryBtn {
+  background: #008751;
+  color: #ffffff;
+  padding: 15px 30px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.primaryBtn:hover {
+  background: #005f39;
+}
+
+.secondaryBtn {
+  background: transparent;
+  border: 2px solid #FFD700;
+  color: #FFD700;
+  padding: 13px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.secondaryBtn:hover {
+  background: #FFD700;
+  color: #001a0d;
+}
+
+/* --- Why Sponsor Section (Grid) --- */
+.whySection {
+  padding: 80px 0;
+  background: #f9f9f9;
+}
+
+.sectionTitle {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 2.2rem;
+  color: #001a0d;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  border-top: 4px solid #008751;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h4 {
+  color: #001a0d;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+/* --- Sponsorship Packages Table --- */
+.packageSection {
+  padding: 80px 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.sponsorTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: #ffffff;
+}
+
+.sponsorTable th {
+  background: #008751;
+  color: #ffffff;
+  text-align: left;
+  padding: 15px;
+  font-weight: 600;
+}
+
+.sponsorTable td {
+  padding: 15px;
+  border-bottom: 1px solid #eeeeee;
+  vertical-align: middle;
+}
+
+.tierName {
+  font-weight: bold;
+  color: #008751;
+}
+
+/* --- Application Form Section --- */
+.formSection {
+  padding: 100px 0;
+  background: #001a0d;
+  color: #ffffff;
+}
+
+.formWrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #ffffff;
+  color: #333333;
+  padding: 50px;
+  border-radius: 20px;
+}
+
+.formWrapper h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #001a0d;
+}
+
+.sponsorForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputRow {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.inputRow input, 
+.sponsorForm select, 
+.sponsorForm textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.inputRow input:focus, 
+.sponsorForm select:focus, 
+.sponsorForm textarea:focus {
+  outline: none;
+  border-color: #008751;
+}
+
+.fileInput {
+  margin: 20px 0;
+  font-size: 0.9rem;
+}
+
+.fileInput label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.submitBtn {
+  width: 100%;
+  background: #008751;
+  color: #ffffff;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.submitBtn:hover {
+  background: #005f39;
+}
+
+.disclaimer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #777777;
+  margin-top: 15px;
+}
+
+/* --- Footer & Contact Info --- */
+.contactFooter {
+  padding: 60px 0;
+  text-align: center;
+  background: #f4f4f4;
+}
+
+.contactFooter h3 {
+  color: #001a0d;
+  margin-bottom: 20px;
+}
+
+.footerGrid {
+  display: flex;
+  justify-content: space-around;
+  margin: 40px 0;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footerGrid div h4 {
+  color: #008751;
+  margin-bottom: 5px;
+}
+
+.slogan {
+  font-weight: bold;
+  color: #008751;
+  font-size: 1.2rem;
+  display: block;
+  margin-top: 20px;
+}
+
+/* --- Responsive Media Queries --- */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .inputRow {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .formWrapper {
+    padding: 30px 20px;
+  }
+
+  .footerGrid {
+    flex-direction: column;
+    gap: 30px;
+  }
+}

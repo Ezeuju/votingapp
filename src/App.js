@@ -16,6 +16,11 @@ import Privacy from './Screens/Privacy';
 import PaymentResult from './COMPONENTS/PaymentResult'; 
 import Dashboard from './COMPONENTS/DashboardScreens/Dashboard';
 import PublicProfile from './Screens/PublicProfile';
+import Sponsor from "./Screens/Sponsor";
+import Contact from './COMPONENTS/Contact';
+import Timeline from "./Screens/Timeline"
+import AdminAuth from './COMPONENTS/AdminAuth/AdminAuth';
+
 
 function App() {
   return (
@@ -37,6 +42,10 @@ function App() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/PublicProfile" element={<PublicProfile />} />
         <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/sponsor" element={<Sponsor />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/timeline" element={<Timeline />} />
+        <Route path="/auth" element={<AdminAuth />} />
 
 
 
