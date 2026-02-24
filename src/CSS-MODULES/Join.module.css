@@ -91,6 +91,11 @@
 
 .submitBtn:hover { background: #005f39; }
 
+.submitBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
 @media (max-width: 900px) {
   .flexLayout { flex-direction: column; }
   .row { flex-direction: column; }

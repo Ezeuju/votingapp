@@ -41,5 +41,24 @@ export const adminApi = {
 
   deleteDonor: (donorId) => {
     return api.delete(`/donors/${donorId}/admin`);
+  },
+
+  getTeams: (params = {}) => {
+    const { pageNo = 1, limitNo = 10, search = '' } = params;
+    return api.get('/teams/admin', {
+      params: { pageNo, limitNo, search }
+    });
+  },
+
+  getTeamById: (teamId) => {
+    return api.get(`/teams/${teamId}/admin`);
+  },
+
+  updateTeamStatus: (teamId, status) => {
+    return api.patch(`/teams/${teamId}/admin`, { status });
+  },
+
+  getTeamStats: () => {
+    return api.get('/teams/stats/admin');
   }
 };

@@ -19,7 +19,7 @@ export const useTableData = (fetchFunction, initialParams = {}) => {
       setError(null);
       try {
         const response = await fetchFunction(params);
-        const result = response.data[0];
+        const result = response.data?.[0] || response.data;
         if (isMounted.current) {
           setData(result.data || []);
           setMetadata(result.metadata || { total: 0, page: 1, limit: 10, pages: 1 });
