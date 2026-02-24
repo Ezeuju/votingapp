@@ -1,42 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../CSS-MODULES/Donate.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
-import paystack from   "../assets/paystack.png"
+import paystack from "../assets/paystack.png";
+import { planApi } from '../services/planApi';
+import { paymentApi } from '../services/paymentApi';
 
 const Donate = () => {
-  // FIXED: Consolidated state to match your inputs
   const [formData, setFormData] = useState({
-    fullName: '',
+    first_name: '',
+    last_name: '',
     email: '',
     amount: '',
-    phone: "",
-    isMonthly: false
+    phone: '',
+    donation_plan_id: ''
   });
+  const [donationTiers, setDonationTiers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const donationTiers = [
-    { title: "Friend of Talent", price: "₦2,000", desc: "Helps one performer reach auditions", icon: "🧑‍🎤" },
-    { title: "Bronze Donor", price: "₦25,000", desc: "Supports logistics for 1 live event", icon: "📸" },
-    { title: "Gold Donor", price: "₦100,000", desc: "Funds training, transport, or equipment", icon: "📍" },
-    { title: "Corporate Sponsor", price: "₦500,000", desc: "Major show sponsorship tier", icon: "🏢" }
-  ];
+  useEffect(() => {
+    const fetchDonationTiers = async () => {
+      try {
+        const response = await planApi.getAll('donation');
+        setDonationTiers(response.data.data);
+      } catch (err) {
+        console.error('Failed to fetch donation tiers:', err);
+      }
+    };
+    fetchDonationTiers();
+  }, []);
 
-  // FIXED: Added the missing handler function
-  const handleDonateClick = (priceString) => {
-    // Strip non-numeric characters to get just the number
-    const numericPrice = priceString.replace(/[^0-9]/g, '');
-    setFormData({ ...formData, amount: numericPrice });
-    
-    // Smooth scroll to the form
+  const handleDonateClick = (tier) => {
+    setFormData({ 
+      ...formData, 
+      amount: tier.amount.toString(),
+      donation_plan_id: tier._id
+    });
     document.getElementById('donate-form').scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value
     });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const payload = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        email: formData.email,
+        phone: formData.phone,
+        amount: formData.amount
+      };
+      
+      if (formData.donation_plan_id) {
+        payload.donation_plan_id = formData.donation_plan_id;
+      }
+
+      const response = await paymentApi.donations.initialize(payload);
+      window.location.href = response.data.authorization_url;
+    } catch (err) {
+      setError(err.message || 'Failed to initialize payment');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,7 +97,7 @@ const Donate = () => {
           <h2 className={styles.sectionTitle}>🎯 Why Donate?</h2>
           <div className={styles.impactGrid}>
             <div className={styles.impactCard}>
-              <div className={styles.icon}>🧑‍🎤</div>
+              <div className={styles.icon}>🧑🎤</div>
               <h4>Give youth a chance</h4>
               <p>Help young talents get discovered and showcase their gifts to the world.</p>
             </div>
@@ -84,15 +120,15 @@ const Donate = () => {
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>🎁 Choose a Donation Tier</h2>
           <div className={styles.tierGrid}>
-            {donationTiers.map((tier, index) => (
-              <div key={index} className={styles.tierCard}>
-                <span className={styles.tierIcon}>{tier.icon}</span>
+            {donationTiers.map((tier) => (
+              <div key={tier._id} className={styles.tierCard}>
+                <span className={styles.tierIcon}>🎁</span>
                 <h3>{tier.title}</h3>
-                <div className={styles.tierPrice}>{tier.price}</div>
-                <p>{tier.desc}</p>
+                <div className={styles.tierPrice}>₦{tier.amount.toLocaleString()}</div>
+                <p>{tier.description}</p>
                 <button 
                   className={styles.cardDonateBtn} 
-                  onClick={() => handleDonateClick(tier.price)}
+                  onClick={() => handleDonateClick(tier)}
                 >
                   DONATE NOW
                 </button>
@@ -111,15 +147,29 @@ const Donate = () => {
               <h3>📥 Secure Paystack Donation</h3>
               <p className={styles.paystackHint}>Enter your details below to proceed to the secure Paystack gateway.</p>
               
-              <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+              <form className={styles.form} onSubmit={handleSubmit}>
+                {error && <div style={{background: '#fee', color: '#c33', padding: '12px', borderRadius: '8px', marginBottom: '15px', fontSize: '14px'}}>{error}</div>}
+                
                 <div className={styles.inputGroup}>
-                  <label>Full Name</label>
+                  <label>First Name</label>
                   <input 
                     type="text" 
-                    name="fullName"
-                    value={formData.fullName}
+                    name="first_name"
+                    value={formData.first_name}
                     onChange={handleInputChange}
-                    placeholder="Full Name" 
+                    placeholder="First Name" 
+                    required 
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <label>Last Name</label>
+                  <input 
+                    type="text" 
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleInputChange}
+                    placeholder="Last Name" 
                     required 
                   />
                 </div>
@@ -135,14 +185,15 @@ const Donate = () => {
                     required 
                   />
                 </div>
+
                 <div className={styles.inputGroup}>
                   <label>Phone Number</label>
                   <input 
-                    type="phone" 
+                    type="tel" 
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="07020323290" 
+                    placeholder="09012345678" 
                     required 
                   />
                 </div>
@@ -166,17 +217,8 @@ const Donate = () => {
                   <img src={paystack} alt="Paystack" className={styles.psLogo} />
                 </div>
 
-                <label className={styles.checkRow}>
-                  <input 
-                    type="checkbox" 
-                    name="isMonthly"
-                    checked={formData.isMonthly}
-                    onChange={handleInputChange}
-                  /> Make this a monthly donation
-                </label>
-
-                <button type="submit" className={styles.donateBtn}>
-                  PROCEED TO PAYSTACK
+                <button type="submit" className={styles.donateBtn} disabled={loading}>
+                  {loading ? 'PROCESSING...' : 'PROCEED TO PAYSTACK'}
                 </button>
               </form>
             </div>
@@ -205,7 +247,7 @@ const Donate = () => {
 
       <footer className={styles.donateFooter}>
         <h3>❤️ Every naira makes a difference</h3>
-        <p>Help us discover and develop Nigeria’s next stars.</p>
+        <p>Help us discover and develop Nigeria's next stars.</p>
         <button className={styles.contactBtn}>CONTACT OUR TEAM</button>
       </footer>
     </div>

@@ -21,11 +21,17 @@
   border-top: 8px solid;
 }
 
-.successBorder { border-color: #008751; }
-.failBorder { border-color: #e63946; }
+.successBorder {
+  border-color: #008751;
+}
+
+.failBorder {
+  border-color: #e63946;
+}
 
 /* Icons */
-.iconCircleSuccess, .iconCircleFail {
+.iconCircleSuccess,
+.iconCircleFail {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -37,14 +43,31 @@
   color: white;
 }
 
-.iconCircleSuccess { background: #008751; box-shadow: 0 0 20px rgba(0, 135, 81, 0.3); }
-.iconCircleFail { background: #e63946; box-shadow: 0 0 20px rgba(230, 57, 70, 0.3); }
+.iconCircleSuccess {
+  background: #008751;
+  box-shadow: 0 0 20px rgba(0, 135, 81, 0.3);
+}
+
+.iconCircleFail {
+  background: #e63946;
+  box-shadow: 0 0 20px rgba(230, 57, 70, 0.3);
+}
 
 /* Typography */
-.successText { color: #001a0d; font-size: 2rem; margin-bottom: 10px; }
-.failText { color: #001a0d; font-size: 2rem; margin-bottom: 10px; }
+.successText {
+  color: #001a0d;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
 
-.detailsBox, .errorBox {
+.failText {
+  color: #001a0d;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.detailsBox,
+.errorBox {
   background: #f4fcf8;
   padding: 20px;
   border-radius: 12px;
@@ -52,7 +75,11 @@
   text-align: left;
 }
 
-.errorBox { background: #fff5f5; color: #666; font-size: 0.9rem; }
+.errorBox {
+  background: #fff5f5;
+  color: #666;
+  font-size: 0.9rem;
+}
 
 .row {
   display: flex;
@@ -67,10 +94,14 @@
   color: #555;
 }
 
-.nextSteps h4 { color: #008751; margin-bottom: 5px; }
+.nextSteps h4 {
+  color: #008751;
+  margin-bottom: 5px;
+}
 
 /* Buttons */
-.btnHome, .btnRetry {
+.btnHome,
+.btnRetry {
   width: 100%;
   padding: 16px;
   border: none;
@@ -80,8 +111,15 @@
   transition: 0.3s;
 }
 
-.btnHome, .btnRetry { background: #008751; color: white; }
-.btnHome:hover { background: #001a0d; }
+.btnHome,
+.btnRetry {
+  background: #008751;
+  color: white;
+}
+
+.btnHome:hover {
+  background: #001a0d;
+}
 
 .btnGroup {
   display: flex;
@@ -98,7 +136,9 @@
   cursor: pointer;
 }
 
-.btnSupport:hover { background: #eee; }
+.btnSupport:hover {
+  background: #eee;
+}
 
 
 /* Animation Container */
@@ -154,10 +194,19 @@
 }
 
 @keyframes stroke {
-  100% { stroke-dashoffset: 0; }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

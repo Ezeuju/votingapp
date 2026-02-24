@@ -1,0 +1,176 @@
+/* ── Page wrapper — full-screen centered with dimmed background ── */
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    padding: 24px;
+}
+
+/* ── White modal card ── */
+.card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 52px 40px 44px;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* ── Icon circle ── */
+.iconWrap {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+}
+
+.iconWrapSuccess {
+    background: #008751;
+}
+
+.iconWrapFail {
+    background: #e63946;
+}
+
+.iconWrap svg {
+    width: 44px;
+    height: 44px;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+/* ── Headings ── */
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0d1b0d;
+    margin: 0 0 14px;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #6b7b6e;
+    margin: 0 0 32px;
+    line-height: 1.6;
+}
+
+/* ── Buttons ── */
+.btnPrimary {
+    display: block;
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.25s;
+    background: #008751;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.btnPrimary:hover {
+    background: #006640;
+}
+
+.btnSecondary {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    background: transparent;
+    color: #555;
+}
+
+.btnSecondary:hover {
+    background: #f5f5f5;
+}
+
+/* ── Full-screen verifying / success splash ── */
+.splash {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 135, 81, 0.97);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.splashInner {
+    text-align: center;
+    color: #fff;
+}
+
+.splashInner h2 {
+    margin-top: 20px;
+    font-size: 1.9rem;
+    animation: fadeUp 0.5s ease-in;
+}
+
+/* Animated SVG checkmark */
+.checkmark {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto;
+}
+
+.checkmark circle {
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-dasharray: 166;
+    stroke-dashoffset: 166;
+    fill: none;
+    animation: drawCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark path {
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    fill: none;
+    animation: drawTick 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+}
+
+@keyframes drawCircle {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes drawTick {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

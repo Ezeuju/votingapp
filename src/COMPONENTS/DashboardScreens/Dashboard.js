@@ -55,9 +55,7 @@ const Dashboard = () => {
               🔔 Notifications
             </button>
             <button className={`${sharedStyles.btn} ${sharedStyles.btnGreen}`}>
-              <a href="/auth">
               ⚙ Settings
-              </a>
             </button>
           </div>
         </div>

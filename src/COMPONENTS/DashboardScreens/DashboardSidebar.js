@@ -1,8 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../DashboardScreens/Dashboard.module.css';
 import { NAV_ITEMS } from './Dashboarddata';
 
 const Dashboardsidebar = ({ active, onNavigate }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/auth');
+  };
+
   return (
     <aside className={styles.sidebar}>
       {/* ── Logo ── */}
@@ -39,6 +47,9 @@ const Dashboardsidebar = ({ active, onNavigate }) => {
             <span className={styles.adminEmail}>admin@starstage.ng</span>
           </div>
         </div>
+        <button className={styles.logoutBtn} onClick={handleLogout}>
+          🚪 Logout
+        </button>
       </div>
     </aside>
   );

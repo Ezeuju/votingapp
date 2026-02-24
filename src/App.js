@@ -13,27 +13,28 @@ import Faq from './Screens/Faq';
 import Join from './Screens/Join';
 import Gallery from './Screens/Gallery';
 import Privacy from './Screens/Privacy';
-import PaymentResult from './COMPONENTS/PaymentResult'; 
+import PaymentResult from './COMPONENTS/PaymentResult';
 import Dashboard from './COMPONENTS/DashboardScreens/Dashboard';
 import PublicProfile from './Screens/PublicProfile';
 import Sponsor from "./Screens/Sponsor";
 import Contact from './COMPONENTS/Contact';
 import Timeline from "./Screens/Timeline"
 import AdminAuth from './COMPONENTS/AdminAuth/AdminAuth';
+import DonationResult from './Screens/DonationResult';
 
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/rules' element={<Rules/>}/>
-        <Route path='/tickets' element={<TicketPage/>}/>
-        <Route path='/contestants' element={<Contestants/>}/>
-        <Route path='/sponsors' element={<Sponsors/>}/>
-        <Route path='/send' element={<Send/>}/>
-        <Route path='/donate' element={<Donate/>}/>
-        <Route path='/mentors' element={<Mentors/>}/>
+        <Route path='/' element={<Home />} />
+        <Route path='/rules' element={<Rules />} />
+        <Route path='/tickets' element={<TicketPage />} />
+        <Route path='/contestants' element={<Contestants />} />
+        <Route path='/sponsors' element={<Sponsors />} />
+        <Route path='/send' element={<Send />} />
+        <Route path='/donate' element={<Donate />} />
+        <Route path='/mentors' element={<Mentors />} />
         <Route path="/auditiony" element={<AuditionRegistration />} />
         <Route path="/join" element={<Join />} />
         <Route path="/gallery" element={<Gallery />} />
@@ -46,11 +47,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/auth" element={<AdminAuth />} />
-
-
-
-
-
+        <Route path="/donation-result" element={<DonationResult />} />
       </Routes>
     </div>
   );

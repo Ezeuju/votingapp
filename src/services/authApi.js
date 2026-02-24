@@ -11,7 +11,7 @@ export const authApi = {
   refreshToken: () => api.post('/auth/refresh-token'),
   
   admin: {
-    login: (data) => api.post('/auth/admins/login', data),
+    login: (data) => api.post('/auths/admins/login', data),
     sendOTP: (data) => api.post('/auth/admins/send-otp', data),
     verifyOTP: (data) => api.post('/auth/admins/verify-otp', data),
     resetPassword: (data) => api.post('/auth/admins/reset-password', data),

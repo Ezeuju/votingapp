@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './AdminAuth.module.css';
+import { authApi } from '../../services/authApi';
 
 const AdminAuth = () => {
   const [view, setView] = useState('login'); // login or forgot
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Secure Admin Login Logic
-    setTimeout(() => {
+    setError('');
+    
+    try {
+      const response = await authApi.admin.login(formData);
+      localStorage.setItem('token', response.data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message || 'Login failed');
+    } finally {
       setLoading(false);
-      navigate('/dashboard'); 
-    }, 1500);
+    }
   };
 
   return (
@@ -29,13 +39,26 @@ const AdminAuth = () => {
           /* --- ADMIN LOGIN FORM --- */
           <form className={styles.form} onSubmit={handleLogin}>
             <h2>Internal Sign In</h2>
+            {error && <div className={styles.error}>{error}</div>}
             <div className={styles.inputGroup}>
               <label>Admin Email</label>
-              <input type="email" placeholder="admin@naijatalentshow.com" required />
+              <input 
+                type="email" 
+                placeholder="admin@naijatalentshow.com" 
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                required 
+              />
             </div>
             <div className={styles.inputGroup}>
               <label>Security Password</label>
-              <input type="password" placeholder="••••••••" required />
+              <input 
+                type="password" 
+                placeholder="••••••••" 
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                required 
+              />
             </div>
             <button type="submit" className={styles.loginBtn} disabled={loading}>
               {loading ? "Authenticating..." : "Access Dashboard"}
