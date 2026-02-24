@@ -1,59 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
-import { STATUS_MAP } from './Dashboarddata';
+import { adminApi } from '../../services/adminApi';
 
-const EMPTY_FORM = {
-  fullName: '',
-  email: '',
-  phone: '',
-  amount: '',
-  monthly: false,
-  date: '',
-  status: 'Pending',
-};
-
-const DashboardDonations = ({ data, setData }) => {
-  const [modal, setModal]         = useState(false);
-  const [search, setSearch]       = useState('');
-  const [form, setForm]           = useState(EMPTY_FORM);
+const DashboardDonations = () => {
+  const [donors, setDonors] = useState([]);
+  const [stats, setStats] = useState({});
+  const [metadata, setMetadata] = useState({});
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [viewEntry, setViewEntry] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const field = (key, val) => setForm(p => ({ ...p, [key]: val }));
-
-  const filtered = data.donations.filter(d =>
-    (d.fullName || '').toLowerCase().includes(search.toLowerCase()) ||
-    (d.email || '').toLowerCase().includes(search.toLowerCase()) ||
-    (d.phone || '').toLowerCase().includes(search.toLowerCase())
-  );
-
-  const handleAdd = () => {
-    if (!form.fullName || !form.amount || !form.email) return;
-    const entry = { id: Date.now(), ...form };
-    setData(p => ({ ...p, donations: [entry, ...p.donations] }));
-    setForm(EMPTY_FORM);
-    setModal(false);
+  const fetchDonors = async () => {
+    setLoading(true);
+    try {
+      const response = await adminApi.getDonors({ pageNo: page, limitNo: 10, search });
+      setDonors(response.data.data);
+      setMetadata(response.data.metadata);
+    } catch (err) {
+      console.error('Failed to fetch donors:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDelete = id =>
-    setData(p => ({ ...p, donations: p.donations.filter(d => d.id !== id) }));
+  const fetchStats = async () => {
+    try {
+      const response = await adminApi.getDonorStats();
+      setStats(response.data);
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+    }
+  };
 
-  const handleStatusChange = (id, status) =>
-    setData(p => ({
-      ...p,
-      donations: p.donations.map(d => d.id === id ? { ...d, status } : d),
-    }));
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  useEffect(() => {
+    fetchDonors();
+  }, [page, search]);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this donor?')) return;
+    try {
+      await adminApi.deleteDonor(id);
+      fetchDonors();
+      fetchStats();
+    } catch (err) {
+      alert(err.message || 'Failed to delete donor');
+    }
+  };
+
+  const handleView = async (id) => {
+    try {
+      const response = await adminApi.getDonorById(id);
+      setViewEntry(response.data);
+    } catch (err) {
+      alert(err.message || 'Failed to fetch donor details');
+    }
+  };
 
   const summaryStats = [
-    { icon: '💰', label: 'Total',     count: data.donations.length },
-    { icon: '✅', label: 'Confirmed', count: data.donations.filter(d => d.status === 'Confirmed').length },
-    { icon: '⏳', label: 'Pending',   count: data.donations.filter(d => d.status === 'Pending').length   },
-    { icon: '🔁', label: 'Monthly',   count: data.donations.filter(d => d.monthly).length                },
+    { icon: '💰', label: 'Total', count: stats.total_donors || 0 },
+    { icon: '✅', label: 'Confirmed', count: stats.confirmed_donors || 0 },
+    { icon: '⏳', label: 'Pending', count: stats.pending_donors || 0 },
+    { icon: '🔁', label: 'Monthly', count: stats.monthly_donors || 0 },
   ];
 
   return (
     <div>
-      {/* ── Summary Stats ── */}
+      {/* Stats */}
       <div className={styles.statsGrid}>
         {summaryStats.map(st => (
           <div className={styles.statCard} key={st.label}>
@@ -64,15 +82,12 @@ const DashboardDonations = ({ data, setData }) => {
         ))}
       </div>
 
-      {/* ── Header ── */}
+      {/* Header */}
       <div className={styles.sectionHeader}>
         <span className={styles.sectionTitle}>All <span>Donations</span></span>
-        {/* <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={() => setModal(true)}>
-          + Add Donation
-        </button> */}
       </div>
 
-      {/* ── Search ── */}
+      {/* Search */}
       <div className={styles.searchWrap}>
         <span className={styles.searchIcon}>🔍</span>
         <input
@@ -83,12 +98,12 @@ const DashboardDonations = ({ data, setData }) => {
         />
       </div>
 
-      {/* ── Table ── */}
+      {/* Table */}
       <div className={styles.tableScroll}>
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Full Name</th>
+              <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Amount</th>
@@ -99,193 +114,120 @@ const DashboardDonations = ({ data, setData }) => {
             </tr>
           </thead>
           <tbody>
-            {filtered.map(d => (
-              <tr key={d.id}>
-                <td className={styles.tdBold}>{d.fullName}</td>
-                <td className={styles.tdMuted}>{d.email}</td>
-                <td className={styles.tdMuted}>{d.phone}</td>
-                <td className={styles.tdGold}>{d.amount}</td>
-                <td>
-                  <span className={`${styles.badge} ${d.monthly ? styles.badgeSuccess : styles.badgeInfo}`}>
-                    {d.monthly ? '🔁 Monthly' : 'One-time'}
-                  </span>
-                </td>
-                <td className={styles.tdMuted}>{d.date}</td>
-                <td>
-                  <span className={`${styles.badge} ${styles[STATUS_MAP[d.status]]}`}>{d.status}</span>
-                </td>
-                <td>
-                  <div style={{ display: 'flex', gap: 6 }}>
-                    <button
-                      className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
-                      onClick={() => setViewEntry(d)}
-                    >
-                      View
-                    </button>
-                    {d.status === 'Pending' && (
-                      <button
-                        className={`${styles.btn} ${styles.btnGreen} ${styles.btnSm}`}
-                        onClick={() => handleStatusChange(d.id, 'Confirmed')}
-                      >
-                        Confirm
-                      </button>
-                    )}
-                    <button
-                      className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                      onClick={() => handleDelete(d.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 && (
+            {loading ? (
+              <tr><td colSpan={8} className={styles.emptyRow}>Loading...</td></tr>
+            ) : donors.length === 0 ? (
               <tr><td colSpan={8} className={styles.emptyRow}>No donations found</td></tr>
+            ) : (
+              donors.map(d => (
+                <tr key={d._id}>
+                  <td className={styles.tdBold}>{d.first_name} {d.last_name}</td>
+                  <td className={styles.tdMuted}>{d.email}</td>
+                  <td className={styles.tdMuted}>{d.phone}</td>
+                  <td className={styles.tdGold}>₦{d.total_donated?.toLocaleString()}</td>
+                  <td>
+                    <span className={`${styles.badge} ${d.type === 'monthly' ? styles.badgeSuccess : styles.badgeInfo}`}>
+                      {d.type === 'monthly' ? '🔁 Monthly' : 'One-time'}
+                    </span>
+                  </td>
+                  <td className={styles.tdMuted}>{new Date(d.date).toLocaleDateString()}</td>
+                  <td>
+                    <span className={`${styles.badge} ${d.payment_status === 'Confirmed' ? styles.badgeSuccess : styles.badgeWarning}`}>
+                      {d.payment_status}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <button
+                        className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                        onClick={() => handleView(d._id)}
+                      >
+                        View
+                      </button>
+                      <button
+                        className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
+                        onClick={() => handleDelete(d._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
       </div>
 
-      {/* ── Add Donation Modal ── */}
-      {modal && (
-        <DashboardModal title="Record Donation" onClose={() => { setModal(false); setForm(EMPTY_FORM); }}>
-          <div className={styles.formGrid}>
-
-            <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
-              <label className={styles.label}>Full Name</label>
-              <input
-                className={styles.input}
-                placeholder="e.g. Emeka Okafor"
-                value={form.fullName}
-                onChange={e => field('fullName', e.target.value)}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Email Address</label>
-              <input
-                className={styles.input}
-                type="email"
-                placeholder="e.g. emeka@email.com"
-                value={form.email}
-                onChange={e => field('email', e.target.value)}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Phone Number</label>
-              <input
-                className={styles.input}
-                placeholder="e.g. +234 801 234 5678"
-                value={form.phone}
-                onChange={e => field('phone', e.target.value)}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Amount Donated (₦)</label>
-              <input
-                className={styles.input}
-                placeholder="e.g. 50,000"
-                value={form.amount}
-                onChange={e => field('amount', e.target.value)}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Date</label>
-              <input
-                className={styles.input}
-                type="date"
-                value={form.date}
-                onChange={e => field('date', e.target.value)}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label className={styles.label}>Status</label>
-              <select
-                className={styles.select}
-                value={form.status}
-                onChange={e => field('status', e.target.value)}
-              >
-                <option value="Pending">Pending</option>
-                <option value="Confirmed">Confirmed</option>
-              </select>
-            </div>
-
-            <div className={`${styles.formGroup} ${styles.formGroupFull}`}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-                <input
-                  type="checkbox"
-                  checked={form.monthly}
-                  onChange={e => field('monthly', e.target.checked)}
-                  style={{ width: 16, height: 16, accentColor: '#FFD700', cursor: 'pointer' }}
-                />
-                <span className={styles.label} style={{ marginBottom: 0 }}>
-                  🔁 Make this a monthly donation
-                </span>
-              </label>
-            </div>
-
-          </div>
-          <div className={styles.modalActions}>
-            <button
-              className={`${styles.btn} ${styles.btnOutline}`}
-              onClick={() => { setModal(false); setForm(EMPTY_FORM); }}
-            >
-              Cancel
-            </button>
-            <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleAdd}>
-              Record Donation
-            </button>
-          </div>
-        </DashboardModal>
+      {/* Pagination */}
+      {metadata.pages > 1 && (
+        <div className={styles.pagination}>
+          <button 
+            className={styles.btn} 
+            disabled={page === 1}
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </button>
+          <span>Page {page} of {metadata.pages}</span>
+          <button 
+            className={styles.btn}
+            disabled={page === metadata.pages}
+            onClick={() => setPage(page + 1)}
+          >
+            Next
+          </button>
+        </div>
       )}
 
-      {/* ── View Donation Modal ── */}
+      {/* View Modal */}
       {viewEntry && (
         <DashboardModal title="Donation Details" onClose={() => setViewEntry(null)}>
           <div className={styles.formGrid}>
-            {[
-              { label: 'Full Name',  value: viewEntry.fullName },
-              { label: 'Email',      value: viewEntry.email    },
-              { label: 'Phone',      value: viewEntry.phone    },
-              { label: 'Amount',     value: viewEntry.amount   },
-              { label: 'Date',       value: viewEntry.date     },
-            ].map(row => (
-              <div className={styles.formGroup} key={row.label}>
-                <span className={styles.label}>{row.label}</span>
-                <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{row.value || '—'}</span>
-              </div>
-            ))}
             <div className={styles.formGroup}>
-              <span className={styles.label}>Donation Type</span>
+              <span className={styles.label}>First Name</span>
+              <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.first_name}</span>
+            </div>
+            <div className={styles.formGroup}>
+              <span className={styles.label}>Last Name</span>
+              <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.last_name}</span>
+            </div>
+            <div className={styles.formGroup}>
+              <span className={styles.label}>Email</span>
+              <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.email}</span>
+            </div>
+            <div className={styles.formGroup}>
+              <span className={styles.label}>Phone</span>
+              <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.phone}</span>
+            </div>
+            <div className={styles.formGroup}>
+              <span className={styles.label}>Total Donated</span>
+              <span style={{ color: '#FFD700', fontSize: 14, fontWeight: 500 }}>₦{viewEntry.total_donated?.toLocaleString()}</span>
+            </div>
+            <div className={styles.formGroup}>
+              <span className={styles.label}>Type</span>
               <div style={{ marginTop: 4 }}>
-                <span className={`${styles.badge} ${viewEntry.monthly ? styles.badgeSuccess : styles.badgeInfo}`}>
-                  {viewEntry.monthly ? '🔁 Monthly' : 'One-time'}
+                <span className={`${styles.badge} ${viewEntry.type === 'monthly' ? styles.badgeSuccess : styles.badgeInfo}`}>
+                  {viewEntry.type === 'monthly' ? '🔁 Monthly' : 'One-time'}
                 </span>
               </div>
             </div>
             <div className={styles.formGroup}>
               <span className={styles.label}>Status</span>
               <div style={{ marginTop: 4 }}>
-                <span className={`${styles.badge} ${styles[STATUS_MAP[viewEntry.status]]}`}>
-                  {viewEntry.status}
+                <span className={`${styles.badge} ${viewEntry.payment_status === 'Confirmed' ? styles.badgeSuccess : styles.badgeWarning}`}>
+                  {viewEntry.payment_status}
                 </span>
               </div>
             </div>
+            <div className={styles.formGroup}>
+              <span className={styles.label}>Date</span>
+              <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>
+                {new Date(viewEntry.createdAt).toLocaleString()}
+              </span>
+            </div>
           </div>
           <div className={styles.modalActions}>
-            {viewEntry.status === 'Pending' && (
-              <button
-                className={`${styles.btn} ${styles.btnGreen}`}
-                onClick={() => { handleStatusChange(viewEntry.id, 'Confirmed'); setViewEntry(null); }}
-              >
-                ✓ Confirm Donation
-              </button>
-            )}
             <button className={`${styles.btn} ${styles.btnOutline}`} onClick={() => setViewEntry(null)}>
               Close
             </button>

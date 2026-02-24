@@ -1,11 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import pageStyles from '../DashboardScreens/Dashboardpages.module.css';
 import { STATUS_MAP } from './Dashboarddata';
+import { adminApi } from '../../services/adminApi';
 
 const DashboardOverview = ({ data }) => {
+  const [recentDonations, setRecentDonations] = useState([]);
+  const [totalDonations, setTotalDonations] = useState(0);
+
+  useEffect(() => {
+    const fetchRecentDonations = async () => {
+      try {
+        const response = await adminApi.getDonors({ pageNo: 1, limitNo: 4 });
+        setRecentDonations(response.data.data);
+      } catch (err) {
+        console.error('Failed to fetch recent donations:', err);
+      }
+    };
+
+    const fetchDonationSummary = async () => {
+      try {
+        const response = await adminApi.getDonorSummary();
+        setTotalDonations(response.data.total_amount);
+      } catch (err) {
+        console.error('Failed to fetch donation summary:', err);
+      }
+    };
+
+    fetchRecentDonations();
+    fetchDonationSummary();
+  }, []);
   const stats = [
-    { icon: '💰', label: 'Total Donations',  value: '₦1.75M',               delta: '+12%' },
+    { icon: '💰', label: 'Total Donations',  value: `₦${totalDonations.toLocaleString()}`, delta: '+12%' },
     { icon: '🎫', label: 'Tickets Issued',   value: data.tickets.length,     delta: '+3%'  },
     { icon: '🏆', label: 'Contestants',      value: data.contestants.length, delta: ''     },
     { icon: '🗳️', label: 'Total Votes',     value: '32,280',                delta: '+18%' },
@@ -40,13 +66,13 @@ const DashboardOverview = ({ data }) => {
                 <tr><th>Donor</th><th>Amount</th><th>Status</th></tr>
               </thead>
               <tbody>
-                {data.donations.slice(0, 4).map(d => (
-                  <tr key={d.id}>
-                    <td>{d.fullName}</td>
-                    <td className={styles.tdGold}>{d.amount}</td>
+                {recentDonations.map(d => (
+                  <tr key={d._id}>
+                    <td>{d.first_name} {d.last_name}</td>
+                    <td className={styles.tdGold}>₦{d.total_donated?.toLocaleString()}</td>
                     <td>
-                      <span className={`${styles.badge} ${styles[STATUS_MAP[d.status]]}`}>
-                        {d.status}
+                      <span className={`${styles.badge} ${d.payment_status === 'Confirmed' ? styles.badgeSuccess : styles.badgeWarning}`}>
+                        {d.payment_status}
                       </span>
                     </td>
                   </tr>
