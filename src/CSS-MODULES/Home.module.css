@@ -1,5 +1,3 @@
-
-
 /* 4. Live Ticker */
 .liveTicker {
   position: fixed;
@@ -22,6 +20,7 @@
   width: 100%;
   padding: 10px;
   font-weight: 500;
+  color: #000;
 }
 
 /* Video Grid */
@@ -54,7 +53,7 @@
   color: #222;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
- 
+
 }
 
 /* Header */
@@ -90,7 +89,7 @@
   padding: 30px 5%;
   display: flex;
   align-items: center;
-  
+
 }
 
 .evolutionText {
@@ -115,7 +114,7 @@
   background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   text-align: center;
   border-top: 5px solid #008751;
 }
@@ -162,10 +161,10 @@
 
 
 @media screen and (max-width: 1000px) {
- .evolutionSection {
-  
-  
-   flex-direction: column;
- }
-  
+  .evolutionSection {
+
+
+    flex-direction: column;
+  }
+
 }

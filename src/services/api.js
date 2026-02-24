@@ -26,4 +26,6 @@ api.interceptors.response.use(
   }
 );
 
+export const getLiveUpdates = () => api.get('/live-updates/user');
+
 export default api;

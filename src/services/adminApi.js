@@ -60,5 +60,24 @@ export const adminApi = {
 
   getTeamStats: () => {
     return api.get('/teams/stats/admin');
+  },
+
+  getLiveUpdates: (params = {}) => {
+    const { pageNo = 1, limitNo = 10, search = '' } = params;
+    return api.get('/live-updates/admin', {
+      params: { pageNo, limitNo, search }
+    });
+  },
+
+  createLiveUpdate: (message) => {
+    return api.post('/live-updates/admin', { message });
+  },
+
+  updateLiveUpdate: (updateId, is_pin) => {
+    return api.patch(`/live-updates/${updateId}/admin`, { is_pin });
+  },
+
+  deleteLiveUpdate: (updateId) => {
+    return api.delete(`/live-updates/${updateId}/admin`);
   }
 };
