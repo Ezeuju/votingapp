@@ -49,6 +49,7 @@ function App() {
         <Route path="/timeline" element={<Timeline />} />
         <Route path="/auth" element={<AdminAuth />} />
         <Route path="/donation-result" element={<DonationResult />} />
+        <Route path="/ticketpage" element={<TicketPage/>} />
       </Routes>
     </div>
   );

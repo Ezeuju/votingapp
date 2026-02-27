@@ -14,13 +14,7 @@ const STATUS_CLASS = {
 };
 
 const DashboardJoinTeam = () => {
-  const {
-    data: applicants,
-    metadata,
-    loading,
-    setSearch,
-    refetch,
-  } = useTableData(adminApi.getTeams);
+  const { data: applicants,loading, setSearch, refetch } = useTableData(adminApi.getTeams);
   const [viewEntry, setViewEntry] = useState(null);
   const [filter, setFilter] = useState("All");
   const [searchInput, setSearchInput] = useState("");

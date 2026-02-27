@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
 import ConfirmModal from './ConfirmModal';
@@ -14,18 +14,22 @@ const DashboardDonations = () => {
   const [loading, setLoading] = useState(false);
   const [confirmId, setConfirmId] = useState(null);
 
-  const fetchDonors = async () => {
-    setLoading(true);
-    try {
-      const response = await adminApi.getDonors({ pageNo: page, limitNo: 10, search });
-      setDonors(response.data.data);
-      setMetadata(response.data.metadata);
-    } catch (err) {
-      console.error('Failed to fetch donors:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchDonors = useCallback(async () => {
+  setLoading(true);
+  try {
+    const response = await adminApi.getDonors({
+      pageNo: page,
+      limitNo: 10,
+      search
+    });
+    setDonors(response.data.data);
+    setMetadata(response.data.metadata);
+  } catch (err) {
+    console.error('Failed to fetch donors:', err);
+  } finally {
+    setLoading(false);
+  }
+}, [page, search]);
 
   const fetchStats = async () => {
     try {
@@ -40,9 +44,9 @@ const DashboardDonations = () => {
     fetchStats();
   }, [donors]);
 
-  useEffect(() => {
-    fetchDonors();
-  }, [page, search]);
+useEffect(() => {
+  fetchDonors();
+}, [fetchDonors]);
 
   const handleDelete = async () => {
     const id = confirmId;
