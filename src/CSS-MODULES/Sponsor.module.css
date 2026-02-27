@@ -268,7 +268,7 @@
 }
 
 /* --- Responsive Media Queries --- */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .hero h1 {
     font-size: 2rem;
   }
@@ -286,4 +286,14 @@
     flex-direction: column;
     gap: 30px;
   }
+
+  .inputRow input, 
+.sponsorForm select, 
+.sponsorForm textarea {
+  width: 90%;
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-family: inherit;
+}
 }
