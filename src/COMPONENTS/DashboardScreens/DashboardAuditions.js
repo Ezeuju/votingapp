@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
+import ConfirmModal from './ConfirmModal';
 import { STATUS_MAP } from './Dashboarddata';
 import { useTableData } from '../../hooks/useTableData';
 import { adminApi } from '../../services/adminApi';
 
-const DashboardAuditions = ({  setData: setDashboardData }) => {
+const DashboardAuditions = ({ setData: setDashboardData }) => {
   const [viewDetails, setViewDetails] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [stats, setStats] = useState(null);
+  const [confirmId, setConfirmId] = useState(null);
 
   const { data, metadata, loading, error, setPage, setSearch, refetch } = useTableData(
     adminApi.getUsers,
     { account_type: 'Applicant' }
   );
 
+  const fetchStats = async () => {
+    try {
+      const response = await adminApi.getAuditionStats();
+      setStats(response.data);
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+    }
+  };
+
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await adminApi.getAuditionStats();
-        setStats(response.data);
-      } catch (err) {
-        console.error('Failed to fetch stats:', err);
-      }
-    };
     fetchStats();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const timer = setTimeout(() => setSearch(searchInput), 500);
@@ -54,10 +57,12 @@ const DashboardAuditions = ({  setData: setDashboardData }) => {
     }
   };
 
-  const handleDelete = async (userId) => {
-    if (!window.confirm('Are you sure you want to delete this audition registration?')) return;
+  const handleDelete = async () => {
+    const userId = confirmId;
+    setConfirmId(null);
     try {
       await adminApi.deleteAudition(userId);
+      await fetchStats();
       refetch();
     } catch (err) {
       console.error('Failed to delete audition:', err);
@@ -183,7 +188,7 @@ const DashboardAuditions = ({  setData: setDashboardData }) => {
                         </button>
                         <button
                           className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                          onClick={() => handleDelete(a._id)}
+                          onClick={() => setConfirmId(a._id)}
                         >
                           Delete
                         </button>
@@ -226,6 +231,15 @@ const DashboardAuditions = ({  setData: setDashboardData }) => {
       )}
 
 
+
+      {/* ── Confirm Delete Modal ── */}
+      {confirmId && (
+        <ConfirmModal
+          message="Are you sure you want to delete this audition registration? This action cannot be undone."
+          onConfirm={handleDelete}
+          onCancel={() => setConfirmId(null)}
+        />
+      )}
 
       {/* ── View Details Modal ── */}
       {viewDetails && (

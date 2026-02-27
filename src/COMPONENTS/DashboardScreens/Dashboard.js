@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import layoutStyles from '../DashboardScreens/Dashboard.module.css';
 import sharedStyles from '../DashboardScreens/Dashboardshared.module.css';
@@ -19,8 +19,14 @@ import Dashboardcontactus from './Dashboardcontactus';
 import { INIT_DATA, PAGE_TITLES } from './Dashboarddata';
 
 const Dashboard = () => {
-  const [active, setActive] = useState('dashboard');
-  const [data, setData]     = useState(INIT_DATA);
+  const [active, setActive] = useState(() => {
+    return localStorage.getItem('dashboardActiveTab') || 'dashboard';
+  });
+  const [data, setData] = useState(INIT_DATA);
+
+  useEffect(() => {
+    localStorage.setItem('dashboardActiveTab', active);
+  }, [active]);
 
   const sharedProps = { data, setData };
 

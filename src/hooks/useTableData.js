@@ -6,6 +6,7 @@ export const useTableData = (fetchFunction, initialParams = {}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [params, setParams] = useState({ pageNo: 1, limitNo: 10, search: '', ...initialParams });
+  const [refreshKey, setRefreshKey] = useState(0);
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -36,12 +37,12 @@ export const useTableData = (fetchFunction, initialParams = {}) => {
       }
     };
     fetchData();
-  }, [params.pageNo, params.limitNo, params.search, params.account_type]);
+  }, [params.pageNo, params.limitNo, params.search, params.account_type, refreshKey]);
 
   const setPage = (page) => setParams(prev => ({ ...prev, pageNo: page }));
   const setLimit = (limit) => setParams(prev => ({ ...prev, limitNo: limit, pageNo: 1 }));
   const setSearch = (search) => setParams(prev => ({ ...prev, search, pageNo: 1 }));
-  const refetch = () => setParams(prev => ({ ...prev }));
+  const refetch = () => setRefreshKey(prev => prev + 1);
 
   return {
     data,

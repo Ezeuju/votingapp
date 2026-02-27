@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
+import ConfirmModal from './ConfirmModal';
 import { adminApi } from '../../services/adminApi';
 
 const DashboardDonations = () => {
@@ -11,6 +12,7 @@ const DashboardDonations = () => {
   const [page, setPage] = useState(1);
   const [viewEntry, setViewEntry] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [confirmId, setConfirmId] = useState(null);
 
   const fetchDonors = async () => {
     setLoading(true);
@@ -36,18 +38,19 @@ const DashboardDonations = () => {
 
   useEffect(() => {
     fetchStats();
-  }, []);
+  }, [donors]);
 
   useEffect(() => {
     fetchDonors();
   }, [page, search]);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this donor?')) return;
+  const handleDelete = async () => {
+    const id = confirmId;
+    setConfirmId(null);
     try {
       await adminApi.deleteDonor(id);
+      await fetchStats();
       fetchDonors();
-      fetchStats();
     } catch (err) {
       alert(err.message || 'Failed to delete donor');
     }
@@ -146,7 +149,7 @@ const DashboardDonations = () => {
                       </button>
                       <button
                         className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                        onClick={() => handleDelete(d._id)}
+                        onClick={() => setConfirmId(d._id)}
                       >
                         Delete
                       </button>
@@ -162,15 +165,15 @@ const DashboardDonations = () => {
       {/* Pagination */}
       {metadata.pages > 1 && (
         <div className={styles.pagination}>
-          <button 
-            className={styles.btn} 
+          <button
+            className={styles.btn}
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
           >
             Previous
           </button>
           <span>Page {page} of {metadata.pages}</span>
-          <button 
+          <button
             className={styles.btn}
             disabled={page === metadata.pages}
             onClick={() => setPage(page + 1)}
@@ -178,6 +181,15 @@ const DashboardDonations = () => {
             Next
           </button>
         </div>
+      )}
+
+      {/* Confirm Delete Modal */}
+      {confirmId && (
+        <ConfirmModal
+          message="Are you sure you want to delete this donor? This action cannot be undone."
+          onConfirm={handleDelete}
+          onCancel={() => setConfirmId(null)}
+        />
       )}
 
       {/* View Modal */}

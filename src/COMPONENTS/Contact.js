@@ -2,12 +2,17 @@ import React, { useState } from 'react';
 import styles from '../CSS-MODULES/Contact.module.css';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { contactApi } from '../services/contactApi';
+import { useToast } from './Toast';
 
 const Contact = () => {
+  const { showToast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
+    subject: '',
     message: ''
   });
 
@@ -15,11 +20,18 @@ const Contact = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    // Add your backend or email service logic here
-    alert("Thank you! Our support team will contact you shortly.");
+    setLoading(true);
+    try {
+      await contactApi.submit(formData);
+      showToast('Message sent successfully! Our team will contact you shortly.', 'success');
+      setFormData({ name: '', phone: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      showToast(error.message || 'Failed to send message. Please try again.', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,26 +76,33 @@ const Contact = () => {
             <form onSubmit={handleSubmit} className={styles.contactForm}>
               <div className={styles.inputGroup}>
                 <label>Name</label>
-                <input type="text" name="name" required onChange={handleChange} />
+                <input type="text" name="name" value={formData.name} required onChange={handleChange} />
               </div>
 
               <div className={styles.inputRow}>
                 <div className={styles.inputGroup}>
                   <label>Phone</label>
-                  <input type="tel" name="phone" required onChange={handleChange} />
+                  <input type="tel" name="phone" value={formData.phone} required onChange={handleChange} />
                 </div>
                 <div className={styles.inputGroup}>
                   <label>Email</label>
-                  <input type="email" name="email" required onChange={handleChange} />
+                  <input type="email" name="email" value={formData.email} required onChange={handleChange} />
                 </div>
               </div>
 
               <div className={styles.inputGroup}>
-                <label>Message</label>
-                <textarea name="message" rows="5" required onChange={handleChange}></textarea>
+                <label>Subject</label>
+                <input type="text" name="subject" value={formData.subject} required onChange={handleChange} />
               </div>
 
-              <button type="submit" className={styles.submitBtn}>SEND MESSAGE</button>
+              <div className={styles.inputGroup}>
+                <label>Message</label>
+                <textarea name="message" rows="5" value={formData.message} required onChange={handleChange}></textarea>
+              </div>
+
+              <button type="submit" className={styles.submitBtn} disabled={loading}>
+                {loading ? 'SENDING...' : 'SEND MESSAGE'}
+              </button>
             </form>
           </div>
         </div>

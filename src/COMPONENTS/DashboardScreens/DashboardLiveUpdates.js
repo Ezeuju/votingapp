@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import pageStyles from '../DashboardScreens/Dashboardpages.module.css';
 import DashboardModal from './Dashboardmodal';
+import ConfirmModal from './ConfirmModal';
 import { adminApi } from '../../services/adminApi';
 import { useTableData } from '../../hooks/useTableData';
 
@@ -11,6 +12,7 @@ const DashboardLiveUpdates = () => {
   const [modal, setModal] = useState(false);
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [confirmId, setConfirmId] = useState(null);
 
   const handleAdd = async () => {
     if (!text.trim()) return;
@@ -27,7 +29,9 @@ const DashboardLiveUpdates = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
+    const id = confirmId;
+    setConfirmId(null);
     try {
       await adminApi.deleteLiveUpdate(id);
       refetch();
@@ -79,9 +83,9 @@ const DashboardLiveUpdates = () => {
                   {u.message}
                 </div>
                 <div className={pageStyles.updateMeta}>
-                  {new Date(u.date).toLocaleString('en-GB', { 
-                    day: 'numeric', 
-                    month: 'short', 
+                  {new Date(u.date).toLocaleString('en-GB', {
+                    day: 'numeric',
+                    month: 'short',
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit'
@@ -97,7 +101,7 @@ const DashboardLiveUpdates = () => {
                 </button>
                 <button
                   className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                  onClick={() => handleDelete(u._id)}
+                  onClick={() => setConfirmId(u._id)}
                 >
                   Delete
                 </button>
@@ -108,6 +112,15 @@ const DashboardLiveUpdates = () => {
             <div className={styles.empty}>No live updates posted yet</div>
           )}
         </div>
+      )}
+
+      {/* ── Confirm Delete Modal ── */}
+      {confirmId && (
+        <ConfirmModal
+          message="Are you sure you want to delete this live update? This action cannot be undone."
+          onConfirm={handleDelete}
+          onCancel={() => setConfirmId(null)}
+        />
       )}
 
       {/* ── Modal ── */}

@@ -15,16 +15,25 @@ import { getLiveUpdates } from '../services/api';
 const Home = () => {
   const [liveUpdates, setLiveUpdates] = useState([]);
 
-  useEffect(() => {
+  const fetchLiveUpdates = () => {
     getLiveUpdates()
       .then((res) => {
-        // res is already unwrapped by the axios interceptor (response.data)
         const updates = res?.data?.data || [];
         setLiveUpdates(updates);
       })
       .catch(() => {
         // silently fail — ticker just stays empty
       });
+  };
+
+  useEffect(() => {
+    fetchLiveUpdates();
+    
+    const interval = setInterval(() => {
+      fetchLiveUpdates();
+    }, 15000);
+
+    return () => clearInterval(interval);
   }, []);
   return (
     <>

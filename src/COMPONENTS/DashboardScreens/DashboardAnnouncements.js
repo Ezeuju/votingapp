@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import styles from '../DashboardScreens/Dashboardshared.module.css';
 import pageStyles from '../DashboardScreens/Dashboardpages.module.css';
 import DashboardModal from './Dashboardmodal';
+import ConfirmModal from './ConfirmModal';
 
 const DashboardAnnouncements = ({ data, setData }) => {
   const [modal, setModal] = useState(false);
-  const [form, setForm]   = useState({ title: '', body: '', pinned: false });
+  const [form, setForm] = useState({ title: '', body: '', pinned: false });
+  const [confirmId, setConfirmId] = useState(null);
 
   const handleAdd = () => {
     if (!form.title || !form.body) return;
@@ -16,8 +18,11 @@ const DashboardAnnouncements = ({ data, setData }) => {
     setModal(false);
   };
 
-  const handleDelete = id =>
+  const handleDelete = () => {
+    const id = confirmId;
+    setConfirmId(null);
     setData(prev => ({ ...prev, announcements: prev.announcements.filter(a => a.id !== id) }));
+  };
 
   const handleTogglePin = id =>
     setData(prev => ({
@@ -61,7 +66,7 @@ const DashboardAnnouncements = ({ data, setData }) => {
               </button>
               <button
                 className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                onClick={() => handleDelete(ann.id)}
+                onClick={() => setConfirmId(ann.id)}
               >
                 Delete
               </button>
@@ -72,6 +77,15 @@ const DashboardAnnouncements = ({ data, setData }) => {
 
       {data.announcements.length === 0 && (
         <div className={styles.empty}>No announcements yet</div>
+      )}
+
+      {/* ── Confirm Delete Modal ── */}
+      {confirmId && (
+        <ConfirmModal
+          message="Are you sure you want to delete this announcement? This action cannot be undone."
+          onConfirm={handleDelete}
+          onCancel={() => setConfirmId(null)}
+        />
       )}
 
       {/* ── Modal ── */}
