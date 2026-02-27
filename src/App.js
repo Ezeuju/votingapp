@@ -21,6 +21,7 @@ import Contact from './COMPONENTS/Contact';
 import Timeline from "./Screens/Timeline"
 import AdminAuth from './COMPONENTS/AdminAuth/AdminAuth';
 import DonationResult from './Screens/DonationResult';
+import ProtectedRoute from './COMPONENTS/ProtectedRoute';
 
 
 function App() {
@@ -42,7 +43,7 @@ function App() {
         <Route path="/PaymentResult" element={<PaymentResult />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/PublicProfile" element={<PublicProfile />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/Dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/sponsor" element={<Sponsor />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/timeline" element={<Timeline />} />
