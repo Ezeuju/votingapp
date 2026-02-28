@@ -1,21 +1,34 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
 
 export const useTableData = (fetchFunction, initialParams = {}) => {
   const [data, setData] = useState([]);
-  const [metadata, setMetadata] = useState({ total: 0, page: 1, limit: 10, pages: 1 });
+  const [metadata, setMetadata] = useState({
+    total: 0,
+    page: 1,
+    limit: 10,
+    pages: 1,
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [params, setParams] = useState({ pageNo: 1, limitNo: 10, search: '', ...initialParams });
+  const [params, setParams] = useState({
+    pageNo: 1,
+    limitNo: 10,
+    search: "",
+    ...initialParams,
+  });
   const [refreshKey, setRefreshKey] = useState(0);
   const isMounted = useRef(true);
 
   useEffect(() => {
     isMounted.current = true;
-    return () => { isMounted.current = false; };
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("Fetching with params:", params);
       setLoading(true);
       setError(null);
       try {
@@ -23,11 +36,18 @@ export const useTableData = (fetchFunction, initialParams = {}) => {
         const result = response.data?.[0] || response.data;
         if (isMounted.current) {
           setData(result.data || []);
-          setMetadata(result.metadata || { total: 0, page: 1, limit: 10, pages: 1 });
+          const meta = result.metadata || {
+            total: 0,
+            page: 1,
+            limit: 10,
+            pages: 1,
+          };
+          console.log("Received metadata:", meta);
+          setMetadata(meta);
         }
       } catch (err) {
         if (isMounted.current) {
-          setError(err.message || 'Failed to fetch data');
+          setError(err.message || "Failed to fetch data");
           setData([]);
         }
       } finally {
@@ -37,12 +57,30 @@ export const useTableData = (fetchFunction, initialParams = {}) => {
       }
     };
     fetchData();
-  }, [params.pageNo, params.limitNo, params.search, params.account_type, refreshKey]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    params.pageNo,
+    params.limitNo,
+    params.search,
+    params.account_type,
+    refreshKey,
+  ]);
 
-  const setPage = (page) => setParams(prev => ({ ...prev, pageNo: page }));
-  const setLimit = (limit) => setParams(prev => ({ ...prev, limitNo: limit, pageNo: 1 }));
-  const setSearch = (search) => setParams(prev => ({ ...prev, search, pageNo: 1 }));
-  const refetch = () => setRefreshKey(prev => prev + 1);
+  const setPage = useCallback((page) => {
+    setParams((prev) => ({ ...prev, pageNo: page }));
+  }, []);
+
+  const setLimit = useCallback((limit) => {
+    setParams((prev) => ({ ...prev, limitNo: limit, pageNo: 1 }));
+  }, []);
+
+  const setSearch = useCallback((search) => {
+    setParams((prev) => ({ ...prev, search, pageNo: 1 }));
+  }, []);
+
+  const refetch = useCallback(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, []);
 
   return {
     data,
@@ -53,7 +91,7 @@ export const useTableData = (fetchFunction, initialParams = {}) => {
     setPage,
     setLimit,
     setSearch,
-    refetch
+    refetch,
   };
 };
 

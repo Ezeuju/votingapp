@@ -179,7 +179,7 @@ const DashboardJoinTeam = () => {
               <div className={styles.cardRow}>
                 <span className={styles.cardRowIcon}>📅</span>
                 <span className={styles.cardRowValue}>
-                  {new Date(a.createdAt).toLocaleDateString("en-GB", {
+                  {new Date(a.createdAt || a.date).toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "short",
                     year: "numeric",

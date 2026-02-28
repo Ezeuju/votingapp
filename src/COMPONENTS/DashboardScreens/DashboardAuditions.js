@@ -12,7 +12,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
   const [stats, setStats] = useState(null);
   const [confirmId, setConfirmId] = useState(null);
 
-  const { data, metadata, loading, error, setPage, setSearch, refetch } = useTableData(
+  const { data, metadata, loading, error, params, setPage, setSearch, refetch } = useTableData(
     adminApi.getUsers,
     { account_type: 'Applicant' }
   );
@@ -28,7 +28,8 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
 
   useEffect(() => {
     fetchStats();
-  }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setSearch(searchInput), 500);
@@ -148,6 +149,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Country / Location</th>
+                  <th>Category</th>
                   <th>Date & Time</th>
                   <th>Plan</th>
                   <th>Status</th>
@@ -161,6 +163,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                     <td className={styles.tdMuted}>{a.email}</td>
                     <td className={styles.tdMuted}>{a.phone || 'N/A'}</td>
                     <td>{getLocation(a)}</td>
+                    <td className={styles.tdMuted}>{a.talent_category || 'N/A'}</td>
                     <td className={styles.tdMuted}>
                       {new Date(a.date).toLocaleDateString()}
                       <br />
@@ -198,7 +201,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                 ))}
                 {data.length === 0 && (
                   <tr>
-                    <td colSpan={8} className={styles.emptyRow}>No audition registrations found</td>
+                    <td colSpan={9} className={styles.emptyRow}>No audition registrations found</td>
                   </tr>
                 )}
               </tbody>
@@ -210,18 +213,18 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
               <button
                 className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
-                onClick={() => setPage(metadata.page - 1)}
-                disabled={metadata.page === 1}
+                onClick={() => setPage(params.pageNo - 1)}
+                disabled={params.pageNo <= 1}
               >
                 Previous
               </button>
               <span style={{ color: '#FFD700' }}>
-                Page {metadata.page} of {metadata.pages} ({metadata.total} total)
+                Page {params.pageNo} of {metadata.pages} ({metadata.total} total)
               </span>
               <button
                 className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
-                onClick={() => setPage(metadata.page + 1)}
-                disabled={metadata.page === metadata.pages}
+                onClick={() => setPage(params.pageNo + 1)}
+                disabled={params.pageNo >= metadata.pages}
               >
                 Next
               </button>
@@ -259,6 +262,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
               { label: 'State', value: viewDetails.state },
               { label: 'Town', value: viewDetails.town },
               { label: 'Street Address', value: viewDetails.street_address },
+              { label: 'Category', value: viewDetails.talent_category },
               { label: 'Account Type', value: viewDetails.account_type },
               { label: 'Role', value: viewDetails.role },
             ].map(row => (
