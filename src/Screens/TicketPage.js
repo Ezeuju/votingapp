@@ -79,9 +79,9 @@ const Tickets = () => {
                 ))}
               </ul>
 
-              <button className={tier.type === 'vip' ? styles.buyBtnGold : styles.buyBtn}>
+              <a href="https://selar.com/57744hc123"><button className={tier.type === 'vip' ? styles.buyBtnGold : styles.buyBtn}>
                 {tier.buttonText}
-              </button>
+              </button></a>
             </div>
           ))}
         </div>

@@ -21,7 +21,7 @@ const Tickets = () => {
             <li>✓ Standard Seating</li>
             <li>✓ Digital Program Guide</li>
           </ul>
-          <button className={styles.buyBtn}>Purchase Ticket</button>
+           <a href="https://selar.com/57744hc123"><button className={styles.buyBtn}>Purchase Ticket</button></a>
         </div>
 
         {/* Tier 2: VIP - Featured */}
@@ -36,7 +36,7 @@ const Tickets = () => {
             <li>✓ Refreshments & Hors d'oeuvres</li>
             <li>✓ Meet & Greet with Judges</li>
           </ul>
-          <button className={styles.buyBtnGold}>Get VIP Access</button>
+           <a href="https://selar.com/57744hc123"><button className={styles.buyBtnGold}>Get VIP Access</button></a>
         </div>
 
         {/* Tier 3: VVIP Table */}
@@ -50,7 +50,7 @@ const Tickets = () => {
             <li>✓ Luxury Gift Hampers</li>
             <li>✓ Branding Opportunity for Sponsors</li>
           </ul>
-          <button className={styles.buyBtn}>Inquire for Table</button>
+          <a href="https://selar.com/57744hc123"><button className={styles.buyBtn}>Inquire for Table</button></a>
         </div>
       </div>
     </section>
