@@ -25,23 +25,18 @@ const Audition = () => {
   return (
     <section className={styles.auditionSection} id="auditions">
       <div className={styles.container}>
-        
+
         {/* 1. COUNTDOWN BLOCK */}
         <div className={styles.countdownWrapper}>
           <span className={styles.eyebrow}>Don't Wait!</span>
           <h2>Auditions Are Approaching</h2>
           <p className={styles.description}>
-            Registration for NAIJA TALENT SHOW – Season 4 is now open. Don’t miss your chance to audition, 
+            Registration for NAIJA TALENT SHOW – Season 4 is now open. Don’t miss your chance to audition,
             get mentored by industry professionals, and compete for life-changing rewards on a global stage.
           </p>
-          
-          <div className={styles.timer}>
-            <div className={styles.timeUnit}><span>206</span><p>Days</p></div>
-            <div className={styles.timeUnit}><span>22</span><p>Hours</p></div>
-            <div className={styles.timeUnit}><span>06</span><p>Minutes</p></div>
-            <div className={styles.timeUnit}><span>40</span><p>Seconds</p></div>
-          </div>
-          <button className={styles.mainRegisterBtn}>Register for Auditions</button>
+
+          <div className={styles.comingSoon}>COMING SOON</div>
+          <button className={styles.mainRegisterBtn} onClick={() => navigate('/auditiony')}>Register for Auditions</button>
         </div>
 
         {/* 2. REGISTRATION PLANS */}
@@ -55,8 +50,8 @@ const Audition = () => {
             <p>Loading plans...</p>
           ) : (
             plans.map((plan) => (
-              <div 
-                key={plan._id} 
+              <div
+                key={plan._id}
                 className={`${styles.planCard} ${plan.title?.toLowerCase().includes('gold') ? styles.featured : ''}`}
               >
                 {plan.title?.toLowerCase().includes('gold') && (
@@ -65,12 +60,12 @@ const Audition = () => {
                 <h3>{plan.title}</h3>
                 <p>{plan.description}</p>
                 <div className={styles.price}>₦{plan.amount?.toLocaleString()}</div>
-                <button 
+                <button
                   className={plan.title?.toLowerCase().includes('gold') ? styles.goldBtn : styles.planBtn}
                   onClick={() => navigate(`/auditiony?plan=${plan._id}`)}
                 >
-                  {plan.title?.toLowerCase().includes('vip') ? 'Apply as VIP' : 
-                   plan.title?.toLowerCase().includes('gold') ? 'Get Gold Pass' : 'Register Now'}
+                  {plan.title?.toLowerCase().includes('vip') ? 'Apply as VIP' :
+                    plan.title?.toLowerCase().includes('gold') ? 'Get Gold Pass' : 'Register Now'}
                 </button>
               </div>
             ))

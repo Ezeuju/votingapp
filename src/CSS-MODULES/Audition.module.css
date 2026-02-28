@@ -17,7 +17,7 @@
   border-radius: 30px;
   border: 1px solid #008751;
   margin-bottom: 80px;
-  
+
 }
 
 .eyebrow {
@@ -28,21 +28,46 @@
 }
 
 .timer {
-  
-  width: 30%;
-  margin: auto;
+  width: 100%;
+  margin: 30px auto;
   display: flex;
   justify-content: center;
   gap: 10px !important;
-  
- 
+}
+
+.comingSoon {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #008751;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 40px 0;
+  text-shadow: 0 0 20px rgba(0, 135, 81, 0.4);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
 }
 
 .timeUnit {
   background: rgba(255, 255, 255, 0.05);
   padding: 20px;
   border-radius: 15px;
-  
+
 }
 
 .timeUnit span {
@@ -111,7 +136,8 @@
   font-weight: 800;
   color: #FFD700;
   margin: 20px 0;
-  margin-top: auto; /* Pushes price/button to bottom */
+  margin-top: auto;
+  /* Pushes price/button to bottom */
 }
 
 .planBtn {
@@ -131,7 +157,7 @@
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
- 
+
 }
 
 /* Mobile Responsiveness */
@@ -140,17 +166,21 @@
     flex-direction: column;
     align-items: center;
   }
+
   .planCard {
     width: 80%;
     max-width: 400px;
     transform: scale(1) !important;
   }
+
   .timer {
     gap: 10px;
   }
+
   .timeUnit {
     padding: 10px;
   }
+
   .timeUnit span {
     font-size: 1.5rem;
   }
