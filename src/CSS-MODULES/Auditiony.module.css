@@ -15,14 +15,17 @@
   margin-bottom: 40px;
 }
 
-.header h2 { font-size: 2.2rem; color: #001a0d; }
+.header h2 {
+  font-size: 2.2rem;
+  color: #001a0d;
+}
 
 /* Guide Box Styles */
 .guideBox {
   background: white;
   padding: 50px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .infoGrid {
@@ -101,7 +104,8 @@
   margin-bottom: 20px;
 }
 
-.field input, .field select {
+.field input,
+.field select {
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -144,7 +148,9 @@
   cursor: pointer;
 }
 
-.nextBtn:disabled { background: #ccc; }
+.nextBtn:disabled {
+  background: #ccc;
+}
 
 .backLink {
   background: none;
@@ -156,10 +162,14 @@
 }
 
 @media (max-width: 850px) {
-  .infoGrid, .checkoutFlex, .inputRow {
+
+  .infoGrid,
+  .checkoutFlex,
+  .inputRow {
     flex-direction: column;
   }
-  .infoGrid{
+
+  .infoGrid {
     flex-direction: column;
 
     display: flex;
@@ -252,4 +262,113 @@
   border-radius: 10px;
   cursor: pointer;
   width: 100%;
+}
+
+/* Upload Styles */
+.uploadSection {
+  margin-bottom: 50px;
+  /* Increased spacing as requested */
+}
+
+.uploadArea {
+  border: 2px dashed #ddd;
+  padding: 40px 20px;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.uploadArea:hover {
+  background: #f0f7f4;
+  border-color: #008751;
+}
+
+.uploadIcon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.uploadText {
+  font-weight: 700;
+  color: #001a0d;
+  font-size: 1rem;
+}
+
+.uploadSub {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+.uploadInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.uploadPreview {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+}
+
+.uploadPreviewImg {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.uploadPreviewName {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #333;
+  word-break: break-all;
+}
+
+.uploadPreviewRemove {
+  background: #fff0f0;
+  color: #e63946;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.uploadPreviewRemove:hover {
+  background: #e63946;
+  color: white;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: #008751;
+  box-shadow: 0 0 0 3px rgba(0, 135, 81, 0.1);
+}
+
+.regForm h3 {
+  margin-bottom: 30px;
+  font-size: 1.6rem;
+  color: #001a0d;
+  border-bottom: 2px solid #008751;
+  display: inline-block;
+  padding-bottom: 5px;
 }

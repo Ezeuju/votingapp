@@ -6,6 +6,7 @@ import Footer from "../COMPONENTS/Footer";
 import { paymentApi } from "../services/paymentApi";
 import { planApi } from "../services/planApi";
 import { useToast } from "../COMPONENTS/Toast";
+import api from "../services/api";
 
 const AFRICAN_COUNTRIES = [
   { code: "DZ", name: "Algeria" },
@@ -80,14 +81,16 @@ const AuditionRegistration = () => {
     email: "",
     country: "NG",
     street_address: "",
-    apartment: "",
     town: "",
     state: "",
     phone: "",
     category: "",
     customCategory: "",
     audition_plan_id: "",
+    photo: "",
+    photoPreview: null,
   });
+  const [uploading, setUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
@@ -160,8 +163,58 @@ const AuditionRegistration = () => {
     }
   };
 
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      showToast("Image too large. Max size is 2MB.", "error");
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append("file", file);
+
+      const response = await api.post("/files", formDataUpload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const photoUrl = response.data.url;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setFormData((prev) => ({
+          ...prev,
+          photo: photoUrl,
+          photoPreview: ev.target.result,
+        }));
+      };
+      reader.readAsDataURL(file);
+      showToast("Photo uploaded successfully!", "success");
+    } catch (error) {
+      showToast("Failed to upload photo. Please try again.", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removePhoto = () => {
+    setFormData((prev) => ({
+      ...prev,
+      photo: "",
+      photoPreview: null,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.photo) {
+      showToast("Please upload your picture to proceed.", "error");
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
@@ -169,7 +222,7 @@ const AuditionRegistration = () => {
         last_name: formData.last_name,
         email: formData.email,
         country: formData.country,
-        street_address: `${formData.street_address}${formData.apartment ? ", " + formData.apartment : ""}`,
+        street_address: formData.street_address,
         town: formData.town,
         state: formData.state,
         phone: formData.phone,
@@ -178,6 +231,7 @@ const AuditionRegistration = () => {
             ? formData.customCategory
             : formData.category,
         audition_plan_id: formData.audition_plan_id,
+        photo: formData.photo,
       };
       const response = await paymentApi.initialize(payload);
       console.log("Full response:", response);
@@ -424,14 +478,6 @@ const AuditionRegistration = () => {
                       placeholder="House number and street name"
                       required
                     />
-                    <input
-                      type="text"
-                      name="apartment"
-                      value={formData.apartment}
-                      onChange={handleInputChange}
-                      placeholder="Apartment, suite, unit, etc. (optional)"
-                      style={{ marginTop: "10px" }}
-                    />
                   </div>
 
                   <div className={styles.inputRow}>
@@ -455,6 +501,59 @@ const AuditionRegistration = () => {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className={styles.uploadSection}>
+                    <label
+                      style={{
+                        fontWeight: 700,
+                        marginBottom: "8px",
+                        display: "block",
+                      }}
+                    >
+                      Applicant Photo *
+                    </label>
+                    {uploading ? (
+                      <div className={styles.uploadArea}>
+                        <div className={styles.uploadIcon}>⏳</div>
+                        <div className={styles.uploadText}>Uploading...</div>
+                      </div>
+                    ) : formData.photoPreview ? (
+                      <div className={styles.uploadPreview}>
+                        <img
+                          src={formData.photoPreview}
+                          alt="preview"
+                          className={styles.uploadPreviewImg}
+                        />
+                        <span className={styles.uploadPreviewName}>
+                          Photo Uploaded
+                        </span>
+                        <button
+                          type="button"
+                          className={styles.uploadPreviewRemove}
+                          onClick={removePhoto}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ) : (
+                      <div className={styles.uploadArea}>
+                        <div className={styles.uploadIcon}>📸</div>
+                        <div className={styles.uploadText}>
+                          Click to upload your picture
+                        </div>
+                        <div className={styles.uploadSub}>
+                          JPG or PNG · Max 2MB
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className={styles.uploadInput}
+                          onChange={handlePhotoUpload}
+                          required
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className={styles.field}>
