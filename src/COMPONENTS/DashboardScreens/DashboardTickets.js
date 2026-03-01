@@ -11,9 +11,9 @@ const TICKET_TYPES = [
 ];
 
 const TICKET_TYPE_BADGE = {
-  'Standard Access':     'badgeInfo',
-  'VIP Access':          'badgeGreen',
-  'All Access Gold Pass':'badgeWarning',
+  'Standard Access': 'badgeInfo',
+  'VIP Access': 'badgeGreen',
+  'All Access Gold Pass': 'badgeWarning',
 };
 
 const EMPTY_FORM = {
@@ -24,17 +24,17 @@ const EMPTY_FORM = {
 };
 
 const DashboardTickets = ({ data, setData }) => {
-  const [modal, setModal]         = useState(false);
-  const [search, setSearch]       = useState('');
+  const [modal, setModal] = useState(false);
+  const [search, setSearch] = useState('');
   const [viewEntry, setViewEntry] = useState(null);
-  const [form, setForm]           = useState(EMPTY_FORM);
+  const [form, setForm] = useState(EMPTY_FORM);
 
   const field = (key, val) => setForm(p => ({ ...p, [key]: val }));
 
   const filtered = data.tickets.filter(t =>
     (t.fullName || '').toLowerCase().includes(search.toLowerCase()) ||
-    (t.email    || '').toLowerCase().includes(search.toLowerCase()) ||
-    (t.id       || '').toLowerCase().includes(search.toLowerCase())
+    (t.email || '').toLowerCase().includes(search.toLowerCase()) ||
+    (t.id || '').toLowerCase().includes(search.toLowerCase())
   );
 
   const handleAdd = () => {
@@ -60,9 +60,9 @@ const DashboardTickets = ({ data, setData }) => {
 
   const summaryStats = [
     { icon: '🎫', label: 'Total Tickets', count: data.tickets.length },
-    { icon: '✅', label: 'Active',        count: data.tickets.filter(t => t.status === 'Active').length },
-    { icon: '🔵', label: 'Used',          count: data.tickets.filter(t => t.status === 'Used').length   },
-    { icon: '🥇', label: 'Gold Pass',     count: data.tickets.filter(t => t.type === 'All Access Gold Pass').length },
+    { icon: '✅', label: 'Active', count: data.tickets.filter(t => t.status === 'Active').length },
+    { icon: '🔵', label: 'Used', count: data.tickets.filter(t => t.status === 'Used').length },
+    { icon: '🥇', label: 'Gold Pass', count: data.tickets.filter(t => t.type === 'All Access Gold Pass').length },
   ];
 
   return (
@@ -113,7 +113,7 @@ const DashboardTickets = ({ data, setData }) => {
           </thead>
           <tbody>
             {filtered.map(t => (
-              <tr key={t.id}>
+              <tr key={t.id} className={styles.clickableRow} onClick={() => setViewEntry(t)}>
                 <td className={`${styles.tdMono} ${styles.tdGold}`}>{t.id}</td>
                 <td className={styles.tdBold}>{t.fullName}</td>
                 <td className={styles.tdMuted}>{t.email}</td>
@@ -129,7 +129,7 @@ const DashboardTickets = ({ data, setData }) => {
                   </span>
                 </td>
                 <td>
-                  <div style={{ display: 'flex', gap: 6 }}>
+                  <div style={{ display: 'flex', gap: 6 }} onClick={(e) => e.stopPropagation()}>
                     <button
                       className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
                       onClick={() => setViewEntry(t)}
@@ -232,10 +232,10 @@ const DashboardTickets = ({ data, setData }) => {
         <DashboardModal title="Ticket Details" onClose={() => setViewEntry(null)}>
           <div className={styles.formGrid}>
             {[
-              { label: 'Ticket ID',  value: viewEntry.id       },
-              { label: 'Full Name',  value: viewEntry.fullName },
-              { label: 'Email',      value: viewEntry.email    },
-              { label: 'Date',       value: viewEntry.date     },
+              { label: 'Ticket ID', value: viewEntry.id },
+              { label: 'Full Name', value: viewEntry.fullName },
+              { label: 'Email', value: viewEntry.email },
+              { label: 'Date', value: viewEntry.date },
             ].map(row => (
               <div className={styles.formGroup} key={row.label}>
                 <span className={styles.label}>{row.label}</span>
@@ -277,7 +277,7 @@ const DashboardTickets = ({ data, setData }) => {
             >
               Revoke Ticket
             </button>
-            
+
             <button className={`${styles.btn} ${styles.btnOutline}`} onClick={() => setViewEntry(null)}>
               Close
             </button>

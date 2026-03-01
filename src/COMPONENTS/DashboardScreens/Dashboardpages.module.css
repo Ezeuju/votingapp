@@ -1,4 +1,3 @@
-
 /* ─── Page-specific styles: Dashboard grid, Announcements, Live Updates,   ─── */
 /* ─── Auditions timeline, Contestants cards                                 ─── */
 
@@ -31,12 +30,34 @@
   gap: 16px;
 }
 
-.annTitle  { font-weight: 600; color: #e8f5e8; font-size: 14px; margin-bottom: 6px; }
-.annBody   { font-size: 13px; color: rgba(232, 245, 232, 0.65); line-height: 1.55; }
-.annMeta   { font-size: 11px; color: rgba(232, 245, 232, 0.35); margin-top: 8px; }
+.annTitle {
+  font-weight: 600;
+  color: #e8f5e8;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
 
-.annActions { display: flex; gap: 8px; flex-shrink: 0; }
-.pinIcon    { color: #FFD700; }
+.annBody {
+  font-size: 13px;
+  color: rgba(232, 245, 232, 0.65);
+  line-height: 1.55;
+}
+
+.annMeta {
+  font-size: 11px;
+  color: rgba(232, 245, 232, 0.35);
+  margin-top: 8px;
+}
+
+.annActions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pinIcon {
+  color: #FFD700;
+}
 
 /* ── LIVE UPDATES ───────────────────────────────────────────────────────── */
 .liveHeader {
@@ -54,8 +75,17 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.8); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
 }
 
 .liveLabel {
@@ -64,6 +94,7 @@
   color: #ff4444;
   letter-spacing: 2px;
   text-transform: uppercase;
+  background-clip: text;
 }
 
 .liveSubtitle {
@@ -72,7 +103,12 @@
   margin: 6px 0 20px;
 }
 
-.updateList { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.updateList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
 
 .updateItem {
   background: rgba(0, 20, 10, 0.6);
@@ -91,10 +127,27 @@
   background: rgba(255, 215, 0, 0.04);
 }
 
-.updateContent { flex: 1; }
-.updateText    { font-size: 14px; color: #e8f5e8; line-height: 1.5; }
-.updateMeta    { font-size: 11px; color: rgba(232, 245, 232, 0.4); margin-top: 4px; }
-.updateActions { display: flex; gap: 6px; flex-shrink: 0; }
+.updateContent {
+  flex: 1;
+}
+
+.updateText {
+  font-size: 14px;
+  color: #e8f5e8;
+  line-height: 1.5;
+}
+
+.updateMeta {
+  font-size: 11px;
+  color: rgba(232, 245, 232, 0.4);
+  margin-top: 4px;
+}
+
+.updateActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
 
 /* ── AUDITIONS TIMELINE ─────────────────────────────────────────────────── */
 .auditionTimeline {
@@ -105,7 +158,9 @@
 .auditionTimeline::before {
   content: '';
   position: absolute;
-  left: 7px; top: 0; bottom: 0;
+  left: 7px;
+  top: 0;
+  bottom: 0;
   width: 2px;
   background: linear-gradient(180deg, #008751, transparent);
 }
@@ -127,7 +182,9 @@
   border: 2px solid #0a0f0a;
 }
 
-.auditionItemDone::before { background: #FFD700; }
+.auditionItemDone::before {
+  background: #FFD700;
+}
 
 .auditionCard {
   background: rgba(0, 20, 10, 0.6);
@@ -137,7 +194,9 @@
   transition: border-color 0.2s;
 }
 
-.auditionCard:hover { border-color: rgba(0, 135, 81, 0.4); }
+.auditionCard:hover {
+  border-color: rgba(0, 135, 81, 0.4);
+}
 
 .auditionTop {
   display: flex;
@@ -146,12 +205,33 @@
   margin-bottom: 8px;
 }
 
-.auditionName   { font-weight: 600; color: #e8f5e8; font-size: 14px; }
-.auditionTime   { font-size: 12px; color: rgba(255, 215, 0, 0.6); }
-.auditionDetail { font-size: 13px; color: rgba(232, 245, 232, 0.55); }
-.auditionScore  { font-size: 13px; color: #FFD700; font-weight: 600; }
+.auditionName {
+  font-weight: 600;
+  color: #e8f5e8;
+  font-size: 14px;
+}
 
-.auditionCardActions { display: flex; gap: 8px; margin-top: 10px; }
+.auditionTime {
+  font-size: 12px;
+  color: rgba(255, 215, 0, 0.6);
+}
+
+.auditionDetail {
+  font-size: 13px;
+  color: rgba(232, 245, 232, 0.55);
+}
+
+.auditionScore {
+  font-size: 13px;
+  color: #FFD700;
+  font-weight: 600;
+}
+
+.auditionCardActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
 
 /* ── CONTESTANTS GRID ───────────────────────────────────────────────────── */
 .contestantsGrid {
@@ -180,12 +260,19 @@
 .contestantCard::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 3px;
   background: linear-gradient(90deg, #008751, #FFD700);
 }
 
-.medal { position: absolute; top: 10px; right: 10px; font-size: 16px; }
+.medal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 16px;
+}
 
 .contestantAvatar {
   width: 64px;
@@ -210,9 +297,15 @@
   margin-bottom: 4px;
 }
 
-.contestantTag     { font-size: 11px; color: rgba(255, 215, 0, 0.6); margin-bottom: 10px; }
+.contestantTag {
+  font-size: 11px;
+  color: rgba(255, 215, 0, 0.6);
+  margin-bottom: 10px;
+}
 
-.contestantVoteSection { margin-top: 12px; }
+.contestantVoteSection {
+  margin-top: 12px;
+}
 
 .contestantVotes {
   font-size: 22px;
@@ -256,4 +349,64 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 28px;
+}
+
+/* ── APPLICANT SEARCH & SELECTION ────────────────────────────────────────── */
+.applicantSearchWrap {
+  position: relative;
+  width: 100%;
+}
+
+.selectedApplicantCard {
+  background: rgba(0, 135, 81, 0.08);
+  border: 1px solid rgba(0, 135, 81, 0.3);
+  border-left: 4px solid #FFD700;
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.selectedInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.selectedName {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: #FFD700;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+}
+
+.selectedMeta {
+  font-size: 12px;
+  color: rgba(232, 245, 232, 0.5);
+  font-weight: 500;
+}
+
+.changeBtn {
+  background: rgba(255, 68, 68, 0.1);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  color: #ff4444;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+
+.changeBtn:hover {
+  background: rgba(255, 68, 68, 0.2);
+  border-color: #ff4444;
+  transform: translateY(-1px);
 }

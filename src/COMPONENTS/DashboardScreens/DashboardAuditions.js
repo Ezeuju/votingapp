@@ -8,6 +8,7 @@ import { adminApi } from '../../services/adminApi';
 
 const DashboardAuditions = ({ setData: setDashboardData }) => {
   const [viewDetails, setViewDetails] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [stats, setStats] = useState(null);
   const [confirmId, setConfirmId] = useState(null);
@@ -158,7 +159,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
               </thead>
               <tbody>
                 {data.map(a => (
-                  <tr key={a._id}>
+                  <tr key={a._id} className={styles.clickableRow} onClick={() => handleViewDetails(a._id)}>
                     <td className={styles.tdBold}>{a.first_name} {a.last_name}</td>
                     <td className={styles.tdMuted}>{a.email}</td>
                     <td className={styles.tdMuted}>{a.phone || 'N/A'}</td>
@@ -182,7 +183,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                       </span>
                     </td>
                     <td>
-                      <div style={{ display: 'flex', gap: 6 }}>
+                      <div style={{ display: 'flex', gap: 6 }} onClick={(e) => e.stopPropagation()}>
                         <button
                           className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
                           onClick={() => handleViewDetails(a._id)}
@@ -249,7 +250,21 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
         <DashboardModal title="Registrant Details" onClose={() => setViewDetails(null)}>
           {viewDetails.photo && (
             <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <img src={viewDetails.photo} alt="Profile" style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }} />
+              <img
+                src={viewDetails.photo}
+                alt="Profile"
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  cursor: 'pointer',
+                  border: '3px solid #008751',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                }}
+                onClick={() => setPreviewImage(viewDetails.photo)}
+                title="Click to preview full image"
+              />
             </div>
           )}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 24px' }}>
@@ -284,6 +299,50 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
             </button>
           </div>
         </DashboardModal>
+      )}
+
+      {/* ── Image Preview Lightbox ── */}
+      {previewImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000,
+            padding: '40px'
+          }}
+          onClick={() => setPreviewImage(null)}
+        >
+          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%', display: 'flex', justifyContent: 'center' }}>
+            <button
+              style={{
+                position: 'absolute',
+                top: '-40px',
+                right: '0',
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '30px',
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+              onClick={() => setPreviewImage(null)}
+            >
+              ✕
+            </button>
+            <img
+              src={previewImage}
+              alt="Full Preview"
+              style={{ maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px', boxShadow: '0 0 40px rgba(0,0,0,0.5)', objectFit: 'contain' }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

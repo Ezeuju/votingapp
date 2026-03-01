@@ -14,22 +14,22 @@ const DashboardDonations = () => {
   const [loading, setLoading] = useState(false);
   const [confirmId, setConfirmId] = useState(null);
 
-const fetchDonors = useCallback(async () => {
-  setLoading(true);
-  try {
-    const response = await adminApi.getDonors({
-      pageNo: page,
-      limitNo: 10,
-      search
-    });
-    setDonors(response.data.data);
-    setMetadata(response.data.metadata);
-  } catch (err) {
-    console.error('Failed to fetch donors:', err);
-  } finally {
-    setLoading(false);
-  }
-}, [page, search]);
+  const fetchDonors = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await adminApi.getDonors({
+        pageNo: page,
+        limitNo: 10,
+        search
+      });
+      setDonors(response.data.data);
+      setMetadata(response.data.metadata);
+    } catch (err) {
+      console.error('Failed to fetch donors:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, search]);
 
   const fetchStats = async () => {
     try {
@@ -44,9 +44,9 @@ const fetchDonors = useCallback(async () => {
     fetchStats();
   }, [donors]);
 
-useEffect(() => {
-  fetchDonors();
-}, [fetchDonors]);
+  useEffect(() => {
+    fetchDonors();
+  }, [fetchDonors]);
 
   const handleDelete = async () => {
     const id = confirmId;
@@ -127,7 +127,7 @@ useEffect(() => {
               <tr><td colSpan={8} className={styles.emptyRow}>No donations found</td></tr>
             ) : (
               donors.map(d => (
-                <tr key={d._id}>
+                <tr key={d._id} className={styles.clickableRow} onClick={() => handleView(d._id)}>
                   <td className={styles.tdBold}>{d.first_name} {d.last_name}</td>
                   <td className={styles.tdMuted}>{d.email}</td>
                   <td className={styles.tdMuted}>{d.phone}</td>
@@ -144,7 +144,7 @@ useEffect(() => {
                     </span>
                   </td>
                   <td>
-                    <div style={{ display: 'flex', gap: 6 }}>
+                    <div style={{ display: 'flex', gap: 6 }} onClick={(e) => e.stopPropagation()}>
                       <button
                         className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
                         onClick={() => handleView(d._id)}
