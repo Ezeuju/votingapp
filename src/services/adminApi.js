@@ -79,5 +79,28 @@ export const adminApi = {
 
   deleteLiveUpdate: (updateId) => {
     return api.delete(`/live-updates/${updateId}/admin`);
+  },
+
+  getContestants: (params = {}) => {
+    const { pageNo = 1, limitNo = 100 } = params;
+    return api.get('/users/admin', {
+      params: { account_type: 'Contestant', pageNo, limitNo }
+    });
+  },
+
+  convertToContestant: (userId) => {
+    return api.patch(`/users/${userId}/convert-to-contestant/admin`);
+  },
+
+  updateContestantStatus: (userId, action) => {
+    return api.patch(`/users/${userId}/contestant-status/admin`, { action });
+  },
+
+  removeContestant: (userId) => {
+    return api.delete(`/users/${userId}/contestant/admin`);
+  },
+
+  getContestantStats: () => {
+    return api.get('/users/contestant/stats/admin');
   }
 };

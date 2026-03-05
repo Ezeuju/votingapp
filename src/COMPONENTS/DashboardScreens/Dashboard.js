@@ -38,7 +38,7 @@ const Dashboard = () => {
       case 'announcements': return <DashboardAnnouncements {...sharedProps} />;
       case 'updates':       return <DashboardLiveUpdates   {...sharedProps} />;
       case 'auditions':     return <DashboardAuditions     {...sharedProps} />;
-      case 'contestants':   return <DashboardContestants   {...sharedProps} />;
+      case 'contestants':   return <DashboardContestants   />;
       case 'sponsors':  return <DashboardSponsory />;
       case 'jointeam':  return <Dashboardjointeam                           />;
       case 'contact':   return <Dashboardcontactus                          />;

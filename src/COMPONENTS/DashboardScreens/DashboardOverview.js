@@ -8,6 +8,8 @@ import DashboardModal from './Dashboardmodal';
 const DashboardOverview = ({ data }) => {
   const [recentDonations, setRecentDonations] = useState([]);
   const [totalDonations, setTotalDonations] = useState(0);
+  const [totalContestants, setTotalContestants] = useState(0);
+  const [topContestants, setTopContestants] = useState([]);
   const [viewEntry, setViewEntry] = useState(null);
 
   useEffect(() => {
@@ -29,13 +31,35 @@ const DashboardOverview = ({ data }) => {
       }
     };
 
+    const fetchContestantStats = async () => {
+      try {
+        const response = await adminApi.getContestantStats();
+        setTotalContestants(response.data.total_contestants);
+      } catch (err) {
+        console.error('Failed to fetch contestant stats:', err);
+      }
+    };
+
+    const fetchTopContestants = async () => {
+      try {
+        const response = await adminApi.getContestants({ limitNo: 4 });
+        const result = response.data?.[0] || response.data;
+        const contestants = result?.data || [];
+        setTopContestants(contestants.sort((a, b) => (b.votes || 0) - (a.votes || 0)).slice(0, 4));
+      } catch (err) {
+        console.error('Failed to fetch top contestants:', err);
+      }
+    };
+
     fetchRecentDonations();
     fetchDonationSummary();
+    fetchContestantStats();
+    fetchTopContestants();
   }, []);
   const stats = [
     { icon: '💰', label: 'Total Donations', value: `₦${totalDonations.toLocaleString()}`, delta: '+12%' },
     { icon: '🎫', label: 'Tickets Issued', value: data.tickets.length, delta: '+3%' },
-    { icon: '🏆', label: 'Contestants', value: data.contestants.length, delta: '' },
+    { icon: '🏆', label: 'Contestants', value: totalContestants, delta: '' },
     { icon: '🗳️', label: 'Total Votes', value: '32,280', delta: '+18%' },
     { icon: '🎤', label: 'Auditions Today', value: data.auditions.length, delta: '' },
     { icon: '📢', label: 'Announcements', value: data.announcements.length, delta: '' },
@@ -95,20 +119,17 @@ const DashboardOverview = ({ data }) => {
                 <tr><th>Name</th><th>Votes</th><th>Status</th></tr>
               </thead>
               <tbody>
-                {[...data.contestants]
-                  .sort((a, b) => b.votes - a.votes)
-                  .slice(0, 4)
-                  .map(c => (
-                    <tr key={c.id} className={styles.clickableRow} onClick={() => setViewEntry({ ...c, type: 'contestant' })}>
-                      <td>{c.name}</td>
-                      <td className={styles.tdGold}>{c.votes.toLocaleString()}</td>
-                      <td>
-                        <span className={`${styles.badge} ${styles[STATUS_MAP[c.status]]}`}>
-                          {c.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                {topContestants.map(c => (
+                  <tr key={c._id} className={styles.clickableRow} onClick={() => setViewEntry({ ...c, type: 'contestant' })}>
+                    <td>{c.first_name} {c.last_name}</td>
+                    <td className={styles.tdGold}>{(c.votes || 0).toLocaleString()}</td>
+                    <td>
+                      <span className={`${styles.badge} ${styles[STATUS_MAP[c.contestant_status]]}`}>
+                        {c.contestant_status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -149,19 +170,23 @@ const DashboardOverview = ({ data }) => {
               <>
                 <div className={styles.formGroup}>
                   <span className={styles.label}>Full Name</span>
-                  <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.name}</span>
-                </div>
-                <div className={styles.formGroup}>
-                  <span className={styles.label}>Nickname</span>
-                  <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.nickname}</span>
+                  <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.first_name} {viewEntry.last_name}</span>
                 </div>
                 <div className={styles.formGroup}>
                   <span className={styles.label}>Category</span>
-                  <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.category}</span>
+                  <span style={{ color: '#e8f5e8', fontSize: 14, fontWeight: 500 }}>{viewEntry.talent_category}</span>
                 </div>
                 <div className={styles.formGroup}>
                   <span className={styles.label}>Votes</span>
-                  <span style={{ color: '#FFD700', fontSize: 14, fontWeight: 500 }}>{viewEntry.votes.toLocaleString()}</span>
+                  <span style={{ color: '#FFD700', fontSize: 14, fontWeight: 500 }}>{(viewEntry.votes || 0).toLocaleString()}</span>
+                </div>
+                <div className={styles.formGroup}>
+                  <span className={styles.label}>Status</span>
+                  <div style={{ marginTop: 4 }}>
+                    <span className={`${styles.badge} ${styles[STATUS_MAP[viewEntry.contestant_status]]}`}>
+                      {viewEntry.contestant_status}
+                    </span>
+                  </div>
                 </div>
               </>
             )}
