@@ -20,21 +20,7 @@ import naijavid7 from "../assets/naijavid7.mp4"
 import naijavid8 from "../assets/naijavid8.mp4"
 import naijavid9 from "../assets/naijavid9.mp4"
 import naijavid10 from "../assets/naijavid10.mp4";
-import naijavid11 from "../assets/naijavid11.mp4"
-import naijavid12 from "../assets/naijavid12.mp4"
-import naijavid13 from "../assets/naijavid13.mp4"
-import naijavid14 from "../assets/naijavid14.mp4"
-import naijavid15 from "../assets/naijavid15.mp4"
-import naijavid16 from "../assets/naijavid16.mp4"
-import naijavid17 from "../assets/naijavid17.mp4"
-import naijavid18 from "../assets/naijavid18.mp4"
-import naijavid19 from "../assets/naijavid19.mp4"
-import naijavid20 from "../assets/naijavid20.mp4"
-import naijavid21 from "../assets/naijavid21.mp4"
-import naijavid22 from "../assets/naijavid22.mp4"
-import naijavid23 from "../assets/naijavid23.mp4"
-import naijavid24 from "../assets/naijavid24.mp4"
-import naijavid25 from "../assets/naijavid25.mp4"
+
 
 const Gallery = () => {
   const scrollRefs = useRef([]);
@@ -68,33 +54,34 @@ const Gallery = () => {
         { type: 'video', url: naijavid1, title: 'Live Performance' },
         { type: 'image', url: naijapic21, title: 'Crowd Reaction' },
         { type: 'image', url: naijapic10, title: 'Judges Table' },
-         { type: 'video', url: naijavid11, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid12, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid13, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid14, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid15, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid16, title: 'Audition Clip 1' }
+        //  { type: 'video', url: naijavid11, title: 'Audition Clip 1' },
+        //  { type: 'video', url: naijavid12, title: 'Audition Clip 1' },
+        //  { type: 'video', url: naijavid13, title: 'Audition Clip 1' },
+        //  { type: 'video', url: naijavid14, title: 'Audition Clip 1' },
+        //  { type: 'video', url: naijavid15, title: 'Audition Clip 1' },
+        //  { type: 'video', url: naijavid16, title: 'Audition Clip 1' }
       ] 
     },
-    { 
-      title: "Behind The Scenes", 
-      media: [
-        { type: 'image', url: naijapic11, title: 'Makeup & Hair' },
-        { type: 'image', url: naijapic12, title: 'Rehearsal Hall' },
-        { type: 'video', url: naijavid1, title: 'Uncut Moments' },
-        { type: 'image', url: naijapic19, title: 'Post-Show Interview' },
-         { type: 'video', url: naijavid17, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid18, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid19, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid20, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid21, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid22, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid23, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid24, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid25, title: 'Audition Clip 1' }
-      ] 
-    }
-  ];
+  //   { 
+  //     title: "Behind The Scenes", 
+  //     media: [
+  //       { type: 'image', url: naijapic11, title: 'Makeup & Hair' },
+  //       { type: 'image', url: naijapic12, title: 'Rehearsal Hall' },
+  //       { type: 'video', url: naijavid1, title: 'Uncut Moments' },
+  //       { type: 'image', url: naijapic19, title: 'Post-Show Interview' },
+  //        { type: 'video', url: naijavid17, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid18, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid19, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid20, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid21, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid22, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid23, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid24, title: 'Audition Clip 1' },
+  //        { type: 'video', url: naijavid25, title: 'Audition Clip 1' }
+  //     ] 
+  //   }
+  // ];
+  ]
 
   const scroll = (index, direction) => {
     const container = scrollRefs.current[index];
