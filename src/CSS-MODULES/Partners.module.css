@@ -1,9 +1,7 @@
 .partnersSection {
   background-color: #ffffff;
-  padding: 60px 0;
+  padding: 80px 0;
   overflow: hidden;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
 }
 
 .container {
@@ -13,85 +11,82 @@
 }
 
 .header {
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   padding: 0 5%;
 }
 
 .eyebrow {
-  color: #008751; /* Brand Green */
-  font-weight: 800;
+  color: #666;
   text-transform: uppercase;
-  font-size: 0.8rem;
   letter-spacing: 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
-.greenText {
-  color: #008751;
-}
+.greenText { color: #008751; }
 
-/* MARQUEE CORE LOGIC */
-.marqueeWrapper {
-  width: 100%;
-  display: flex;
-  overflow: hidden;
+/* THE SLIDER ENGINE */
+.slider {
   position: relative;
-  user-select: none;
-}
-
-.marqueeContent {
+  width: 100%;
+  height: 150px; /* Increased height for bolder presence */
   display: flex;
-  flex-shrink: 0;
   align-items: center;
-  gap: 60px; /* Space between logos */
-  padding: 20px 0;
-  /* Adjust timing (30s) based on number of logos */
-  animation: scrollMarquee 30s linear infinite;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
-/* PAUSE ON HOVER */
-.marqueeWrapper:hover .marqueeContent {
+.slideTrack {
+  display: flex;
+  /* Adjust width calculation based on the new logoBox width */
+  width: calc(300px * 12); 
+  animation: scroll 25s linear infinite; /* Slightly faster for more energy */
+}
+
+.slideTrack:hover {
   animation-play-state: paused;
 }
 
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-300px * 4)); } 
+}
+
 .logoBox {
-  flex: 0 0 auto;
-  width: 200px;
-  height: 100px;
+  width: 300px; /* Increased width per logo */
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transition: 0.3s ease;
-}
-
-.logoBox:hover {
- 
+  padding: 0 30px;
 }
 
 .logoBox img {
   max-width: 100%;
-  max-height: 100%;
+  max-height: 85px; /* Increased from 60px to 85px for boldness */
   object-fit: contain;
+  /* Removed grayscale and increased opacity */
+  filter: none; 
+  opacity: 1; 
+  transition: transform 0.3s ease;
+  /* Optional: adds a very soft depth to the logos */
+  filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.05));
 }
 
-/* ANIMATION KEYFRAMES */
-@keyframes scrollMarquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%); /* Scroll exactly half the width */
-  }
+.logoBox:hover img {
+  transform: scale(1.1);
+  filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.1));
 }
 
-/* Mobile Adjustments */
 @media (max-width: 768px) {
   .logoBox {
-    width: 120px;
-    height: 60px;
+    width: 200px;
   }
-  .marqueeContent {
-    gap: 40px;
-    animation-duration: 20s; /* Faster scroll for mobile */
+  .slideTrack {
+    width: calc(200px * 12);
+    animation-duration: 15s;
+  }
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-200px * 4)); }
   }
 }

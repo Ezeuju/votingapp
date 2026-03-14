@@ -1,26 +1,74 @@
 /* 4. Live Ticker */
 .liveTicker {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #fff;
   display: flex;
-  z-index: 999;
+  align-items: center;
+  background: #001a0d; /* Dark NTS Green */
+  height: 50px;
+  overflow: hidden;
+  border-bottom: 1px solid #008751;
 }
 
 .tickerLabel {
-  background: #B22222;
-  padding: 10px 20px;
-  font-weight: bold;
+  background: #ff0000;
+  color: white;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 0.75rem;
+  z-index: 10; /* Keeps the label above the scrolling text */
   white-space: nowrap;
-  color: #fff;
+  box-shadow: 10px 0 15px rgba(0,0,0,0.3);
 }
 
 .tickerContent {
-  width: 100%;
-  padding: 10px;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.tickerTrack {
+  display: flex;
+  white-space: nowrap;
+  padding-left: 20px;
+  animation: tickerScroll 40s linear infinite;
+}
+
+.tickerTrack:hover {
+  animation-play-state: paused; /* Allows users to stop and read a long update */
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Moves exactly half (one full set of updates) */
+}
+
+.tickerItem {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: #000;
+}
+
+.redDot {
+  margin-right: 10px;
+  font-size: 0.7rem;
+}
+
+.separator {
+  margin: 0 40px;
+  color: #008751;
+  font-weight: bold;
+}
+
+
+@media (max-width: 768px) {
+  .tickerTrack {
+    animation-duration: 25s;
+  }
 }
 
 /* Video Grid */

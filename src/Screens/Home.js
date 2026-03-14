@@ -111,21 +111,21 @@ const Home = () => {
 
 
       {/* 4. LIVE UPDATE TICKER */}
-      <div className={styles.liveTicker}>
-        <div className={styles.tickerLabel}>LIVE UPDATES</div>
-        <div className={styles.tickerContent}>
-          {liveUpdates.length > 0 ? (
-            <marquee scrollamount="6">
-              {liveUpdates.map((update, index) => (
-                <span key={update._id} style={{ marginRight: '60px' }}>
-                  🔴 {update.message}
-                  {index < liveUpdates.length - 1 && <span style={{ marginLeft: '60px' }}>•</span>}
-                </span>
-              ))}
-            </marquee>
-          ) : null}
-        </div>
+    <div className={styles.liveTicker}>
+  <div className={styles.tickerLabel}>LIVE UPDATES</div>
+  <div className={styles.tickerContent}>
+    {liveUpdates.length > 0 ? (
+      <div className={styles.tickerTrack}>
+        {[...liveUpdates, ...liveUpdates].map((update, index) => (
+          <span key={`${update._id}-${index}`} className={styles.tickerItem}>
+            <span className={styles.redDot}>🔴</span> {update.message}
+            <span className={styles.separator}>•</span>
+          </span>
+        ))}
       </div>
+    ) : null}
+  </div>
+</div>
 
       {/* Spacer for ticker */}
       <div style={{ height: '50px' }}></div>
