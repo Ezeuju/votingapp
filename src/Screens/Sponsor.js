@@ -15,7 +15,7 @@ const Sponsor = () => {
     <>
     <Navbar />
     <div className={styles.sponsorPage}>
-      {/* HERO SECTION */}
+     
       <header className={styles.hero}>
         <div className={styles.container}>
           <span className={styles.badge}>🤝 Partner with Naija Talent Show 2026</span>
@@ -28,7 +28,7 @@ const Sponsor = () => {
         </div>
       </header>
 
-      {/* WHY SPONSOR SECTION */}
+     
       <section className={styles.whySection}>
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>🎯 Why Sponsor Us?</h2>
@@ -53,7 +53,7 @@ const Sponsor = () => {
         </div>
       </section>
 
-      {/* SPONSORSHIP OPPORTUNITIES TABLE */}
+     
       <section className={styles.packageSection}>
         <div className={styles.container}>
           <h2 className={styles.sectionTitle}>🧩 Sponsorship Opportunities</h2>
@@ -78,7 +78,7 @@ const Sponsor = () => {
         </div>
       </section>
 
-      {/* APPLICATION FORM */}
+   
       <section className={styles.formSection} id="apply">
         <div className={styles.container}>
           <div className={styles.formWrapper}>
@@ -114,7 +114,7 @@ const Sponsor = () => {
         </div>
       </section>
 
-      {/* CONTACT INFO */}
+    
       <footer className={styles.contactFooter}>
         <div className={styles.container}>
           <h3>📩 Contact Us Directly</h3>

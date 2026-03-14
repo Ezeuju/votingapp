@@ -122,3 +122,21 @@
     margin-top: 20px;
   }
 }
+
+.socialIcons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Keeps icons neat on small screens */
+}
+
+.socialIcons a {
+  color: #fff;
+  font-size: 1.5rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.socialIcons a:hover {
+  color: #FFD700; /* Gold hover effect */
+  transform: translateY(-3px);
+}

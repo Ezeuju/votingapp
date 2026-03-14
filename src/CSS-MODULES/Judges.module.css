@@ -1,13 +1,15 @@
-.judgesSection {
-  background-color: #050505; /* Deep stage black */
-  padding: 100px 5%;
-  color: white;
+.judgeSection {
+  background-color: #050505;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  color: #fff;
   text-align: center;
+  width: 100%;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 95%; /* Increased to fit 4 cards side-by-side comfortably */
+  margin: auto;
 }
 
 .header {
@@ -15,71 +17,85 @@
 }
 
 .eyebrow {
-  color: #008751; /* Brand Green */
-  font-weight: 700;
+  color: #008751;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.9rem;
 }
 
-.greenText {
-  color: #008751;
-}
+.goldText { color: #FFD700; }
+.greenText { color: #008751; }
 
-/* Flexbox Grid */
-.judgesGrid {
-  display: flex;
-  flex-wrap: wrap;
+/* Grid set to exactly 4 columns for Desktop */
+.judgeGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 25px;
   justify-content: center;
-  gap: 30px;
 }
 
 .judgeCard {
-  flex: 1 1 300px;
-  max-width: 350px;
   background: #111;
   border-radius: 20px;
   overflow: hidden;
   transition: transform 0.3s ease;
-  border-bottom: 4px solid #008751;
+  border-bottom: 4px solid #008751; /* Kept from your original */
 }
 
 .judgeCard:hover {
   transform: translateY(-10px);
 }
 
-/* Image Hover Effect */
+/* Image/Mystery Wrapper */
 .imageWrapper {
   position: relative;
-  height: 350px;
+  height: 380px; /* Adjusted for 4-column balance */
   overflow: hidden;
 }
 
-.judgeImage {
-  width: 60%;
-  height: 60%;
- 
-  transition: filter 0.3s ease;
- 
-  display: flex;
-  margin: auto;
-  margin-top: 3rem;
-  align-items: center;
-}
-
-.judgeImage img{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.socialOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+.mysteryFrame {
+  position: relative;
   width: 100%;
   height: 100%;
-  background: rgba(0, 135, 81, 0.8); /* Translucent Green */
+  background: linear-gradient(135deg, #001a0d 0%, #002e17 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.silhouette {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 135, 81, 0.2) 0%, transparent 70%);
+}
+
+.questionMark {
+  font-size: 7rem;
+  font-weight: 900;
+  color: rgba(255, 215, 0, 0.3);
+  animation: pulseQuestion 2s infinite alternate ease-in-out;
+}
+
+@keyframes pulseQuestion {
+  from { transform: scale(1); opacity: 0.2; filter: blur(2px); }
+  to { transform: scale(1.15); opacity: 0.6; filter: blur(0px); }
+}
+
+.frameGlow {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+/* Social Overlay from your original code */
+.socialOverlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 135, 81, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,24 +108,16 @@
   opacity: 1;
 }
 
-.socialOverlay a {
-  color: white;
-  font-size: 1.8rem;
-  transition: transform 0.3s;
-}
-
-.socialOverlay a:hover {
-  transform: scale(1.2);
-  color: #ffcc00; /* Gold accent */
-}
-
-/* Info Section */
+/* Info Styling */
 .info {
   padding: 25px;
+  text-align: center;
 }
 
-.info h3 {
-  font-size: 1.4rem;
+.revealText {
+  color: #FFD700;
+  font-size: 1.3rem;
+  font-weight: 700;
   margin-bottom: 5px;
 }
 
@@ -120,21 +128,29 @@
   margin-bottom: 10px;
 }
 
-.country {
-  font-size: 0.85rem;
-  color: #aaa;
+.categoryBadge {
+  display: inline-block;
+  background: #008751;
+  padding: 5px 15px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  color: white;
 }
 
-/* Mobile Responsiveness */
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .judgeGrid {
+    grid-template-columns: repeat(2, 1fr); /* 2 per row for tablets */
+  }
+}
+
 @media (max-width: 768px) {
-  .judgesGrid {
-    flex-direction: column;
-    align-items: center;
+  .judgeGrid {
+    grid-template-columns: 1fr; /* 1 per row for mobile */
+    max-width: 400px;
+    margin: 0 auto;
   }
-  
-  .judgeCard {
-    width: 100%;
-  }
+  .imageWrapper { height: 450px; }
 }

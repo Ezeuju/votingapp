@@ -7,7 +7,9 @@ import Tickets from '../COMPONENTS/Tickets';
 import Judges from '../COMPONENTS/Judges';
 import Audition from '../COMPONENTS/Audition';
 import Partners from '../COMPONENTS/Partners';
+import TwitchStream from './TwitchStream';
 import Contacty from '../COMPONENTS/Contacty';
+import LiveStream from '../COMPONENTS/LiveStream';
 import Footer from "../COMPONENTS/Footer";
 import { getLiveUpdates } from '../services/api';
 
@@ -37,6 +39,8 @@ const Home = () => {
   }, []);
   return (
     <>
+
+    <LiveStream isLive={true} />
       <Navbar />
       <Hero />
 
@@ -94,6 +98,7 @@ const Home = () => {
 
       </div>
       <Gallery />
+      <TwitchStream />
       <Tickets />
       <Judges />
       <Audition />

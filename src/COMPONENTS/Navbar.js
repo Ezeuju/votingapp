@@ -29,7 +29,7 @@ const Navbar = () => {
             <li><a href="/auditiony" onClick={() => setMenuOpen(false)}>Auditions</a></li>
             <li><a href="/contestants" onClick={() => setMenuOpen(false)}>Contestants</a></li>
             <li><a href="/tickets" onClick={() => setMenuOpen(false)}>Tickets</a></li>
-            <li><a href="/sponsor" className={styles.goldLink} onClick={() => setMenuOpen(false)}>Become a Partner</a></li>
+            <li><a href="/sponsor" className={styles.goldLink} onClick={() => setMenuOpen(false)}>Become a Sponsor</a></li>
           </ul>
 
           <div className={styles.authBox}>

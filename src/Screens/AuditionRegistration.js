@@ -169,8 +169,8 @@ const handleVideoUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  if (file.size > 100 * 1024 * 1024) {
-    showToast("Video too large. Max size is 100MB.", "error");
+  if (file.size > 50 * 1024 * 1024) {
+    showToast("Video too large. Max size is 50MB.", "error");
     return;
   }
 
@@ -218,7 +218,7 @@ const removeVideo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.photo) {
+    if (!formData.video) {
       showToast("Please upload your picture to proceed.", "error");
       return;
     }
@@ -551,7 +551,7 @@ const removeVideo = () => {
         Click to upload your audition video
       </div>
       <div className={styles.uploadSub}>
-        MP4, WebM or MOV · Max 3-Minutes · Max 100MB
+        MP4, WebM or MOV · Max 2-Minutes · Max 100MB
       </div>
       <input
         type="file"

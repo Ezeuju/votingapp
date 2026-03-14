@@ -23,6 +23,7 @@ import AdminAuth from './COMPONENTS/AdminAuth/AdminAuth';
 import DonationResult from './Screens/DonationResult';
 import ProtectedRoute from './COMPONENTS/ProtectedRoute';
 import Thankyou from './Screens/Thankyou';
+import TwitchStream from './Screens/TwitchStream';
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <Route path="/donation-result" element={<DonationResult />} />
         <Route path="/ticketpage" element={<TicketPage/>} />
         <Route path="/thankyou" element={<Thankyou/>} />
+        <Route path="/twitchstream" element={<TwitchStream/>} />
       </Routes>
     </div>
   );
