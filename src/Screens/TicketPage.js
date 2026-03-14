@@ -6,43 +6,55 @@ import Footer from "../COMPONENTS/Footer";
 const Tickets = () => {
   const ticketTiers = [
     {
-      name: "Standard Access",
-      price: "₦2000",
+      name: "Event Entry",
+      price: "₦2,000",
       type: "regular",
-      benefits: [
-        "Live Show Entry",
-        "10 Voting Points",
-        "Standard Seating",
-        "Digital Program Guide"
-      ],
+      benefits: ["Live Show Entry", "Standard Seating", "General Access"],
       buttonText: "Purchase Ticket"
     },
     {
-      name: "VIP Access",
-      price: "₦10000",
-      type: "vip",
-      badge: "Most Requested",
-      benefits: [
-        "Premium Front-Row Seating",
-        "50 Voting Points",
-        "VIP Lounge Access",
-        "Refreshments & Hors d'oeuvres",
-        "Meet & Greet with Judges"
-      ],
-      buttonText: "Get VIP Access"
+      name: "Standard Entry",
+      price: "₦5,000",
+      type: "regular",
+      benefits: ["Priority Entry", "Improved Seating", "Digital Program"],
+      buttonText: "Purchase Ticket"
     },
     {
-      name: "General Access Gold Pass",
+      name: "Couple Regular",
+      price: "₦5,000",
+      type: "regular",
+      badge: "Best Value",
+      benefits: ["Entry for Two", "Side-by-Side Seating", "Event Access"],
+      buttonText: "Get Couple Pass"
+    },
+    {
+      name: "Single Silver Pass",
+      price: "₦5,000",
+      type: "silver",
+      benefits: ["Silver Row Seating", "Souvenir Tag", "Fast-track Entry"],
+      buttonText: "Get Silver Pass"
+    },
+    {
+      name: "Gold Audition Pass",
+      price: "₦10,000",
+      type: "gold",
+      benefits: ["Audition Entry", "Performance Slot", "Mentor Feedback"],
+      buttonText: "Get Gold Pass"
+    },
+    {
+      name: "VIP Audition Pass",
+      price: "₦10,000",
+      type: "vip",
+      badge: "Most Popular",
+      benefits: ["Priority Audition", "VIP Lounge Access", "Judge Meet & Greet"],
+      buttonText: "Get VIP Pass"
+    },
+    {
+      name: "VIP with Security",
       price: "₦50,000",
       type: "vvip",
-      benefits: [
-        "Private Table Service",
-        "500 Voting Points",
-        "Red Carpet Photo-Op",
-        "Luxury Gift Hampers",
-        "Branding Opportunity for Sponsors"
-      ],
-      buttonText: "Inquire for Table"
+      benefits: ["Premium VVIP Seating", "Dedicated Security Detail", "Backstage Access", "Refreshments"],
+      buttonText: "Secure VVIP Access"
     }
   ];
 
@@ -52,11 +64,11 @@ const Tickets = () => {
     <section className={styles.ticketSection} id="tickets">
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.eyebrow}>Experience the Magic Live</span>
-          <h2>Get Your <span className={styles.greenText}>Show Tickets</span></h2>
+          <span className={styles.eyebrow}>Naija to the World 2026</span>
+          <h2>Secure Your <span className={styles.greenText}>Event Tickets</span></h2>
           <p>
-            Secure your seat at the most anticipated event of the year. 
-            From standard entry to VVIP red-carpet treatment.
+            Join the movement. Choose the experience that fits your style, 
+            from standard entry to premium VIP protection.
           </p>
         </div>
 
@@ -64,7 +76,7 @@ const Tickets = () => {
           {ticketTiers.map((tier, index) => (
             <div 
               key={index} 
-              className={`${styles.ticketCard} ${tier.type === 'vip' ? styles.vipCard : ''}`}
+              className={`${styles.ticketCard} ${tier.type === 'vip' ? styles.vipCard : ''} ${tier.type === 'vvip' ? styles.vvipCard : ''}`}
             >
               {tier.badge && <div className={styles.popularBadge}>{tier.badge}</div>}
               
@@ -79,9 +91,15 @@ const Tickets = () => {
                 ))}
               </ul>
 
-              <a href="https://selar.com/57744hc123"><button className={tier.type === 'vip' ? styles.buyBtnGold : styles.buyBtn}>
-                {tier.buttonText}
-              </button></a>
+              <a href="https://selar.com/57744hc123" target="_blank" rel="noopener noreferrer">
+                <button className={
+                  tier.type === 'vip' || tier.type === 'vvip' || tier.type === 'gold' 
+                  ? styles.buyBtnGold 
+                  : styles.buyBtn
+                }>
+                  {tier.buttonText}
+                </button>
+              </a>
             </div>
           ))}
         </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from '../CSS-MODULES/Gallerys.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
@@ -10,78 +10,76 @@ import naijapic12 from "../assets/naijapic12.jpeg"
 import naijapic19 from "../assets/naijapic19.jpeg"
 import naijapic20 from "../assets/naijapic20.jpeg" 
 import naijapic21 from "../assets/naijapic21.jpeg"
-import naijavid1 from "../assets/naijavid1.mp4" 
-import naijavid2 from "../assets/naijavid2.mp4"
-import naijavid3 from  "../assets/naijavid3.mp4"
-import naijavi4 from "../assets/naijavi4.mp4"
-import naijavid5 from "../assets/naijavid5.mp4"
-import naijavid6 from "../assets/naijavid6.mp4"
-import naijavid7 from "../assets/naijavid7.mp4"
-import naijavid8 from "../assets/naijavid8.mp4"
-import naijavid9 from "../assets/naijavid9.mp4"
-import naijavid10 from "../assets/naijavid10.mp4";
-
 
 const Gallery = () => {
   const scrollRefs = useRef([]);
   const [selectedMedia, setSelectedMedia] = useState(null);
+  const modalVideoRef = useRef(null);
 
-  // Define each row as a separate category here
+  // Trigger play when modal opens
+  useEffect(() => {
+    if (selectedMedia && selectedMedia.type === 'video' && modalVideoRef.current) {
+      modalVideoRef.current.load();
+      modalVideoRef.current.play().catch(error => {
+        console.log("Autoplay prevented:", error);
+      });
+    }
+  }, [selectedMedia]);
+
   const categories = [
     { 
       title: "Talents Highlights", 
       media: [
-        { type: 'video', url: naijavid1, title: 'Audition Clip 1' },
-        { type: 'image', url: naijapic10, title: 'Lagos Auditions' },
-        { type: 'image', url: naijapic11, title: 'Backstage Prep' },
+        { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440356/naijavid16_wr3wjm.mp4" },
+        { type: 'image', url: naijapic10 },
+        { type: 'image', url: naijapic11 },
         { type: 'image', url: naijapic12, title: 'Talent Showcase' },
-        { type: 'image', url: naijapic19, title: 'Golden Buzzer' },
-         { type: 'video', url: naijavid2, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid3, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavi4, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid5, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid6, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid7, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid8, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid9, title: 'Audition Clip 1' },
-         { type: 'video', url: naijavid10, title: 'Audition Clip 1' }
+        { type: 'image', url: naijapic19},
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440300/naijavid24_uuodln.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440298/naijavid23_dqkyww.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440288/naijavid12_imbuuk.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440283/naijavid19_zmozun.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440272/naijavid22_xtpyrf.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440270/naijavid20_vs3gk6.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440265/naijavid21_f33zbu.mp4" },
+         { type: 'video', url: 'https://res.cloudinary.com/duxagntku/video/upload/v1773440136/naijavid25_orui81.mp4' },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773439993/naijavid2_porbpi.mp4" }
       ] 
     },
     { 
       title: "Live Show Extravaganza", 
       media: [
         { type: 'image', url: naijapic20, title: 'Main Stage Energy' },
-        { type: 'video', url: naijavid1, title: 'Live Performance' },
+        { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440398/naijavid11_bbeo1m.mp4" },
         { type: 'image', url: naijapic21, title: 'Crowd Reaction' },
         { type: 'image', url: naijapic10, title: 'Judges Table' },
-        //  { type: 'video', url: naijavid11, title: 'Audition Clip 1' },
-        //  { type: 'video', url: naijavid12, title: 'Audition Clip 1' },
-        //  { type: 'video', url: naijavid13, title: 'Audition Clip 1' },
-        //  { type: 'video', url: naijavid14, title: 'Audition Clip 1' },
-        //  { type: 'video', url: naijavid15, title: 'Audition Clip 1' },
-        //  { type: 'video', url: naijavid16, title: 'Audition Clip 1' }
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773439993/naijavid2_porbpi.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440974/naijavid1_hrpcbb.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440400/naijavid32_kgsthg.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440401/naijavid18_oc7nnq.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440399/naijavid13_aaphlq.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440398/naijavid11_bbeo1m.mp4" }
       ] 
     },
-  //   { 
-  //     title: "Behind The Scenes", 
-  //     media: [
-  //       { type: 'image', url: naijapic11, title: 'Makeup & Hair' },
-  //       { type: 'image', url: naijapic12, title: 'Rehearsal Hall' },
-  //       { type: 'video', url: naijavid1, title: 'Uncut Moments' },
-  //       { type: 'image', url: naijapic19, title: 'Post-Show Interview' },
-  //        { type: 'video', url: naijavid17, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid18, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid19, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid20, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid21, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid22, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid23, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid24, title: 'Audition Clip 1' },
-  //        { type: 'video', url: naijavid25, title: 'Audition Clip 1' }
-  //     ] 
-  //   }
-  // ];
-  ]
+    { 
+      title: "Behind The Scenes", 
+      media: [
+        { type: 'image', url: naijapic11, title: 'Makeup & Hair' },
+        { type: 'image', url: naijapic12, title: 'Rehearsal Hall' },
+        { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440398/naijavid15_ugw3ov.mp4" },
+        { type: 'image', url: naijapic20 },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440395/naijavid10_meo7ci.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440393/naijavid6_rs2bzl.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440392/naijavid8_pmkrp9.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440389/naijavid28_o5fx3e.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440389/naijavid7_blxii1.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440383/naijavi4_xgjz4u.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440369/naijavid5_ut6ie0.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440361/naijavid31_ryk8ro.mp4" },
+         { type: 'video', url: "https://res.cloudinary.com/duxagntku/video/upload/v1773440359/naijavid30_oqnt2s.mp4" }
+      ] 
+    }
+  ];
 
   const scroll = (index, direction) => {
     const container = scrollRefs.current[index];
@@ -108,7 +106,6 @@ const Gallery = () => {
 
         <section className={styles.galleryContent}>
           <div className={styles.container}>
-            {/* This map creates one unique section for every object in the categories array */}
             {categories.map((cat, idx) => (
               <div key={idx} className={styles.gallerySection}>
                 <div className={styles.sectionHeader}>
@@ -119,21 +116,21 @@ const Gallery = () => {
                   </div>
                 </div>
 
-                {/* By having only one carousel here, the ref is always unique to this category */}
-                <div 
-                  className={styles.carouselContainer} 
-                  ref={el => scrollRefs.current[idx] = el}
-                >
+                <div className={styles.carouselContainer} ref={el => scrollRefs.current[idx] = el}>
                   <div className={styles.imageTrack}>
                     {cat.media.map((item, i) => (
-                      <div 
-                        key={i} 
-                        className={styles.imageCard} 
-                        onClick={() => setSelectedMedia(item)}
-                      >
+                      <div key={i} className={styles.imageCard} onClick={() => setSelectedMedia(item)}>
                         {item.type === 'video' ? (
                           <div className={styles.videoThumbnail}>
-                            <video muted loop className={styles.galleryImage}>
+                            <video 
+                              muted 
+                              loop 
+                              autoPlay 
+                              playsInline
+                              preload="metadata"
+                              poster={item.url.replace(".mp4", ".jpg")} 
+                              className={styles.galleryImage}
+                            >
                               <source src={item.url} type="video/mp4" />
                             </video>
                             <div className={styles.playOverlay}>▶</div>
@@ -150,20 +147,26 @@ const Gallery = () => {
           </div>
         </section>
 
-        {/* MODAL OVERLAY */}
         {selectedMedia && (
           <div className={styles.modalOverlay} onClick={() => setSelectedMedia(null)}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
               <button className={styles.closeBtn} onClick={() => setSelectedMedia(null)}>&times;</button>
               
               {selectedMedia.type === 'video' ? (
-                <video src={selectedMedia.url} controls autoPlay className={styles.expandedMedia} />
+                <video 
+                  ref={modalVideoRef}
+                  src={selectedMedia.url} 
+                  controls 
+                  autoPlay 
+                  playsInline
+                  className={styles.expandedMedia} 
+                />
               ) : (
                 <img src={selectedMedia.url} alt="Expanded View" className={styles.expandedMedia} />
               )}
               
               <div className={styles.modalCaption}>
-                <h3>{selectedMedia.title}</h3>
+                <h3>{selectedMedia.title || "Gallery Moment"}</h3>
               </div>
             </div>
           </div>

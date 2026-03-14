@@ -22,6 +22,7 @@ import Timeline from "./Screens/Timeline"
 import AdminAuth from './COMPONENTS/AdminAuth/AdminAuth';
 import DonationResult from './Screens/DonationResult';
 import ProtectedRoute from './COMPONENTS/ProtectedRoute';
+import Thankyou from './Screens/Thankyou';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
         <Route path="/auth" element={<AdminAuth />} />
         <Route path="/donation-result" element={<DonationResult />} />
         <Route path="/ticketpage" element={<TicketPage/>} />
+        <Route path="/thankyou" element={<Thankyou/>} />
       </Routes>
     </div>
   );

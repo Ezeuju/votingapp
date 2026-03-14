@@ -25,10 +25,14 @@
 .greenText { color: #008751; }
 
 .ticketContainer {
-  display: flex;
+  display: grid;
+  /* Desktop: Exactly 2 equal columns */
+  grid-template-columns: repeat(2, 1fr); 
   justify-content: center;
-  align-items: stretch;
-  gap: 25px;
+  gap: 30px;
+  /* Added margin to center the grid if the container is wider than the cards */
+  max-width: 900px; 
+  margin: 0 auto;
 }
 
 .ticketCard {
@@ -36,12 +40,13 @@
   border: 1px solid #333;
   padding: 50px 30px;
   border-radius: 25px;
-  flex: 1;
-  max-width: 380px;
+  /* Removed flex: 1; as grid handles sizing now */
+  width: 100%; 
   transition: all 0.4s ease;
   display: flex;
   flex-direction: column;
   position: relative;
+  box-sizing: border-box; /* Ensures padding doesn't break the width */
 }
 
 .ticketCard:hover {
@@ -139,16 +144,19 @@
   font-size: 0.85rem;
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 1024px) {
-  .ticketContainer {
-    flex-direction: column;
-    align-items: center;
+.ticketContainer {
+  
+    grid-template-columns: 1fr;
+    max-width: 450px; 
   }
   
   .ticketCard {
-    width: 100%;
-    max-width: 450px;
-    transform: scale(1) !important;
+    transform: scale(1) !important; 
+  }
+
+  .vipCard {
+    margin: 15px 0; 
   }
 }

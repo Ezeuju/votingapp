@@ -163,49 +163,57 @@ const AuditionRegistration = () => {
     }
   };
 
-  const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  
 
-    if (file.size > 2 * 1024 * 1024) {
-      showToast("Image too large. Max size is 2MB.", "error");
-      return;
-    }
+const handleVideoUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-    setUploading(true);
-    try {
-      const formDataUpload = new FormData();
-      formDataUpload.append("file", file);
+  if (file.size > 100 * 1024 * 1024) {
+    showToast("Video too large. Max size is 100MB.", "error");
+    return;
+  }
 
-      const response = await api.post("/files", formDataUpload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+  setUploading(true);
+  try {
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", file);
 
-      const photoUrl = response.data.url;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setFormData((prev) => ({
-          ...prev,
-          photo: photoUrl,
-          photoPreview: ev.target.result,
-        }));
-      };
-      reader.readAsDataURL(file);
-      showToast("Photo uploaded successfully!", "success");
-    } catch (error) {
-      showToast("Failed to upload photo. Please try again.", "error");
-    } finally {
-      setUploading(false);
-    }
-  };
+    const response = await api.post("/files", formDataUpload, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-  const removePhoto = () => {
+    const videoUrl = response.data.url;
+
+    const previewUrl = URL.createObjectURL(file);
+
     setFormData((prev) => ({
       ...prev,
-      photo: "",
-      photoPreview: null,
+      video: videoUrl,
+      videoPreview: previewUrl,
     }));
-  };
+
+    showToast("Video uploaded successfully!", "success");
+  } catch (error) {
+    console.error("Upload error:", error);
+    showToast("Failed to upload video. Please try again.", "error");
+  } finally {
+    setUploading(false);
+  }
+};
+
+const removeVideo = () => {
+
+  if (formData.videoPreview) {
+    URL.revokeObjectURL(formData.videoPreview);
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    video: "",
+    videoPreview: null,
+  }));
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -503,58 +511,58 @@ const AuditionRegistration = () => {
                     </div>
                   </div>
 
-                  <div className={styles.uploadSection}>
-                    <label
-                      style={{
-                        fontWeight: 700,
-                        marginBottom: "8px",
-                        display: "block",
-                      }}
-                    >
-                      Applicant Photo *
-                    </label>
-                    {uploading ? (
-                      <div className={styles.uploadArea}>
-                        <div className={styles.uploadIcon}>⏳</div>
-                        <div className={styles.uploadText}>Uploading...</div>
-                      </div>
-                    ) : formData.photoPreview ? (
-                      <div className={styles.uploadPreview}>
-                        <img
-                          src={formData.photoPreview}
-                          alt="preview"
-                          className={styles.uploadPreviewImg}
-                        />
-                        <span className={styles.uploadPreviewName}>
-                          Photo Uploaded
-                        </span>
-                        <button
-                          type="button"
-                          className={styles.uploadPreviewRemove}
-                          onClick={removePhoto}
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ) : (
-                      <div className={styles.uploadArea}>
-                        <div className={styles.uploadIcon}>📸</div>
-                        <div className={styles.uploadText}>
-                          Click to upload your picture
-                        </div>
-                        <div className={styles.uploadSub}>
-                          JPG or PNG · Max 2MB
-                        </div>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className={styles.uploadInput}
-                          onChange={handlePhotoUpload}
-                          required
-                        />
-                      </div>
-                    )}
-                  </div>
+                <div className={styles.uploadSection}>
+  <label
+    style={{
+      fontWeight: 700,
+      marginBottom: "8px",
+      display: "block",
+    }}
+  >
+    Audition Video *
+  </label>
+  {uploading ? (
+    <div className={styles.uploadArea}>
+      <div className={styles.uploadIcon}>⏳</div>
+      <div className={styles.uploadText}>Uploading Video...</div>
+    </div>
+  ) : formData.videoPreview ? (
+    <div className={styles.uploadPreview}>
+      <video
+        src={formData.videoPreview}
+        className={styles.uploadPreviewImg}
+        controls
+      />
+      <span className={styles.uploadPreviewName}>
+        Video Ready
+      </span>
+      <button
+        type="button"
+        className={styles.uploadPreviewRemove}
+        onClick={removeVideo}
+      >
+        ✕
+      </button>
+    </div>
+  ) : (
+    <div className={styles.uploadArea}>
+      <div className={styles.uploadIcon}>🎥</div>
+      <div className={styles.uploadText}>
+        Click to upload your audition video
+      </div>
+      <div className={styles.uploadSub}>
+        MP4, WebM or MOV · Max 3-Minutes · Max 100MB
+      </div>
+      <input
+        type="file"
+        accept="video/*"
+        className={styles.uploadInput}
+        onChange={handleVideoUpload}
+        required
+      />
+    </div>
+  )}
+</div>
 
                   <div className={styles.field}>
                     <label>Audition Plan *</label>
