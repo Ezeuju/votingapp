@@ -1,15 +1,91 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../CSS-MODULES/Sponsor.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from "../COMPONENTS/Footer"
+import { partnerApi } from '../services/partnerApi';
+import { uploadFile } from '../services/fileApi';
 
 const Sponsor = () => {
-  const packages = [
-    { tier: "Bronze Partner", includes: "Logo placement, event passes, social mentions" },
-    { tier: "Silver Sponsor", includes: "VIP booth, media shout-outs, co-branded merchandise" },
-    { tier: "Gold Sponsor", includes: "Full brand integration, branding zones, speaking opportunities" },
-    { tier: "Platinum Partner", includes: "Naming rights (segments), press coverage, national promotion" }
-  ];
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [logoFile, setLogoFile] = useState(null);
+  const [logoPreview, setLogoPreview] = useState('');
+  const [formData, setFormData] = useState({
+    organization_name: '',
+    contact_person: '',
+    email: '',
+    phone_number: '',
+    partnership_plan_id: '',
+    company_website: '',
+    partnership_goal: '',
+    logo_url: ''
+  });
+
+  useEffect(() => {
+    fetchPlans();
+  }, []);
+
+  const fetchPlans = async () => {
+    try {
+      const response = await partnerApi.getPlans();
+      setPlans(response.data?.data || []);
+    } catch (error) {
+      console.error('Error fetching plans:', error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleLogoChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploading(true);
+      try {
+        const uploadResponse = await uploadFile(file);
+        const logoUrl = uploadResponse.data.url;
+        setFormData({ ...formData, logo_url: logoUrl });
+        setLogoFile(file);
+        const reader = new FileReader();
+        reader.onload = (event) => setLogoPreview(event.target.result);
+        reader.readAsDataURL(file);
+      } catch (error) {
+        alert('Failed to upload logo: ' + (error.message || 'Unknown error'));
+      } finally {
+        setUploading(false);
+      }
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccessMessage('');
+    try {
+      await partnerApi.submitUser(formData);
+      setSuccessMessage('✅ Partner application submitted successfully! We will review your application and get back to you soon.');
+      setFormData({
+        organization_name: '',
+        contact_person: '',
+        email: '',
+        phone_number: '',
+        partnership_plan_id: '',
+        company_website: '',
+        partnership_goal: '',
+        logo_url: ''
+      });
+      setLogoFile(null);
+      setLogoPreview('');
+      setTimeout(() => setSuccessMessage(''), 8000);
+    } catch (error) {
+      alert(error.message || 'Failed to submit application');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -66,10 +142,10 @@ const Sponsor = () => {
                 </tr>
               </thead>
               <tbody>
-                {packages.map((pkg, index) => (
-                  <tr key={index}>
-                    <td className={styles.tierName}>{pkg.tier}</td>
-                    <td>{pkg.includes}</td>
+                {plans.map((plan) => (
+                  <tr key={plan._id}>
+                    <td className={styles.tierName}>{plan.title}</td>
+                    <td>{plan.description}</td>
                   </tr>
                 ))}
               </tbody>
@@ -83,31 +159,81 @@ const Sponsor = () => {
         <div className={styles.container}>
           <div className={styles.formWrapper}>
             <h2>📥 Become a Sponsor – Apply Now</h2>
-            <form className={styles.sponsorForm}>
+            {successMessage && (
+              <div style={{
+                background: 'rgba(74, 222, 128, 0.15)',
+                border: '1px solid rgba(74, 222, 128, 0.3)',
+                borderRadius: '8px',
+                padding: '16px',
+                marginBottom: '20px',
+                color: '#4ade80',
+                fontSize: '14px',
+                fontWeight: '500'
+              }}>
+                {successMessage}
+              </div>
+            )}
+            <form className={styles.sponsorForm} onSubmit={handleSubmit}>
               <div className={styles.inputRow}>
-                <input type="text" placeholder="Organization/Brand Name" required />
-                <input type="text" placeholder="Contact Person" required />
+                <input type="text" name="organization_name" placeholder="Organization/Brand Name" value={formData.organization_name} onChange={handleChange} required />
+                <input type="text" name="contact_person" placeholder="Contact Person" value={formData.contact_person} onChange={handleChange} required />
               </div>
               <div className={styles.inputRow}>
-                <input type="email" placeholder="Email Address" required />
-                <input type="tel" placeholder="Phone Number" required />
+                <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
+                <input type="tel" name="phone_number" placeholder="Phone Number" value={formData.phone_number} onChange={handleChange} required />
               </div>
               <div className={styles.inputRow}>
-                <select required>
+                <select name="partnership_plan_id" value={formData.partnership_plan_id} onChange={handleChange} required>
                   <option value="">Sponsorship Tier Interested In</option>
-                  <option>Platinum Partner</option>
-                  <option>Gold Sponsor</option>
-                  <option>Silver Sponsor</option>
-                  <option>Bronze Partner</option>
+                  {plans.map(plan => (
+                    <option key={plan._id} value={plan._id}>{plan.title}</option>
+                  ))}
                 </select>
-                <input type="url" placeholder="Company Website / Social Link" />
+                <input type="url" name="company_website" placeholder="Company Website / Social Link" value={formData.company_website} onChange={handleChange} />
               </div>
-              <textarea placeholder="Brief Message / Partnership Goal" rows="4"></textarea>
+              <textarea name="partnership_goal" placeholder="Brief Message / Partnership Goal" rows="4" value={formData.partnership_goal} onChange={handleChange}></textarea>
               <div className={styles.fileInput}>
                 <label>Upload Logo or Proposal (Optional)</label>
-                <input type="file" />
+                {logoPreview ? (
+                  <div style={{
+                    position: 'relative',
+                    width: '100%',
+                    marginTop: '10px',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: '1px solid rgba(0, 135, 81, 0.3)'
+                  }}>
+                    <img src={logoPreview} alt="Logo preview" style={{ width: '100%', maxHeight: '200px', objectFit: 'cover' }} />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLogoFile(null);
+                        setLogoPreview('');
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '8px',
+                        right: '8px',
+                        background: 'rgba(0, 0, 0, 0.7)',
+                        color: '#fff',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '32px',
+                        height: '32px',
+                        cursor: 'pointer',
+                        fontSize: '18px'
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <input type="file" accept="image/*" onChange={handleLogoChange} />
+                )}
               </div>
-              <button type="submit" className={styles.submitBtn}>Submit Application</button>
+              <button type="submit" className={styles.submitBtn} disabled={loading || uploading}>
+                {uploading ? 'Uploading Logo...' : loading ? 'Submitting...' : 'Submit Application'}
+              </button>
               <p className={styles.disclaimer}>🔒 All submissions are confidential.</p>
             </form>
           </div>

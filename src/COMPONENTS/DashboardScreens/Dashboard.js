@@ -13,6 +13,7 @@ import DashboardLiveUpdates  from './DashboardLiveUpdates';
 import DashboardAuditions    from './DashboardAuditions';
 import DashboardContestants  from './DashboardContestants';
 import DashboardSponsory  from './DashboardSponsory';
+import DashboardPartners  from './DashboardPartners';
 import Dashboardjointeam  from './Dashboardjointeam';
 import Dashboardcontactus from './Dashboardcontactus';
 
@@ -39,7 +40,7 @@ const Dashboard = () => {
       case 'updates':       return <DashboardLiveUpdates   {...sharedProps} />;
       case 'auditions':     return <DashboardAuditions     {...sharedProps} />;
       case 'contestants':   return <DashboardContestants   />;
-      case 'sponsors':  return <DashboardSponsory />;
+      case 'sponsors':  return <DashboardPartners />;
       case 'jointeam':  return <Dashboardjointeam                           />;
       case 'contact':   return <Dashboardcontactus                          />;
       default:              return <DashboardOverview      {...sharedProps} />;

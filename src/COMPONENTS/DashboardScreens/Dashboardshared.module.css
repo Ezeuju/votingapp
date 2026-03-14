@@ -425,3 +425,25 @@
   color: rgba(232, 245, 232, 0.3);
   font-size: 14px;
 }
+
+/* ── PAGINATION ─────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 16px;
+  color: rgba(232, 245, 232, 0.7);
+  font-size: 14px;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── TABLE SCROLL ───────────────────────────────────────────────────────── */
+.tableScroll {
+  overflow-x: auto;
+}
