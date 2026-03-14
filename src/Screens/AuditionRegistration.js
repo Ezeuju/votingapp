@@ -219,7 +219,7 @@ const removeVideo = () => {
     e.preventDefault();
 
     if (!formData.video) {
-      showToast("Please upload your picture to proceed.", "error");
+      showToast("Please upload your video to proceed.", "error");
       return;
     }
 
@@ -239,7 +239,7 @@ const removeVideo = () => {
             ? formData.customCategory
             : formData.category,
         audition_plan_id: formData.audition_plan_id,
-        photo: formData.photo,
+        video: formData.video,
       };
       const response = await paymentApi.initialize(payload);
       console.log("Full response:", response);

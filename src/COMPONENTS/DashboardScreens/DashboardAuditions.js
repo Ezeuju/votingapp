@@ -293,6 +293,28 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
               </span>
             </div>
           </div>
+          {viewDetails.video && (
+            <div style={{ marginTop: '24px', marginBottom: '20px' }}>
+              <div className={styles.label} style={{ marginBottom: 8 }}>Introduction Video</div>
+              <video
+                src={viewDetails.video}
+                controls
+                preload="metadata"
+                style={{
+                  width: '100%',
+                  borderRadius: '8px',
+                  backgroundColor: '#000',
+                  border: '1px solid rgba(0, 135, 81, 0.3)'
+                }}
+              />
+            </div>
+          )}
+          {!viewDetails.video && (
+            <div style={{ marginTop: '24px', marginBottom: '20px', color: 'rgba(232, 245, 232, 0.5)', fontSize: '14px' }}>
+              <div className={styles.label} style={{ marginBottom: 8 }}>Introduction Video</div>
+              <div>No video submitted</div>
+            </div>
+          )}
           <div className={styles.modalActions}>
             <button className={`${styles.btn} ${styles.btnOutline}`} onClick={() => setViewDetails(null)}>
               Close

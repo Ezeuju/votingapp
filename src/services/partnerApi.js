@@ -10,6 +10,7 @@ export const partnerApi = {
     if (params.search) query.append('search', params.search);
     if (params.pageNo) query.append('pageNo', params.pageNo);
     if (params.limitNo) query.append('limitNo', params.limitNo);
+    if (params.status) query.append('status', params.status);
     return api.get(`/partners/admin?${query.toString()}`);
   },
   getOne: (id) => api.get(`/partners/${id}/admin`),
