@@ -6,6 +6,7 @@ import DashboardModal from "./Dashboardmodal";
 import ConfirmModal from "./ConfirmModal";
 import { STATUS_MAP } from "./Dashboarddata";
 import { adminApi } from "../../services/adminApi";
+import { uploadFile } from "../../services/fileApi";
 import { toast } from "react-toastify";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
@@ -20,6 +21,9 @@ const DashboardContestants = () => {
   const [loadingContestants, setLoadingContestants] = useState(false);
   const [actionLoading, setActionLoading] = useState(null);
   const [confirmId, setConfirmId] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [uploadedPhoto, setUploadedPhoto] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetchContestants();
@@ -75,7 +79,9 @@ const DashboardContestants = () => {
     if (!selectedApplicant) return;
     setActionLoading('add');
     try {
-      await adminApi.convertToContestant(selectedApplicant._id);
+      await adminApi.convertToContestant(selectedApplicant._id, {
+        photo: uploadedPhoto
+      });
       toast.success("Contestant added successfully");
       await fetchContestants();
       resetForm();
@@ -88,9 +94,28 @@ const DashboardContestants = () => {
     }
   };
 
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const response = await uploadFile(file);
+      const photoUrl = response.url || response.data?.url;
+      setUploadedPhoto(photoUrl);
+      toast.success("Photo uploaded successfully");
+    } catch (err) {
+      console.error("Upload error:", err);
+      toast.error("Failed to upload photo");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const resetForm = () => {
     setSearchTerm("");
     setSelectedApplicant(null);
+    setUploadedPhoto(null);
   };
 
   const handleRemoveClick = (id) => {
@@ -155,7 +180,7 @@ const DashboardContestants = () => {
             <div key={c._id} className={pageStyles.contestantCard}>
               {i < 3 && <div className={pageStyles.medal}>{MEDALS[i]}</div>}
 
-              <div className={pageStyles.contestantAvatar}>
+              <div className={pageStyles.contestantAvatar} style={{ cursor: 'pointer' }} onClick={() => c.photo && setPreviewImage(c.photo)}>
                 {c.photo ? (
                   <img src={c.photo} alt={c.first_name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
                 ) : (
@@ -166,7 +191,7 @@ const DashboardContestants = () => {
                 {c.first_name} {c.last_name}
               </div>
               <div className={pageStyles.contestantTag}>
-                {c.talent_category || 'N/A'}
+                #{c.contestant_number || 'N/A'} • {c.talent_category || 'N/A'}
               </div>
 
               <span className={`${styles.badge} ${styles[STATUS_MAP[c.contestant_status]]}`}>
@@ -313,6 +338,33 @@ const DashboardContestants = () => {
                     Change
                   </button>
                 </div>
+                <div className={`${styles.formGroup} ${styles.formGroupFull}`} style={{ marginTop: '16px' }}>
+                  <label className={styles.label}>Contestant Photo</label>
+                  {uploading ? (
+                    <div style={{ padding: '20px', textAlign: 'center', color: '#FFD700' }}>Uploading...</div>
+                  ) : uploadedPhoto ? (
+                    <div style={{ padding: '12px', background: 'rgba(0, 135, 81, 0.1)', borderRadius: '8px', border: '1px solid rgba(0, 135, 81, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#4ade80' }}>✓ Photo uploaded</span>
+                      <button
+                        type="button"
+                        className={`${styles.btn} ${styles.btnOutline} ${styles.btnSm}`}
+                        onClick={() => setUploadedPhoto(null)}
+                      >
+                        Change
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ position: 'relative', border: '2px dashed rgba(0, 135, 81, 0.3)', borderRadius: '8px', padding: '20px', textAlign: 'center', cursor: 'pointer', background: 'rgba(0, 30, 15, 0.4)' }}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                      />
+                      <div style={{ color: 'rgba(232, 245, 232, 0.6)', fontSize: '14px' }}>Click to upload photo</div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -329,7 +381,7 @@ const DashboardContestants = () => {
             <button
               className={`${styles.btn} ${styles.btnPrimary}`}
               onClick={handleAdd}
-              disabled={!selectedApplicant || actionLoading === 'add'}
+              disabled={!selectedApplicant || !uploadedPhoto || actionLoading === 'add'}
             >
               {actionLoading === 'add' ? 'Adding...' : 'Add Contestant'}
             </button>
@@ -344,6 +396,50 @@ const DashboardContestants = () => {
           onConfirm={handleRemoveConfirm}
           onCancel={() => setConfirmId(null)}
         />
+      )}
+
+      {/* ── Image Preview Lightbox ── */}
+      {previewImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000,
+            padding: '40px'
+          }}
+          onClick={() => setPreviewImage(null)}
+        >
+          <div style={{ position: 'relative', maxWidth: '90%', maxHeight: '90%', display: 'flex', justifyContent: 'center' }}>
+            <button
+              style={{
+                position: 'absolute',
+                top: '-40px',
+                right: '0',
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '30px',
+                cursor: 'pointer',
+                fontWeight: 'bold'
+              }}
+              onClick={() => setPreviewImage(null)}
+            >
+              ✕
+            </button>
+            <img
+              src={previewImage}
+              alt="Full Preview"
+              style={{ maxWidth: '100%', maxHeight: '80vh', borderRadius: '8px', boxShadow: '0 0 40px rgba(0,0,0,0.5)', objectFit: 'contain' }}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

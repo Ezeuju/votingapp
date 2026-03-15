@@ -1,10 +1,15 @@
-import api from './api';
+import api from "./api";
 
 export const adminApi = {
   getUsers: (params = {}) => {
-    const { account_type = 'Applicant', pageNo = 1, limitNo = 10, search = '' } = params;
-    return api.get('/users/admin', {
-      params: { account_type, pageNo, limitNo, search }
+    const {
+      account_type = "Applicant",
+      pageNo = 1,
+      limitNo = 10,
+      search = "",
+    } = params;
+    return api.get("/users/admin", {
+      params: { account_type, pageNo, limitNo, search },
     });
   },
 
@@ -13,7 +18,7 @@ export const adminApi = {
   },
 
   getAuditionStats: () => {
-    return api.get('/users/audition/stats/admin');
+    return api.get("/users/audition/stats/admin");
   },
 
   deleteAudition: (userId) => {
@@ -21,9 +26,9 @@ export const adminApi = {
   },
 
   getDonors: (params = {}) => {
-    const { pageNo = 1, limitNo = 10, search = '' } = params;
-    return api.get('/donors/admin', {
-      params: { pageNo, limitNo, search }
+    const { pageNo = 1, limitNo = 10, search = "" } = params;
+    return api.get("/donors/admin", {
+      params: { pageNo, limitNo, search },
     });
   },
 
@@ -32,11 +37,11 @@ export const adminApi = {
   },
 
   getDonorStats: () => {
-    return api.get('/donors/stats/admin');
+    return api.get("/donors/stats/admin");
   },
 
   getDonorSummary: () => {
-    return api.get('/donors/summary/admin');
+    return api.get("/donors/summary/admin");
   },
 
   deleteDonor: (donorId) => {
@@ -44,9 +49,9 @@ export const adminApi = {
   },
 
   getTeams: (params = {}) => {
-    const { pageNo = 1, limitNo = 10, search = '' } = params;
-    return api.get('/teams/admin', {
-      params: { pageNo, limitNo, search }
+    const { pageNo = 1, limitNo = 10, search = "" } = params;
+    return api.get("/teams/admin", {
+      params: { pageNo, limitNo, search },
     });
   },
 
@@ -59,18 +64,18 @@ export const adminApi = {
   },
 
   getTeamStats: () => {
-    return api.get('/teams/stats/admin');
+    return api.get("/teams/stats/admin");
   },
 
   getLiveUpdates: (params = {}) => {
-    const { pageNo = 1, limitNo = 10, search = '' } = params;
-    return api.get('/live-updates/admin', {
-      params: { pageNo, limitNo, search }
+    const { pageNo = 1, limitNo = 10, search = "" } = params;
+    return api.get("/live-updates/admin", {
+      params: { pageNo, limitNo, search },
     });
   },
 
   createLiveUpdate: (message) => {
-    return api.post('/live-updates/admin', { message });
+    return api.post("/live-updates/admin", { message });
   },
 
   updateLiveUpdate: (updateId, is_pin) => {
@@ -82,14 +87,19 @@ export const adminApi = {
   },
 
   getContestants: (params = {}) => {
-    const { pageNo = 1, limitNo = 100 } = params;
-    return api.get('/users/admin', {
-      params: { account_type: 'Contestant', pageNo, limitNo }
+    const {
+      pageNo = 1,
+      limitNo = 100,
+      filter = "contestant_number",
+      order = 1,
+    } = params;
+    return api.get("/users/admin", {
+      params: { account_type: "Contestant", pageNo, limitNo, filter, order },
     });
   },
 
-  convertToContestant: (userId) => {
-    return api.patch(`/users/${userId}/convert-to-contestant/admin`);
+  convertToContestant: (userId, data) => {
+    return api.patch(`/users/${userId}/convert-to-contestant/admin`, data);
   },
 
   updateContestantStatus: (userId, action) => {
@@ -101,6 +111,6 @@ export const adminApi = {
   },
 
   getContestantStats: () => {
-    return api.get('/users/contestant/stats/admin');
-  }
+    return api.get("/users/contestant/stats/admin");
+  },
 };

@@ -248,25 +248,6 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
       {/* ── View Details Modal ── */}
       {viewDetails && (
         <DashboardModal title="Registrant Details" onClose={() => setViewDetails(null)}>
-          {viewDetails.photo && (
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-              <img
-                src={viewDetails.photo}
-                alt="Profile"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  cursor: 'pointer',
-                  border: '3px solid #008751',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                }}
-                onClick={() => setPreviewImage(viewDetails.photo)}
-                title="Click to preview full image"
-              />
-            </div>
-          )}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 24px' }}>
             {[
               { label: 'First Name', value: viewDetails.first_name },
