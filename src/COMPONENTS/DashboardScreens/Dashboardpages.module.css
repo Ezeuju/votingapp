@@ -236,7 +236,7 @@
 /* ── CONTESTANTS GRID ───────────────────────────────────────────────────── */
 .contestantsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-bottom: 20px;
 }
@@ -245,11 +245,12 @@
   background: linear-gradient(135deg, rgba(0, 30, 15, 0.9), rgba(0, 20, 10, 1));
   border: 1px solid rgba(0, 135, 81, 0.25);
   border-radius: 12px;
-  padding: 20px;
+  padding: 40px;
   text-align: center;
   transition: all 0.2s;
   position: relative;
   overflow: hidden;
+  width: 70%;
 }
 
 .contestantCard:hover {

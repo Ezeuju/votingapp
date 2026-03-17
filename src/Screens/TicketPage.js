@@ -91,7 +91,7 @@ const Tickets = () => {
                 ))}
               </ul>
 
-              <a href="https://selar.com/57744hc123" target="_blank" rel="noopener noreferrer">
+              <a href="/ticketform" target="_blank" rel="noopener noreferrer">
                 <button className={
                   tier.type === 'vip' || tier.type === 'vvip' || tier.type === 'gold' 
                   ? styles.buyBtnGold 

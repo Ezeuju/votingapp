@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import layoutStyles from '../DashboardScreens/Dashboard.module.css';
 import sharedStyles from '../DashboardScreens/Dashboardshared.module.css';
-
+import Dashboardjudges from '../DashboardScreens/Dashboardjudges';
 
 import DashboardSidebar      from './DashboardSidebar';
 import DashboardOverview     from './DashboardOverview';
@@ -12,12 +12,12 @@ import DashboardAnnouncements from './DashboardAnnouncements';
 import DashboardLiveUpdates  from './DashboardLiveUpdates';
 import DashboardAuditions    from './DashboardAuditions';
 import DashboardContestants  from './DashboardContestants';
-import DashboardSponsory  from './DashboardSponsory';
 import DashboardPartners  from './DashboardPartners';
 import Dashboardjointeam  from './Dashboardjointeam';
 import Dashboardcontactus from './Dashboardcontactus';
 
 import { INIT_DATA, PAGE_TITLES } from './Dashboarddata';
+
 
 const Dashboard = () => {
   const [active, setActive] = useState(() => {
@@ -41,20 +41,24 @@ const Dashboard = () => {
       case 'auditions':     return <DashboardAuditions     {...sharedProps} />;
       case 'contestants':   return <DashboardContestants   />;
       case 'sponsors':  return <DashboardPartners />;
-      case 'jointeam':  return <Dashboardjointeam                           />;
-      case 'contact':   return <Dashboardcontactus                          />;
+       case 'jointeam':  
+        return <Dashboardjointeam />;
+      case 'contact':   
+        return <Dashboardcontactus />; 
+      case 'judges':    
+        return <Dashboardjudges />;                                          
       default:              return <DashboardOverview      {...sharedProps} />;
     }
   };
 
   return (
     <div className={layoutStyles.root}>
-      {/* ── Sidebar ── */}
+  
       <DashboardSidebar active={active} onNavigate={setActive} />
 
-      {/* ── Main ── */}
+  
       <main className={layoutStyles.main}>
-        {/* Topbar */}
+     
         <div className={layoutStyles.topbar}>
           <span className={layoutStyles.topbarTitle}>{PAGE_TITLES[active]}</span>
           <div className={layoutStyles.topbarActions}>
@@ -67,7 +71,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Page Content */}
+     
         <div className={layoutStyles.content}>
           {renderPage()}
         </div>
