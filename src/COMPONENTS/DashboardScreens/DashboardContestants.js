@@ -1,57 +1,57 @@
 // src/COMPONENTS/DashboardScreens/DashboardContestants.jsx
 import React, { useState, useEffect } from "react";
-import styles     from "../DashboardScreens/Dashboardshared.module.css";
+import styles from "../DashboardScreens/Dashboardshared.module.css";
 import pageStyles from "../DashboardScreens/Dashboardpages.module.css";
-import DashboardModal    from "./Dashboardmodal";
-import ConfirmModal      from "./ConfirmModal";
+import DashboardModal from "./Dashboardmodal";
+import ConfirmModal from "./ConfirmModal";
 import ContestantProfile from "../../Screens/ContestantProfile";
-import VotingPage        from "../../Screens/VotingPage";
-import { STATUS_MAP }    from "./Dashboarddata";
-import { adminApi }      from "../../services/adminApi";
-import { uploadFile }    from "../../services/fileApi";
-import { toast }         from "react-toastify";
+import VotingPage from "../../Screens/VotingPage";
+import { STATUS_MAP } from "./Dashboarddata";
+import { adminApi } from "../../services/adminApi";
+import { uploadFile } from "../../services/fileApi";
+import { toast } from "react-toastify";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 
 
 const normalise = (c) => ({
-  id:           c._id,
-  name:         `${c.first_name || ''} ${c.last_name || ''}`.trim(),
-  nickname:     c.nickname     || `#${c.contestant_number || ''}`,
-  category:     c.talent_category || 'N/A',
-  votes:        c.votes        || 0,
-  max:          10000,
-  status:       c.contestant_status || 'Active',
-  age:          c.age          || '',
-  hometown:     c.hometown     || c.location || '',
-  bio:          c.bio          || '',
-  highlight:    c.highlight    || '',
-  instagram:    c.instagram    || '',
+  id: c._id,
+  name: `${c.first_name || ''} ${c.last_name || ''}`.trim(),
+  nickname: c.nickname || `#${c.contestant_number || ''}`,
+  category: c.talent_category || 'N/A',
+  votes: c.votes || 0,
+  max: 10000,
+  status: c.contestant_status || 'Active',
+  age: c.age || '',
+  hometown: c.hometown || c.location || '',
+  bio: c.bio || '',
+  highlight: c.highlight || '',
+  instagram: c.instagram || '',
   auditionSong: c.audition_song || '',
-  photoPreview: c.photo        || null,
- 
+  photoPreview: c.photo || null,
+
   _raw: c,
 });
 
 // view: 'list' | 'profile' | 'vote'
 const DashboardContestants = () => {
-  const [view,             setView]             = useState('list');
+  const [view, setView] = useState('list');
   const [activeContestant, setActiveContestant] = useState(null);
 
-  const [modal,            setModal]            = useState(false);
-  const [searchTerm,       setSearchTerm]       = useState('');
-  const [applicants,       setApplicants]       = useState([]);
-  const [contestants,      setContestants]      = useState([]);
-  const [selectedApplicant,setSelectedApplicant]= useState(null);
-  const [loadingApplicants,setLoadingApplicants]= useState(false);
-  const [loadingContestants,setLoadingContestants]=useState(false);
-  const [actionLoading,    setActionLoading]    = useState(null);
-  const [confirmId,        setConfirmId]        = useState(null);
-  const [previewImage,     setPreviewImage]     = useState(null);
-  const [uploadedPhoto,    setUploadedPhoto]    = useState(null);
-  const [uploading,        setUploading]        = useState(false);
+  const [modal, setModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [applicants, setApplicants] = useState([]);
+  const [contestants, setContestants] = useState([]);
+  const [selectedApplicant, setSelectedApplicant] = useState(null);
+  const [loadingApplicants, setLoadingApplicants] = useState(false);
+  const [loadingContestants, setLoadingContestants] = useState(false);
+  const [actionLoading, setActionLoading] = useState(null);
+  const [confirmId, setConfirmId] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [uploadedPhoto, setUploadedPhoto] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
- 
+
   const sorted = [...contestants]
     .sort((a, b) => (b.votes || 0) - (a.votes || 0))
     .map(normalise);
@@ -77,7 +77,7 @@ const DashboardContestants = () => {
   const fetchContestants = async () => {
     setLoadingContestants(true);
     try {
-      const resp   = await adminApi.getContestants();
+      const resp = await adminApi.getContestants();
       const result = resp.data?.[0] || resp.data;
       setContestants(result?.data || []);
     } catch (err) {
@@ -91,7 +91,7 @@ const DashboardContestants = () => {
   const fetchApplicants = async (search = '') => {
     setLoadingApplicants(true);
     try {
-      const resp   = await adminApi.getUsers({ account_type: 'Applicant', limitNo: 100, search });
+      const resp = await adminApi.getUsers({ account_type: 'Applicant', limitNo: 100, search });
       const result = resp.data?.[0] || resp.data;
       setApplicants(result?.data || []);
     } catch (err) {
@@ -184,7 +184,7 @@ const DashboardContestants = () => {
           : c
       )
     );
-   
+
     await fetchContestants();
   };
 
@@ -231,18 +231,12 @@ const DashboardContestants = () => {
 
   return (
     <div>
-    
+
       <div className={styles.sectionHeader}>
         <span className={styles.sectionTitle}>
           🏆 <span>Contestants</span>
         </span>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button
-            className={`${styles.btn} ${styles.btnGreen}`}
-            onClick={() => goVote(null)}
-          >
-            🗳️ Vote Now
-          </button>
           <button
             className={`${styles.btn} ${styles.btnPrimary}`}
             onClick={() => setModal(true)}
@@ -252,7 +246,7 @@ const DashboardContestants = () => {
         </div>
       </div>
 
-     
+
       {loadingContestants ? (
         <div className={styles.empty}>Loading contestants...</div>
       ) : (
@@ -261,7 +255,7 @@ const DashboardContestants = () => {
             <div key={c.id} className={pageStyles.contestantCard}>
               {i < 3 && <div className={pageStyles.medal}>{MEDALS[i]}</div>}
 
-            
+
               <div
                 className={pageStyles.contestantAvatar}
                 style={{ cursor: c.photoPreview ? 'pointer' : 'default' }}
@@ -310,15 +304,7 @@ const DashboardContestants = () => {
                   View Profile
                 </button>
 
-                {/* ── Vote (new) ── */}
-                {c.status === 'Active' && (
-                  <button
-                    className={`${styles.btn} ${styles.btnGreen} ${styles.btnSm}`}
-                    onClick={() => goVote(c)}
-                  >
-                    🗳️ Vote
-                  </button>
-                )}
+
 
                 {/* ── Status actions (unchanged) ── */}
                 {c.status === 'Active' && (
@@ -340,7 +326,7 @@ const DashboardContestants = () => {
                   </button>
                 )}
 
-              
+
                 <button
                   className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
                   onClick={() => handleRemoveClick(c.id)}
@@ -359,7 +345,7 @@ const DashboardContestants = () => {
         <div className={styles.empty}>No contestants added yet</div>
       )}
 
- 
+
       {modal && (
         <DashboardModal
           title="Convert Applicant to Contestant"
@@ -468,7 +454,7 @@ const DashboardContestants = () => {
         </DashboardModal>
       )}
 
-  
+
       {confirmId && (
         <ConfirmModal
           message='Are you sure you want to remove this contestant?'
@@ -477,7 +463,7 @@ const DashboardContestants = () => {
         />
       )}
 
-     
+
       {previewImage && (
         <div
           style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000, padding: 40 }}

@@ -26,7 +26,9 @@ import Thankyou from './Screens/Thankyou';
 import TwitchStream from './Screens/TwitchStream';
 import TicketForm from './Screens/Ticketform';
 import ContestantProfile from './Screens/ContestantProfile';
+import PublicContestantProfile from './Screens/PublicContestantProfile';
 import VotingPage from './Screens/VotingPage';
+import VoteCallback from './Screens/VoteCallback';
 
 
 function App() {
@@ -58,8 +60,9 @@ function App() {
         <Route path="/thankyou" element={<Thankyou/>} />
         <Route path="/twitchstream" element={<TwitchStream/>} />
         <Route path="/ticketform" element={<TicketForm/>} />
-        <Route path="/contestantprofile" element={<ContestantProfile/>} />
-        <Route path="/voting" element={<VotingPage/>} />
+        <Route path="/contestantprofile/:id" element={<PublicContestantProfile/>} />
+        <Route path="/vote/:contestant_id" element={<VotingPage/>} />
+        <Route path="/contestants/vote/callback" element={<VoteCallback/>} />
 
       
       </Routes>

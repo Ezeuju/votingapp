@@ -121,12 +121,6 @@ const Contestants = () => {
                     <div className={styles.imageWrapper}>
                       <img src={item.photo} alt={item.first_name} className={styles.photo} />
                       <div className={styles.idBadge}>#{item.contestant_number || 'N/A'}</div>
-                      <div className={styles.voteOverlay}>
-                        <a href={`/voting?id=${item._id}`}>
-
-                        <button className={styles.voteBtnQuick}>VOTE</button>
-                        </a>
-                      </div>
                     </div>
 
                     <div className={styles.details}>
@@ -136,7 +130,7 @@ const Contestants = () => {
                       </div>
                       <p className={styles.talentTag}>{item.talent_category || 'N/A'}</p>
                       <p className={styles.loc}>📍 {item.state || item.location || 'N/A'}</p>
-                      <Link to="/contestantprofile">
+                      <Link to={`/contestantprofile/${item._id}`}>
                         <button className={styles.profileBtn}>View Full Profile</button>
                       </Link>
                     </div>

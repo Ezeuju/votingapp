@@ -1,49 +1,27 @@
-// src/Screens/VotingPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from '../CSS-MODULES/Contestantprofile.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
 import api from '../services/api';
-
-// ── Vote packages — votes, amount in kobo (Paystack), display label
-const PACKAGES = [
-  { id: 'p1', votes: 1,  amount: 10000,  label: '₦100',   note: '1 vote'    },
-  { id: 'p2', votes: 2,  amount: 20000,  label: '₦200',   note: '2 votes'   },
-  { id: 'p3', votes: 5,  amount: 50000,  label: '₦500',   note: '5 votes'   },
-  { id: 'p4', votes: 10, amount: 100000, label: '₦1,000', note: '10 votes'  },
-];
-
-// ── Replace with your actual Paystack public key
-const PAYSTACK_PUBLIC_KEY = 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+import { paymentApi } from '../services/paymentApi';
+import { planApi } from '../services/planApi';
 
 const VotingPage = () => {
   const navigate = useNavigate();
+  const { contestant_id } = useParams();
 
-  const [contestants,        setContestants]        = useState([]);
-  const [selectedPackage,    setSelectedPackage]    = useState(null);
+  const [contestants, setContestants] = useState([]);
+  const [plans, setPlans] = useState([]);
+  const [selectedPlan, setSelectedPlan] = useState(null);
   const [selectedContestant, setSelectedContestant] = useState(null);
-  const [voterName,          setVoterName]          = useState('');
-  const [voterEmail,         setVoterEmail]         = useState('');
-  const [loading,            setLoading]            = useState(false);
-  const [fetching,           setFetching]           = useState(true);
-  const [success,            setSuccess]            = useState(false);
-  const [paystackReady,      setPaystackReady]      = useState(false);
+  const [voterName, setVoterName] = useState('');
+  const [voterEmail, setVoterEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
 
-  // ── Read ?id=... from URL to pre-select a contestant
-  const preselectedId = new URLSearchParams(window.location.search).get('id');
-
-  // ── Load Paystack inline script
-  useEffect(() => {
-    if (window.PaystackPop) { setPaystackReady(true); return; }
-    const script = document.createElement('script');
-    script.src = 'https://js.paystack.co/v1/inline.js';
-    script.onload = () => setPaystackReady(true);
-    document.head.appendChild(script);
-  }, []);
-
+  // Fetch contestants
   const fetchContestants = useCallback(async () => {
-    setFetching(true);
     try {
       const response = await api.get('/users/contestants');
       let data = response.data || response;
@@ -56,112 +34,67 @@ const VotingPage = () => {
 
       setContestants(active);
 
-      // Pre-select contestant if ?id= was passed
-      if (preselectedId) {
-        const match = active.find(c => c._id === preselectedId);
+      // Pre-select contestant if contestant_id from URL
+      if (contestant_id) {
+        const match = active.find(c => c._id === contestant_id);
         if (match) setSelectedContestant(match);
       }
     } catch (err) {
       console.error('Failed to fetch contestants:', err);
-    } finally {
-      setFetching(false);
     }
-  }, [preselectedId]);
+  }, [contestant_id]);
 
-  useEffect(() => { fetchContestants(); }, [fetchContestants]);
+  // Fetch vote plans
+  const fetchPlans = useCallback(async () => {
+    try {
+      const response = await planApi.getAll('vote');
+      const data = response.data || response;
+      const plansList = data.data || data;
+      setPlans(Array.isArray(plansList) ? plansList : []);
+    } catch (err) {
+      console.error('Failed to fetch plans:', err);
+    }
+  }, []);
 
-  const canPay = selectedPackage && selectedContestant && voterEmail && voterName && paystackReady;
+  useEffect(() => {
+    const loadData = async () => {
+      setFetching(true);
+      await Promise.all([fetchContestants(), fetchPlans()]);
+      setFetching(false);
+    };
+    loadData();
+  }, [fetchContestants, fetchPlans]);
 
-  const handlePaystack = () => {
+  const canPay = selectedPlan && selectedContestant && voterEmail && voterName;
+
+  const handlePayment = async () => {
     if (!canPay) return;
     setLoading(true);
 
-    const handler = window.PaystackPop.setup({
-      key:      PAYSTACK_PUBLIC_KEY,
-      email:    voterEmail,
-      amount:   selectedPackage.amount,
-      currency: 'NGN',
-      ref:      `VOTE-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`,
-      metadata: {
-        custom_fields: [
-          { display_name: 'Voter Name',     variable_name: 'voter_name',      value: voterName },
-          { display_name: 'Contestant',     variable_name: 'contestant_name', value: `${selectedContestant.first_name} ${selectedContestant.last_name}` },
-          { display_name: 'Contestant ID',  variable_name: 'contestant_id',   value: selectedContestant._id },
-          { display_name: 'Votes Purchased',variable_name: 'votes_purchased', value: selectedPackage.votes },
-        ],
-      },
-      onClose: () => setLoading(false),
-      callback: async (response) => {
+    try {
+      const response = await paymentApi.vote.initialize({
+        user_id: selectedContestant._id,
+        vote_plan_id: selectedPlan._id,
+        amount: selectedPlan.amount,
+        full_name: voterName,
+        email: voterEmail,
+        callback_url: `${window.location.origin}/contestants/vote/callback`,
+      });
+
+      const authUrl = response?.data?.authorization_url || response?.authorization_url;
+
+      if (authUrl) {
+        window.location.href = authUrl;
+      } else {
+        alert('Failed to initialize payment');
         setLoading(false);
-        // Notify your backend about the successful vote payment
-        try {
-          await api.post('/votes/record', {
-            contestant_id: selectedContestant._id,
-            votes:         selectedPackage.votes,
-            reference:     response.reference,
-            voter_name:    voterName,
-            voter_email:   voterEmail,
-          });
-        } catch (err) {
-          console.error('Vote record error:', err);
-          // Payment succeeded even if recording fails — still show success
-        }
-        setSuccess(true);
-      },
-    });
-
-    handler.openIframe();
+      }
+    } catch (err) {
+      console.error('Payment initialization failed:', err);
+      alert(err.response?.data?.message || 'Payment initialization failed');
+      setLoading(false);
+    }
   };
-
-  // ── Success screen
-  if (success) {
-    return (
-      <>
-        <Navbar />
-        <div style={{ minHeight: '100vh', background: '#000e05', padding: '40px 20px' }}>
-          <div style={{ maxWidth: 700, margin: '0 auto' }}>
-            <div className={styles.successBox}>
-              <div className={styles.successIcon}>🎉</div>
-              <div className={styles.successTitle}>Votes Submitted!</div>
-              <div className={styles.successMsg}>
-                You successfully cast{' '}
-                <strong style={{ color: '#FFD700' }}>
-                  {selectedPackage.votes} vote{selectedPackage.votes > 1 ? 's' : ''}
-                </strong>{' '}
-                for{' '}
-                <strong style={{ color: '#FFD700' }}>
-                  {selectedContestant.first_name} {selectedContestant.last_name}
-                </strong>.
-                <br />Thank you for supporting your favourite contestant!
-              </div>
-              <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <button
-                  className={styles.paystackBtn}
-                  style={{ width: 'auto', padding: '12px 24px' }}
-                  onClick={() => {
-                    setSuccess(false);
-                    setSelectedPackage(null);
-                    setVoterName('');
-                    setVoterEmail('');
-                  }}
-                >
-                  🗳️ Vote Again
-                </button>
-                <button
-                  className={styles.backBtn}
-                  onClick={() => navigate('/contestants')}
-                  style={{ marginBottom: 0 }}
-                >
-                  ← Back to Contestants
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </>
-    );
-  }
 
   return (
     <>
@@ -172,6 +105,7 @@ const VotingPage = () => {
           <button
             className={styles.backBtn}
             onClick={() => navigate('/contestants')}
+            type="button"
           >
             ← Back to Contestants
           </button>
@@ -181,28 +115,34 @@ const VotingPage = () => {
             Choose a vote package, select your contestant and pay securely via Paystack.
           </div>
 
-          {/* ── Step 1 — Vote Package ── */}
+          {/* Step 1 — Vote Package */}
           <div style={{ marginBottom: 28 }}>
             <div className={styles.contestantSelectorTitle}>Step 1 — Choose a Vote Package</div>
-            <div className={styles.packagesGrid}>
-              {PACKAGES.map(pkg => (
-                <div
-                  key={pkg.id}
-                  className={`${styles.packageCard} ${selectedPackage?.id === pkg.id ? styles.packageCardSelected : ''}`}
-                  onClick={() => setSelectedPackage(pkg)}
-                >
-                  <div className={styles.packageVotes}>{pkg.votes}</div>
-                  <div className={styles.packageVotesLabel}>
-                    Vote{pkg.votes > 1 ? 's' : ''}
+            {fetching ? (
+              <div style={{ color: '#FFD700', fontSize: 13, padding: '10px 0' }}>
+                Loading vote packages...
+              </div>
+            ) : (
+              <div className={styles.packagesGrid}>
+                {plans.map(plan => (
+                  <div
+                    key={plan._id}
+                    className={`${styles.packageCard} ${selectedPlan?._id === plan._id ? styles.packageCardSelected : ''}`}
+                    onClick={() => setSelectedPlan(plan)}
+                  >
+                    <div className={styles.packageVotes}>{plan.title.split(' ')[0]}</div>
+                    <div className={styles.packageVotesLabel}>
+                      {plan.title.split(' ').slice(1).join(' ')}
+                    </div>
+                    <div className={styles.packagePrice}>₦{plan.amount.toLocaleString()}</div>
+                    <div className={styles.packagePriceNote}>{plan.description}</div>
                   </div>
-                  <div className={styles.packagePrice}>{pkg.label}</div>
-                  <div className={styles.packagePriceNote}>₦100 per vote</div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* ── Step 2 — Choose Contestant ── */}
+          {/* Step 2 — Choose Contestant */}
           <div className={styles.contestantSelector}>
             <div className={styles.contestantSelectorTitle}>
               Step 2 — Who are you voting for?
@@ -218,6 +158,7 @@ const VotingPage = () => {
                     key={c._id}
                     className={`${styles.contestantOption} ${selectedContestant?._id === c._id ? styles.contestantOptionSelected : ''}`}
                     onClick={() => setSelectedContestant(c)}
+                    style={contestant_id && c._id === contestant_id ? { pointerEvents: 'none', opacity: 1 } : {}}
                   >
                     <div className={styles.contestantOptionAvatar}>
                       {c.photo
@@ -239,7 +180,7 @@ const VotingPage = () => {
             )}
           </div>
 
-          {/* ── Step 3 — Voter Details ── */}
+          {/* Step 3 — Voter Details */}
           <div className={styles.voterForm}>
             <div className={styles.voterFormTitle}>Step 3 — Your Details</div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
@@ -269,8 +210,8 @@ const VotingPage = () => {
             </div>
           </div>
 
-          {/* ── Order Summary ── */}
-          {(selectedPackage || selectedContestant) && (
+          {/* Order Summary */}
+          {(selectedPlan || selectedContestant) && (
             <div className={styles.orderSummary}>
               <div className={styles.orderSummaryTitle}>Order Summary</div>
               <div className={styles.orderRow}>
@@ -284,34 +225,33 @@ const VotingPage = () => {
               <div className={styles.orderRow}>
                 <span className={styles.orderLabel}>Vote Package</span>
                 <span className={styles.orderValue}>
-                  {selectedPackage
-                    ? `${selectedPackage.votes} vote${selectedPackage.votes > 1 ? 's' : ''}`
-                    : '—'}
+                  {selectedPlan ? selectedPlan.title : '—'}
                 </span>
               </div>
               <div className={styles.orderRow}>
                 <span className={styles.orderLabel}>Rate</span>
-                <span className={styles.orderValue}>₦100 per vote</span>
+                <span className={styles.orderValue}>{selectedPlan?.description || '—'}</span>
               </div>
               <div className={styles.orderTotal}>
                 <span className={styles.orderTotalLabel}>Total</span>
                 <span className={styles.orderTotalValue}>
-                  {selectedPackage ? selectedPackage.label : '₦0'}
+                  {selectedPlan ? `₦${selectedPlan.amount.toLocaleString()}` : '₦0'}
                 </span>
               </div>
             </div>
           )}
 
-          {/* ── Pay Button ── */}
+          {/* Pay Button */}
           <button
             className={styles.paystackBtn}
-            onClick={handlePaystack}
+            onClick={handlePayment}
             disabled={!canPay || loading}
+            type="button"
           >
             {loading
               ? '⏳ Processing...'
               : canPay
-                ? `💳 Pay ${selectedPackage.label} via Paystack`
+                ? `💳 Continue to Payment`
                 : '💳 Complete steps above to pay'
             }
           </button>

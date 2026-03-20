@@ -8,4 +8,9 @@ export const paymentApi = {
     initialize: (data) => api.post('/payments/donations/initialize', data),
     verify: (reference) => api.get(`/payments/donations/verify?reference=${reference}`),
   },
+
+  vote: {
+    initialize: (data) => api.post('/payments/vote/initialize', data),
+    verify: (reference) => api.get(`/payments/vote/verify?reference=${reference}`),
+  },
 };

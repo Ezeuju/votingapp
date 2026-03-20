@@ -88,12 +88,6 @@ const ContestantProfile = ({ contestant = DEFAULT_CONTESTANT, rank = 1, onBack, 
           </div>
 
           <div className={styles.profileHeroActions}>
-            <button
-              className={`${shared.btn} ${shared.btnPrimary}`}
-              onClick={() => onVote && onVote(current)}
-            >
-              🗳️ Vote for {current.name.split(' ')[0]}
-            </button>
             {current.instagram && (
               <button className={`${shared.btn} ${shared.btnOutline}`}>
                 📸 {current.instagram}
@@ -141,31 +135,7 @@ const ContestantProfile = ({ contestant = DEFAULT_CONTESTANT, rank = 1, onBack, 
         </div>
       </div>
 
-     
-      <div style={{
-        background: 'linear-gradient(135deg, rgba(255,215,0,0.07), rgba(0,135,81,0.07))',
-        border: '1px solid rgba(255,215,0,0.2)',
-        borderRadius: 14,
-        padding: '24px 28px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 20,
-        flexWrap: 'wrap',
-      }}>
-        <div>
-          <div style={{ fontFamily: 'Playfair Display, serif', fontSize: 18, fontWeight: 700, color: '#e8f5e8', marginBottom: 4 }}>
-            Support {current.name}
-          </div>
-        </div>
-        <button
-          className={`${shared.btn} ${shared.btnPrimary}`}
-          style={{ fontSize: 15, padding: '12px 28px' }}
-          onClick={() => onVote && onVote(current)}
-        >
-          🗳️ Vote Now
-        </button>
-      </div>
+
     </div>
   );
 };
