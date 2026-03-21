@@ -71,9 +71,10 @@ const Footer = () => {
           {/* Global Presence */}
           <div className={styles.presenceSection}>
             <h4>Global Presence</h4>
-            <p><strong>NTR INC USA:</strong> North Carolina, Raleigh, USA</p>
+            <p><strong>NTR INC USA:</strong> 5540 Centerview Drive, Suite 200, Raleigh, NC 27606. USA</p>
             <p><strong>NTS LTD:</strong> CAC Registered, Abuja, Nigeria</p>
-            <p className={styles.office}>Opposite Apo ShopRite Mall/AYM Shafa Filling Station FCT, Abuja, Nigeria</p>
+            <p className={styles.office}>19A Utang Street, Off Barracks Road, Uyo, Akwa Ibom State, Nigeria</p>
+            <p className={styles.office}>16 Ola-Adigun Street, New Rd, Igbefon, Lekki, Lagos</p>
           </div>
         </div>
 
