@@ -36,6 +36,7 @@ export const STATUS_MAP = {
   Scheduled:  'badgeInfo',
   Eliminated: 'badgeDanger',
   Probation:  'badgeWarning',
+  Revoked:    'badgeDanger',
 };
 
 export const INIT_DATA = {

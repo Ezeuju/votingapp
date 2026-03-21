@@ -113,4 +113,26 @@ export const adminApi = {
   getContestantStats: () => {
     return api.get("/users/contestant/stats/admin");
   },
+
+  // ── Tickets ──
+  getTickets: (params = {}) => {
+    const { pageNo = 1, limitNo = 10, search = '' } = params;
+    return api.get('/issued-tickets', { params: { pageNo, limitNo, search } });
+  },
+
+  getTicketStats: () => {
+    return api.get('/issued-tickets/stats');
+  },
+
+  getTicketById: (id) => {
+    return api.get(`/issued-tickets/${id}`);
+  },
+
+  issueTicket: (data) => {
+    return api.post('/issued-tickets', data);
+  },
+
+  updateTicket: (id, data) => {
+    return api.patch(`/issued-tickets/${id}`, data);
+  },
 };

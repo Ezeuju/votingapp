@@ -1,73 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from '../CSS-MODULES/Ticketform.module.css';
+import { ticketApi } from '../services/ticketApi';
 
-const TICKET_TYPES = [
-  {
-    id: 'event-entry',
-    label: 'Event Entry',
-    price: 2000,
-    priceLabel: '₦2,000',
-    icon: '🎟️',
-    desc: 'General admission to the event',
-    tier: 'basic',
-  },
-  {
-    id: 'standard-entry',
-    label: 'Standard Entry',
-    price: 5000,
-    priceLabel: '₦5,000',
-    icon: '🎫',
-    desc: 'Standard access with reserved seating',
-    tier: 'basic',
-  },
-  {
-    id: 'couple-regular',
-    label: 'Couple Regular',
-    price: 5000,
-    priceLabel: '₦5,000',
-    icon: '👫',
-    desc: 'Entry for two — general admission',
-    tier: 'basic',
-  },
-  {
-    id: 'single-silver',
-    label: 'Single Silver Pass',
-    price: 5000,
-    priceLabel: '₦5,000',
-    icon: '🥈',
-    desc: 'Silver-tier individual access pass',
-    tier: 'silver',
-  },
-  {
-    id: 'gold-audition',
-    label: 'Gold Audition Pass',
-    price: 10000,
-    priceLabel: '₦10,000',
-    icon: '🥇',
-    desc: 'Priority audition slot with gold perks',
-    tier: 'gold',
-  },
-  {
-    id: 'vip-audition',
-    label: 'VIP Audition Pass',
-    price: 10000,
-    priceLabel: '₦10,000',
-    icon: '⭐',
-    desc: 'VIP audition access with security escort',
-    tier: 'vip',
-    tag: '★ VIP with Security',
-  },
-  {
-    id: 'vvip-access',
-    label: 'Secure VVIP Access',
-    price: null,
-    priceLabel: 'Contact Us',
-    icon: '💎',
-    desc: 'Exclusive VVIP experience — fully secured',
-    tier: 'vvip',
-    tag: '👑 Most Exclusive',
-  },
-];
+const TIER_ICON = { vip: '⭐', gold: '🥇', silver: '🥈', basic: '🎟️', vvip: '💎' };
+const TIER_BY_TITLE = (title = '') => {
+  const t = title.toLowerCase();
+  if (t.includes('vvip') || t.includes('secure vvip')) return 'vvip';
+  if (t.includes('vip')) return 'vip';
+  if (t.includes('gold')) return 'gold';
+  if (t.includes('silver')) return 'silver';
+  return 'basic';
+};
 
 const TIER_STYLES = {
   basic:  styles.tierBasic,
@@ -79,50 +22,114 @@ const TIER_STYLES = {
 
 const EMPTY_FORM = { name: '', email: '', ticketId: '' };
 
+const SELAR_URL = 'https://selar.com/57744hc123';
+const REDIRECT_DELAY = 5; // seconds
+
 const TicketForm = ({ onSubmit }) => {
-  const [form, setForm]         = useState(EMPTY_FORM);
-  const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors]     = useState({});
+  const [form, setForm]             = useState(EMPTY_FORM);
+  const [submitted, setSubmitted]   = useState(false);
+  const [errors, setErrors]         = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [ticketPlans, setTicketPlans] = useState([]);
+  const [plansLoading, setPlansLoading] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const [countdown, setCountdown]     = useState(REDIRECT_DELAY);
+  const countdownRef                  = useRef(null);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await ticketApi.getTicketPlans();
+        setTicketPlans(res?.data?.data || []);
+      } catch (e) {
+        console.error('Failed to load ticket plans', e);
+      } finally {
+        setPlansLoading(false);
+      }
+    };
+    load();
+  }, []);
 
   const field = (key, val) => {
     setForm(p => ({ ...p, [key]: val }));
     if (errors[key]) setErrors(p => ({ ...p, [key]: '' }));
   };
 
-  const selected = TICKET_TYPES.find(t => t.id === form.ticketId);
+  useEffect(() => {
+    const plan = ticketPlans.find(p => p._id === form.ticketId) || null;
+    setSelectedPlan(plan);
+  }, [form.ticketId, ticketPlans]);
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim())    e.name    = 'Please enter your full name';
-    if (!form.email.trim())   e.email   = 'Please enter your email address';
+    if (!form.name.trim())   e.name    = 'Please enter your full name';
+    if (!form.email.trim())  e.email   = 'Please enter your email address';
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Please enter a valid email';
-    if (!form.ticketId)       e.ticketId = 'Please select a ticket type';
+    if (!form.ticketId)      e.ticketId = 'Please select a ticket type';
     return e;
   };
 
-  const handleSubmit = () => {
+  const startCountdown = () => {
+    setCountdown(REDIRECT_DELAY);
+    countdownRef.current = setInterval(() => {
+      setCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(countdownRef.current);
+          window.location.href = SELAR_URL;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleSubmit = async () => {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
-    if (onSubmit) onSubmit({ ...form, ticket: selected });
-    setSubmitted(true);
+
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      await ticketApi.submitTicket({
+        full_name: form.name,
+        email: form.email,
+        ticket_plan_id: form.ticketId,
+      });
+      if (onSubmit) onSubmit({ ...form, ticket: selectedPlan });
+      setSubmitted(true);
+      startCountdown();
+    } catch (err) {
+      setSubmitError(err?.message || 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  // Clean up interval on unmount
+  useEffect(() => () => clearInterval(countdownRef.current), []);
 
   const handleReset = () => {
     setForm(EMPTY_FORM);
     setErrors({});
     setSubmitted(false);
+    setSubmitError('');
+    setSelectedPlan(null);
   };
 
+  // ── Success screen ──
   if (submitted) {
     return (
       <div className={styles.successWrap}>
         <div className={styles.successGlow} />
         <div className={styles.successIcon}>🎉</div>
-        <h2 className={styles.successTitle}>You're In!</h2>
+        <h2 className={styles.successTitle}>Ticket Request Initiated!</h2>
         <p className={styles.successMsg}>
-          Your <strong>{selected?.label}</strong> ticket request has been received.<br />
-          A confirmation will be sent to <strong>{form.email}</strong>.
+          Your <strong>{selectedPlan?.title}</strong> ticket request has been received.<br />
+          Further information and your ticket details will be sent to{' '}
+          <strong>{form.email}</strong> via email.
         </p>
+
         <div className={styles.successTicket}>
           <div className={styles.successTicketRow}>
             <span className={styles.successTicketLabel}>Name</span>
@@ -131,19 +138,59 @@ const TicketForm = ({ onSubmit }) => {
           <div className={styles.successTicketDivider} />
           <div className={styles.successTicketRow}>
             <span className={styles.successTicketLabel}>Ticket</span>
-            <span className={styles.successTicketVal}>{selected?.icon} {selected?.label}</span>
+            <span className={styles.successTicketVal}>
+              {TIER_ICON[TIER_BY_TITLE(selectedPlan?.title)] || '🎟️'} {selectedPlan?.title}
+            </span>
           </div>
           <div className={styles.successTicketDivider} />
           <div className={styles.successTicketRow}>
-            <span className={styles.successTicketLabel}>Price</span>
+            <span className={styles.successTicketLabel}>Amount</span>
             <span className={styles.successTicketVal} style={{ color: '#FFD700', fontWeight: 700 }}>
-              {selected?.priceLabel}
+              ₦{Number(selectedPlan?.amount).toLocaleString()}
             </span>
           </div>
         </div>
-        <button className={styles.resetBtn} onClick={handleReset}>
-          Get Another Ticket
-        </button>
+
+        {/* ── Payment redirect notice ── */}
+        <div style={{
+          background: 'rgba(255,215,0,0.07)',
+          border: '1px solid rgba(255,215,0,0.25)',
+          borderRadius: 14,
+          padding: '16px 24px',
+          marginBottom: 24,
+          maxWidth: 360,
+          width: '100%',
+          textAlign: 'center',
+        }}>
+          <p style={{ color: 'rgba(232,245,232,0.7)', fontSize: 13, margin: '0 0 6px' }}>
+            💳 Redirecting you to complete payment in
+          </p>
+          <div style={{
+            fontSize: 40,
+            fontWeight: 900,
+            color: '#FFD700',
+            lineHeight: 1,
+            marginBottom: 10,
+            fontFamily: "'Playfair Display', serif",
+          }}>
+            {countdown > 0 ? countdown : '🚀'}
+          </div>
+          <p style={{ color: 'rgba(232,245,232,0.4)', fontSize: 11, margin: 0 }}>
+            You will be redirected automatically
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <a href={SELAR_URL} target="_blank" rel="noopener noreferrer">
+            <button className={styles.submitBtn} style={{ minWidth: 200, marginTop: 0 }}>
+              <span>Proceed to Payment</span>
+              <span className={styles.submitArrow}>→</span>
+            </button>
+          </a>
+          <button className={styles.resetBtn} onClick={handleReset}>
+            Get Another Ticket
+          </button>
+        </div>
       </div>
     );
   }
@@ -162,10 +209,8 @@ const TicketForm = ({ onSubmit }) => {
           </p>
         </div>
 
-       
         <div className={styles.formBody}>
 
-         
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Full Name</label>
             <div className={`${styles.inputWrap} ${errors.name ? styles.inputError : ''}`}>
@@ -195,51 +240,70 @@ const TicketForm = ({ onSubmit }) => {
             {errors.email && <span className={styles.errorMsg}>{errors.email}</span>}
           </div>
 
-         
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Select Ticket Type</label>
             {errors.ticketId && <span className={styles.errorMsg}>{errors.ticketId}</span>}
-            <div className={styles.ticketGrid}>
-              {TICKET_TYPES.map(t => (
-                <div
-                  key={t.id}
-                  className={`${styles.ticketCard} ${TIER_STYLES[t.tier]} ${form.ticketId === t.id ? styles.ticketCardSelected : ''}`}
-                  onClick={() => field('ticketId', t.id)}
-                >
-                  {t.tag && <div className={styles.ticketTag}>{t.tag}</div>}
-                  <div className={styles.ticketIcon}>{t.icon}</div>
-                  <div className={styles.ticketLabel}>{t.label}</div>
-                  <div className={styles.ticketDesc}>{t.desc}</div>
-                  <div className={styles.ticketPrice}>{t.priceLabel}</div>
-                  {form.ticketId === t.id && (
-                    <div className={styles.ticketCheck}>✓</div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {plansLoading ? (
+              <p style={{ color: '#a8c4a8', fontSize: 13, marginTop: 8 }}>Loading ticket plans…</p>
+            ) : (
+              <div className={styles.ticketGrid}>
+                {ticketPlans.map(plan => {
+                  const tier = TIER_BY_TITLE(plan.title);
+                  const icon = TIER_ICON[tier] || '🎟️';
+                  const isVVIP = tier === 'vvip';
+                  return (
+                    <div
+                      key={plan._id}
+                      className={`${styles.ticketCard} ${TIER_STYLES[tier] || ''} ${form.ticketId === plan._id ? styles.ticketCardSelected : ''}`}
+                      onClick={() => !isVVIP && field('ticketId', plan._id)}
+                      style={isVVIP ? { cursor: 'default', opacity: 0.85 } : {}}
+                    >
+                      {tier === 'vip' && <div className={styles.ticketTag}>★ VIP with Security</div>}
+                      {tier === 'vvip' && <div className={styles.ticketTag}>👑 Most Exclusive</div>}
+                      <div className={styles.ticketIcon}>{icon}</div>
+                      <div className={styles.ticketLabel}>{plan.title}</div>
+                      <div className={styles.ticketDesc}>{(plan.features || []).join(', ')}</div>
+                      {isVVIP ? (
+                        <div className={styles.ticketPrice}>Contact Us</div>
+                      ) : (
+                        <div className={styles.ticketPrice}>₦{Number(plan.amount).toLocaleString()}</div>
+                      )}
+                      {form.ticketId === plan._id && (
+                        <div className={styles.ticketCheck}>✓</div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-         
-          {selected && (
+          {selectedPlan && (
             <div className={styles.summary}>
               <div className={styles.summaryLeft}>
-                <span className={styles.summaryIcon}>{selected.icon}</span>
+                <span className={styles.summaryIcon}>{TIER_ICON[TIER_BY_TITLE(selectedPlan.title)] || '🎟️'}</span>
                 <div>
-                  <div className={styles.summaryLabel}>{selected.label}</div>
-                  <div className={styles.summaryDesc}>{selected.desc}</div>
+                  <div className={styles.summaryLabel}>{selectedPlan.title}</div>
+                  <div className={styles.summaryDesc}>{(selectedPlan.features || []).slice(0, 2).join(', ')}</div>
                 </div>
               </div>
-              <div className={styles.summaryPrice}>{selected.priceLabel}</div>
+              <div className={styles.summaryPrice}>₦{Number(selectedPlan.amount).toLocaleString()}</div>
             </div>
           )}
 
-        
-          <a href="https://selar.com/57744hc123">
-          <button className={styles.submitBtn} onClick={handleSubmit}>
-            <span>Secure My Ticket</span>
-            <span className={styles.submitArrow}>→</span>
+          {submitError && (
+            <p style={{ color: '#f87171', fontSize: 13, marginTop: 8, textAlign: 'center' }}>{submitError}</p>
+          )}
+
+          <button
+            className={styles.submitBtn}
+            onClick={handleSubmit}
+            disabled={submitting}
+            style={submitting ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+          >
+            <span>{submitting ? 'Submitting…' : 'Secure My Ticket'}</span>
+            {!submitting && <span className={styles.submitArrow}>→</span>}
           </button>
-          </a>
 
           <p className={styles.footerNote}>
             🔒 Payments are secure. Ticket confirmation sent via email.
@@ -251,6 +315,3 @@ const TicketForm = ({ onSubmit }) => {
 };
 
 export default TicketForm;
-
-
-
