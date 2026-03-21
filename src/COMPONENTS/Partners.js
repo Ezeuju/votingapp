@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../CSS-MODULES/Partners.module.css';
-import { partnerApi } from '../services/partnerApi';
+import { getPublicPartners } from '../services/api';
 
 const Partners = () => {
   const [logos, setLogos] = useState([]);
@@ -9,9 +9,9 @@ const Partners = () => {
   useEffect(() => {
     const fetchPartners = async () => {
       try {
-        const response = await partnerApi.getAll({ status: 'approved' });
-        if (response?.data && response.data.length > 0) {
-          setLogos(response.data);
+        const response = await getPublicPartners();
+        if (response?.data?.data?.data && response.data.data.data.length > 0) {
+          setLogos(response.data.data.data);
         }
       } catch (error) {
         console.error('Error fetching partners:', error);

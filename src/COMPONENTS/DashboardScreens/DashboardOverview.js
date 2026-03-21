@@ -9,6 +9,8 @@ const DashboardOverview = ({ data }) => {
   const [recentDonations, setRecentDonations] = useState([]);
   const [totalDonations, setTotalDonations] = useState(0);
   const [totalContestants, setTotalContestants] = useState(0);
+  const [totalTickets, setTotalTickets] = useState(0);
+  const [totalVotes, setTotalVotes] = useState(0);
   const [topContestants, setTopContestants] = useState([]);
   const [viewEntry, setViewEntry] = useState(null);
 
@@ -51,17 +53,36 @@ const DashboardOverview = ({ data }) => {
       }
     };
 
+    const fetchTicketStats = async () => {
+      try {
+        const response = await adminApi.getTicketStats();
+        setTotalTickets(response?.data?.total_tickets || 0);
+      } catch (err) {
+        console.error('Failed to fetch ticket stats:', err);
+      }
+    };
+
+    const fetchTotalVotes = async () => {
+      try {
+        const response = await adminApi.getTotalVotes();
+        setTotalVotes(response?.data?.total_votes || 0);
+      } catch (err) {
+        console.error('Failed to fetch total votes:', err);
+      }
+    };
+
     fetchRecentDonations();
     fetchDonationSummary();
     fetchContestantStats();
     fetchTopContestants();
+    fetchTicketStats();
+    fetchTotalVotes();
   }, []);
   const stats = [
     { icon: '💰', label: 'Total Donations', value: `₦${totalDonations.toLocaleString()}`, delta: '+12%' },
-    { icon: '🎫', label: 'Tickets Issued', value: data.tickets.length, delta: '+3%' },
+    { icon: '🎫', label: 'Tickets Issued', value: totalTickets, delta: '' },
     { icon: '🏆', label: 'Contestants', value: totalContestants, delta: '' },
-    { icon: '🗳️', label: 'Total Votes', value: '32,280', delta: '+18%' },
-    { icon: '🎤', label: 'Auditions Today', value: data.auditions.length, delta: '' },
+    { icon: '🗳️', label: 'Total Votes', value: totalVotes.toLocaleString(), delta: '' },
     { icon: '📢', label: 'Announcements', value: data.announcements.length, delta: '' },
   ];
 

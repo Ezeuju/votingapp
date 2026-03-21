@@ -27,5 +27,8 @@ api.interceptors.response.use(
 );
 
 export const getLiveUpdates = () => api.get('/live-updates/user');
+export const getPublicJudges = () => api.get('/judges/user');
+export const getPublicTimelines = () => api.get('/timelines/user');
+export const getPublicPartners = () => api.get('/partners/user');
 
 export default api;

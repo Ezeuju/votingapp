@@ -1,9 +1,9 @@
 export const NAV_ITEMS = [
   { id: 'dashboard',     icon: '⬛', label: 'Dashboard'           },
-  { id: 'donations',     icon: '💰', label: 'Donations',           badge: 5 },
-  { id: 'tickets',       icon: '🎫', label: 'Issued Tickets',      badge: 5 },
+  { id: 'donations',     icon: '💰', label: 'Donations'           },
+  { id: 'tickets',       icon: '🎫', label: 'Issued Tickets'      },
   { id: 'announcements', icon: '📢', label: 'Announcements'       },
-  { id: 'updates',       icon: '🔴', label: 'Live Updates',        badge: 4 },
+  { id: 'updates',       icon: '🔴', label: 'Live Updates'        },
   { id: 'auditions',     icon: '🎤', label: 'Auditions'           },
   { id: 'contestants',   icon: '🏆', label: 'Contestants'         },
   { id: 'sponsors',      icon: '🤝', label: 'Partners & Sponsors' },

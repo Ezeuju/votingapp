@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../CSS-MODULES/Timeline.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
+import { getPublicTimelines } from '../services/api';
 
 const Timeline = () => {
-  const events = [
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fallback/Default roadmap events in case there are no announcements yet
+  const defaultEvents = [
     {
       date: "May 2026",
       title: "Audition Registration Opens",
@@ -37,52 +42,98 @@ const Timeline = () => {
     }
   ];
 
+  useEffect(() => {
+    const fetchAnnouncementsForTimeline = async () => {
+      try {
+        const resp = await getPublicTimelines();
+        const data = resp.data?.data || [];
+        
+        const formatDate = (dateStr) => {
+          if (!dateStr) return "";
+          return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        };
+
+        // Map Announcements to Timeline Events
+        const mappedEvents = data.map(ann => ({
+          id: ann._id,
+          date: (ann.start_date && ann.end_date)
+            ? `${formatDate(ann.start_date)} - ${formatDate(ann.end_date)}`
+            : ann.start_date || ann.end_date 
+              ? formatDate(ann.start_date || ann.end_date)
+              : "Upcoming",
+          title: ann.title,
+          description: ann.description,
+          status: "upcoming"
+        }));
+
+        // If data returns successfully, we still allow an empty timeline
+        // unless you strictly want defaults when empty. Typically defaults
+        // are good for first-time launch before backend population.
+        if (mappedEvents.length > 0) {
+          setEvents(mappedEvents);
+        } else {
+          setEvents(defaultEvents);
+        }
+      } catch (err) {
+        console.error("Failed to load announcements for timeline:", err);
+        setEvents(defaultEvents);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAnnouncementsForTimeline();
+  }, []);
+
   return (
     <>
-    <Navbar />
-    <div className={styles.timelinePage}>
-      {/* HERO SECTION */}
-      <header className={styles.hero}>
-        <div className={styles.container}>
-          <span className={styles.badge}>Road to Stardom</span>
-          <h1>Season 4 <span className={styles.goldText}>Timeline</span></h1>
-          <p>Mark your calendars. Here is the official roadmap for the Naija Talent Show 2026 season.</p>
-        </div>
-      </header>
-
-      
-
-      {/* TIMELINE SECTION */}
-      <section className={styles.roadmapSection}>
-        <div className={styles.container}>
-          <div className={styles.timelineWrapper}>
-            {events.map((event, index) => (
-              <div key={index} className={styles.timelineItem}>
-                <div className={styles.dateSide}>
-                  <div className={styles.dateCircle}>{event.date}</div>
-                </div>
-                <div className={styles.contentSide}>
-                  <div className={styles.eventCard}>
-                    <h3>{event.title}</h3>
-                    <p>{event.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+      <Navbar />
+      <div className={styles.timelinePage}>
+        {/* HERO SECTION */}
+        <header className={styles.hero}>
+          <div className={styles.container}>
+            <span className={styles.badge}>Road to Stardom</span>
+            <h1>Season 4 <span className={styles.goldText}>Timeline</span></h1>
+            <p>Mark your calendars. Here is the official roadmap for the Naija Talent Show 2026 season.</p>
           </div>
-        </div>
-      </section>
+        </header>
 
-      {/* CTA SECTION */}
-      <section className={styles.cta}>
-        <div className={styles.container}>
-          <h2>Ready to make your mark?</h2>
-          <p>Don't miss the registration deadline for Season 4.</p>
-          <button className={styles.applyBtn}><a href="/auditiony">Start Your Journey</a></button>
-        </div>
-      </section>
-    </div>
-    <Footer />
+        {/* TIMELINE SECTION */}
+        <section className={styles.roadmapSection}>
+          <div className={styles.container}>
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '40px', color: '#e8f5e8' }}>
+                Loading timeline events...
+              </div>
+            ) : (
+              <div className={styles.timelineWrapper}>
+                {events.map((event, index) => (
+                  <div key={event.id || index} className={styles.timelineItem}>
+                    <div className={styles.dateSide}>
+                      <div className={styles.dateCircle}>{event.date}</div>
+                    </div>
+                    <div className={styles.contentSide}>
+                      <div className={styles.eventCard}>
+                        <h3>{event.title}</h3>
+                        <p>{event.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* CTA SECTION */}
+        <section className={styles.cta}>
+          <div className={styles.container}>
+            <h2>Ready to make your mark?</h2>
+            <p>Don't miss the registration deadline for Season 4.</p>
+            <button className={styles.applyBtn}><a href="/audition">Start Your Journey</a></button>
+          </div>
+        </section>
+      </div>
+      <Footer />
     </>
   );
 };

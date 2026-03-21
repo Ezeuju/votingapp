@@ -114,6 +114,46 @@ export const adminApi = {
     return api.get("/users/contestant/stats/admin");
   },
 
+  // ── Judges ──
+  getJudges: (params = {}) => {
+    const { pageNo = 1, limitNo = 100, search = '' } = params;
+    return api.get('/judges/admin', { params: { pageNo, limitNo, search } });
+  },
+
+  getJudgeById: (id) => {
+    return api.get(`/judges/${id}/admin`);
+  },
+
+  createJudge: (data) => {
+    return api.post('/judges/admin', data);
+  },
+
+  updateJudge: (id, data) => {
+    return api.patch(`/judges/${id}/admin`, data);
+  },
+
+  deleteJudge: (id) => {
+    return api.delete(`/judges/${id}/admin`);
+  },
+
+  // ── Announcements / Timelines ──
+  getTimelines: (params = {}) => {
+    const { pageNo = 1, limitNo = 100, search = '' } = params;
+    return api.get('/timelines', { params: { pageNo, limitNo, search } });
+  },
+
+  createTimeline: (data) => {
+    return api.post('/timelines', data);
+  },
+
+  updateTimeline: (id, data) => {
+    return api.patch(`/timelines/${id}`, data);
+  },
+
+  deleteTimeline: (id) => {
+    return api.delete(`/timelines/${id}`);
+  },
+
   // ── Tickets ──
   getTickets: (params = {}) => {
     const { pageNo = 1, limitNo = 10, search = '' } = params;
@@ -122,6 +162,10 @@ export const adminApi = {
 
   getTicketStats: () => {
     return api.get('/issued-tickets/stats');
+  },
+
+  getTotalVotes: () => {
+    return api.get('/users/votes');
   },
 
   getTicketById: (id) => {

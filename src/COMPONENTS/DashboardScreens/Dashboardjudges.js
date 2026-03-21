@@ -1,99 +1,62 @@
-// src/COMPONENTS/DashboardScreens/DashboardJudges.jsx
-import React, { useState } from 'react';
+// src/COMPONENTS/DashboardScreens/Dashboardjudges.js
+import React, { useState, useEffect } from 'react';
 import styles from '../DashboardScreens/Judges.module.css';
 import shared from '../DashboardScreens/Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
+import { adminApi } from "../../services/adminApi";
+import { uploadFile } from "../../services/fileApi";
+import { toast } from "react-toastify";
 
-const ROLES = ['Head Judge', 'Guest Judge', 'Mentor'];
+const POSITIONS = ['Head Judge', 'Guest Judge', 'Mentor', 'Industry Veteran', 'Creative Director', 'Global Superstar', 'Vocal Powerhouse'];
 
-const ROLE_CLASS = {
+const POSITION_CLASS = {
   'Head Judge':  styles.roleHead,
   'Guest Judge': styles.roleGuest,
   'Mentor':      styles.roleMentor,
 };
 
-const SPECIALITIES = [
-  'Vocals', 'Dance', 'Instrumentals', 'Music Production',
-  'Acting', 'Comedy', 'Spoken Word', 'General',
-];
-
 const EMPTY_FORM = {
-  fullName:    '',
-  email:       '',
-  phone:       '',
-  role:        'Guest Judge',
-  speciality:  'Vocals',
-  nationality: '',
-  bio:         '',
-  instagram:   '',
+  first_name:   '',
+  last_name:    '',
+  location:     '',
+  phone:        '',
+  position:     'Guest Judge',
+  nationality:  '',
+  bio:          '',
+  instagram_handle: '',
   photoPreview: null,
-  photoFile:   null,
-  status:      'Active',
+  photoFile:    null,
+  status:       'Active',
 };
 
-const INIT_JUDGES = [
-  {
-    id: 1,
-    fullName:    'Dr. Adaeze Okonkwo',
-    email:       'adaeze@starstage.ng',
-    phone:       '+234 801 111 2222',
-    role:        'Head Judge',
-    speciality:  'Vocals',
-    nationality: 'Nigerian',
-    bio:         'Award-winning vocal coach with 20 years in the Nigerian music industry. Producer of 3 platinum-certified albums.',
-    instagram:   '@adaezeokonkwo',
-    photoPreview: null,
-    status:      'Active',
-  },
-  {
-    id: 2,
-    fullName:    'Kofi Mensah',
-    email:       'kofi@starstage.ng',
-    phone:       '+233 244 333 4444',
-    role:        'Guest Judge',
-    speciality:  'Dance',
-    nationality: 'Ghanaian',
-    bio:         'Internationally acclaimed choreographer. Has worked with top African artists on world tours.',
-    instagram:   '@kofimensahdance',
-    photoPreview: null,
-    status:      'Active',
-  },
-  {
-    id: 3,
-    fullName:    'Fatima Al-Hassan',
-    email:       'fatima@starstage.ng',
-    phone:       '+234 802 555 6666',
-    role:        'Mentor',
-    speciality:  'Music Production',
-    nationality: 'Nigerian',
-    bio:         'Grammy-nominated music producer and songwriter. Founder of AfroSound Studios, Lagos.',
-    instagram:   '@fatimaproduces',
-    photoPreview: null,
-    status:      'Active',
-  },
-  {
-    id: 4,
-    fullName:    'Segun Adeyemi',
-    email:       'segun@starstage.ng',
-    phone:       '+234 803 777 8888',
-    role:        'Guest Judge',
-    speciality:  'Instrumentals',
-    nationality: 'Nigerian',
-    bio:         'Classical and contemporary guitarist, music lecturer at the University of Lagos.',
-    instagram:   '@segunguitar',
-    photoPreview: null,
-    status:      'Inactive',
-  },
-];
-
 const DashboardJudges = () => {
-  const [judges, setJudges]       = useState(INIT_JUDGES);
+  const [judges, setJudges]       = useState([]);
+  const [loading, setLoading]     = useState(true);
   const [modal, setModal]         = useState(false);
   const [viewEntry, setViewEntry] = useState(null);
   const [editEntry, setEditEntry] = useState(null);
   const [search, setSearch]       = useState('');
-  const [roleFilter, setRoleFilter] = useState('All');
+  const [positionFilter, setPositionFilter] = useState('All');
   const [form, setForm]           = useState(EMPTY_FORM);
+  const [saving, setSaving]       = useState(false);
+
+  useEffect(() => {
+    fetchJudges();
+  }, []);
+
+  const fetchJudges = async () => {
+    setLoading(true);
+    try {
+      const resp = await adminApi.getJudges({ limitNo: 100 });
+      const data = resp.data?.data || [];
+      setJudges(data);
+    } catch (err) {
+      console.error("Failed to fetch judges:", err);
+      toast.error("Failed to load judges.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const field = (key, val) => setForm(p => ({ ...p, [key]: val }));
 
@@ -113,45 +76,128 @@ const DashboardJudges = () => {
 
   const openEdit = (judge) => {
     setEditEntry(judge);
-    setForm({ ...judge });
+    setForm({
+      first_name: judge.first_name || '',
+      last_name: judge.last_name || '',
+      location: judge.location || '',
+      phone: judge.phone || '',
+      position: judge.position || 'Guest Judge',
+      nationality: judge.nationality || '',
+      bio: judge.bio || '',
+      instagram_handle: judge.instagram_handle || '',
+      status: judge.status || 'Active',
+      photoPreview: judge.photo || null,
+      photoFile: null
+    });
     setModal(true);
   };
 
-  const handleSave = () => {
-    if (!form.fullName || !form.email || !form.role) return;
-    if (editEntry) {
-      setJudges(p => p.map(j => j.id === editEntry.id ? { ...j, ...form } : j));
-    } else {
-      setJudges(p => [{ id: Date.now(), ...form }, ...p]);
+  const handleSave = async () => {
+    if (!form.first_name || !form.last_name || !form.position) {
+      toast.error("First name, last name, and position are required.");
+      return;
     }
-    setForm(EMPTY_FORM);
-    setEditEntry(null);
-    setModal(false);
+    setSaving(true);
+    try {
+      let photoUrl = form.photoPreview;
+      if (form.photoFile) {
+        toast.info("Uploading photo...");
+        const uploadResp = await uploadFile(form.photoFile);
+        photoUrl = uploadResp.url || uploadResp.data?.url;
+      }
+
+      const payload = {
+        first_name: form.first_name,
+        last_name: form.last_name,
+        role: form.position, // Keep backward compat or ignore
+        position: form.position,
+        location: form.location,
+        phone: form.phone,
+        status: form.status,
+        nationality: form.nationality,
+        instagram_handle: form.instagram_handle,
+        bio: form.bio,
+        photo: photoUrl
+      };
+
+      if (editEntry) {
+        await adminApi.updateJudge(editEntry._id, payload);
+        toast.success("Judge updated successfully!");
+      } else {
+        await adminApi.createJudge(payload);
+        toast.success("Judge added successfully!");
+      }
+
+      setModal(false);
+      setForm(EMPTY_FORM);
+      setEditEntry(null);
+      fetchJudges();
+    } catch (err) {
+      console.error("Failed to save judge:", err);
+      toast.error(err.response?.data?.message || "Failed to save judge.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleDelete = id => setJudges(p => p.filter(j => j.id !== id));
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to remove this judge?")) return;
+    try {
+      await adminApi.deleteJudge(id);
+      toast.success("Judge removed successfully!");
+      fetchJudges();
+    } catch (err) {
+      console.error("Failed to delete judge:", err);
+      toast.error("Failed to delete judge.");
+    }
+  };
 
-  const handleToggleStatus = id =>
-    setJudges(p => p.map(j =>
-      j.id === id ? { ...j, status: j.status === 'Active' ? 'Inactive' : 'Active' } : j
-    ));
+  const handleToggleStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
+      // If the API supports partial patch we can just send status. 
+      // We will re-fetch the judge or assume updateJudge needs full payload. 
+      // For simplicity, we can fetch their current data, merge and upload.
+      const judgeToUpdate = judges.find(j => j._id === id);
+      if(!judgeToUpdate) return;
+      const payload = {
+        first_name: judgeToUpdate.first_name,
+        last_name: judgeToUpdate.last_name,
+        position: judgeToUpdate.position,
+        location: judgeToUpdate.location,
+        phone: judgeToUpdate.phone,
+        status: newStatus,
+        nationality: judgeToUpdate.nationality,
+        instagram_handle: judgeToUpdate.instagram_handle,
+        bio: judgeToUpdate.bio,
+        photo: judgeToUpdate.photo
+      };
+      await adminApi.updateJudge(id, payload);
+      toast.success("Status updated!");
+      fetchJudges();
+    } catch (err) {
+      console.error("Failed to toggle status:", err);
+      toast.error("Failed to update status.");
+    }
+  };
 
   const filtered = judges.filter(j => {
     const q = search.toLowerCase();
     const matchSearch =
-      (j.fullName    || '').toLowerCase().includes(q) ||
-      (j.email       || '').toLowerCase().includes(q) ||
-      (j.speciality  || '').toLowerCase().includes(q) ||
-      (j.nationality || '').toLowerCase().includes(q);
-    const matchRole = roleFilter === 'All' || j.role === roleFilter;
+      (j.first_name    || '').toLowerCase().includes(q) ||
+      (j.last_name     || '').toLowerCase().includes(q) ||
+      (j.location      || '').toLowerCase().includes(q) ||
+      (j.position      || '').toLowerCase().includes(q) ||
+      (j.nationality   || '').toLowerCase().includes(q);
+    const matchRole = positionFilter === 'All' || j.position === positionFilter;
     return matchSearch && matchRole;
   });
 
   const counts = {
     total:    judges.length,
-    head:     judges.filter(j => j.role === 'Head Judge').length,
-    guest:    judges.filter(j => j.role === 'Guest Judge').length,
-    mentor:   judges.filter(j => j.role === 'Mentor').length,
+    head:     judges.filter(j => j.position === 'Head Judge').length,
+    guest:    judges.filter(j => j.position === 'Guest Judge').length,
+    mentor:   judges.filter(j => j.position === 'Mentor').length,
     active:   judges.filter(j => j.status === 'Active').length,
   };
 
@@ -199,19 +245,19 @@ const DashboardJudges = () => {
         <span className={shared.searchIcon}>🔍</span>
         <input
           className={shared.searchInput}
-          placeholder="Search by name, email, speciality or nationality..."
+          placeholder="Search by name, location, position or nationality..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
       </div>
 
-      {/* ── Role Filter Tabs ── */}
+      {/* ── Role/Position Filter Tabs ── */}
       <div className={styles.filterTabs}>
-        {['All', ...ROLES].map(r => (
+        {['All', 'Head Judge', 'Guest Judge', 'Mentor'].map(r => (
           <button
             key={r}
-            className={`${styles.filterTab} ${roleFilter === r ? styles.filterTabActive : ''}`}
-            onClick={() => setRoleFilter(r)}
+            className={`${styles.filterTab} ${positionFilter === r ? styles.filterTabActive : ''}`}
+            onClick={() => setPositionFilter(r)}
           >
             {r}
           </button>
@@ -219,7 +265,12 @@ const DashboardJudges = () => {
       </div>
 
       {/* ── Judge Cards ── */}
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className={styles.empty}>
+          <div className={styles.emptyIcon}>⏳</div>
+          Loading judges...
+        </div>
+      ) : filtered.length === 0 ? (
         <div className={styles.empty}>
           <div className={styles.emptyIcon}>⚖️</div>
           No judges found
@@ -227,35 +278,35 @@ const DashboardJudges = () => {
       ) : (
         <div className={styles.judgesGrid}>
           {filtered.map(j => (
-            <div key={j.id} className={styles.judgeCard}>
+            <div key={j._id} className={styles.judgeCard}>
               <div className={styles.cardTop}>
                 <div className={styles.judgeAvatar}>
-                  {j.photoPreview
-                    ? <img src={j.photoPreview} alt={j.fullName} />
-                    : (j.fullName || '?')[0]
+                  {j.photo
+                    ? <img src={j.photo} alt={j.first_name} />
+                    : (j.first_name || '?')[0]
                   }
                 </div>
                 <div className={styles.judgeInfo}>
-                  <div className={styles.judgeName}>{j.fullName}</div>
-                  <div className={styles.judgeTitle}>{j.speciality} · {j.nationality}</div>
-                  <span className={ROLE_CLASS[j.role]}>{j.role}</span>
+                  <div className={styles.judgeName}>{j.first_name} {j.last_name}</div>
+                  <div className={styles.judgeTitle}>{j.nationality || 'N/A'}</div>
+                  <span className={POSITION_CLASS[j.position] || styles.roleGuest}>{j.position}</span>
                 </div>
               </div>
 
               <div className={styles.cardDivider} />
 
               <div className={styles.detailRow}>
-                <span className={styles.detailIcon}>📧</span>
-                <span className={styles.detailText}>{j.email}</span>
+                <span className={styles.detailIcon}>📍</span>
+                <span className={styles.detailText}>{j.location || 'N/A'}</span>
               </div>
               <div className={styles.detailRow}>
                 <span className={styles.detailIcon}>📞</span>
-                <span className={styles.detailText}>{j.phone}</span>
+                <span className={styles.detailText}>{j.phone || 'N/A'}</span>
               </div>
-              {j.instagram && (
+              {j.instagram_handle && (
                 <div className={styles.detailRow}>
                   <span className={styles.detailIcon}>📸</span>
-                  <span className={styles.detailText}>{j.instagram}</span>
+                  <span className={styles.detailText}>{j.instagram_handle}</span>
                 </div>
               )}
 
@@ -282,7 +333,7 @@ const DashboardJudges = () => {
                 </button>
                 <button
                   className={`${shared.btn} ${shared.btnDanger} ${shared.btnSm}`}
-                  onClick={() => handleDelete(j.id)}
+                  onClick={() => handleDelete(j._id)}
                 >
                   Remove
                 </button>
@@ -299,17 +350,22 @@ const DashboardJudges = () => {
           onClose={() => { setModal(false); setForm(EMPTY_FORM); setEditEntry(null); }}
         >
           <div className={shared.formGrid}>
-
-            <div className={`${shared.formGroup} ${shared.formGroupFull}`}>
-              <label className={shared.label}>Full Name</label>
-              <input className={shared.input} placeholder="e.g. Dr. Adaeze Okonkwo"
-                value={form.fullName} onChange={e => field('fullName', e.target.value)} />
+            <div className={shared.formGroup}>
+              <label className={shared.label}>First Name</label>
+              <input className={shared.input} placeholder="e.g. Dr. Adaeze"
+                value={form.first_name} onChange={e => field('first_name', e.target.value)} />
             </div>
 
             <div className={shared.formGroup}>
-              <label className={shared.label}>Email Address</label>
-              <input className={shared.input} type="email" placeholder="e.g. judge@starstage.ng"
-                value={form.email} onChange={e => field('email', e.target.value)} />
+              <label className={shared.label}>Last Name</label>
+              <input className={shared.input} placeholder="e.g. Okonkwo"
+                value={form.last_name} onChange={e => field('last_name', e.target.value)} />
+            </div>
+
+            <div className={shared.formGroup}>
+              <label className={shared.label}>Location / Address</label>
+              <input className={shared.input} placeholder="e.g. Lagos, Nigeria"
+                value={form.location} onChange={e => field('location', e.target.value)} />
             </div>
 
             <div className={shared.formGroup}>
@@ -319,16 +375,9 @@ const DashboardJudges = () => {
             </div>
 
             <div className={shared.formGroup}>
-              <label className={shared.label}>Role</label>
-              <select className={shared.select} value={form.role} onChange={e => field('role', e.target.value)}>
-                {ROLES.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
-            </div>
-
-            <div className={shared.formGroup}>
-              <label className={shared.label}>Speciality</label>
-              <select className={shared.select} value={form.speciality} onChange={e => field('speciality', e.target.value)}>
-                {SPECIALITIES.map(s => <option key={s} value={s}>{s}</option>)}
+              <label className={shared.label}>Position</label>
+              <select className={shared.select} value={form.position} onChange={e => field('position', e.target.value)}>
+                {POSITIONS.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
             </div>
 
@@ -341,7 +390,7 @@ const DashboardJudges = () => {
             <div className={shared.formGroup}>
               <label className={shared.label}>Instagram Handle</label>
               <input className={shared.input} placeholder="e.g. @judgename"
-                value={form.instagram} onChange={e => field('instagram', e.target.value)} />
+                value={form.instagram_handle} onChange={e => field('instagram_handle', e.target.value)} />
             </div>
 
             <div className={shared.formGroup}>
@@ -385,11 +434,12 @@ const DashboardJudges = () => {
             <button
               className={`${shared.btn} ${shared.btnOutline}`}
               onClick={() => { setModal(false); setForm(EMPTY_FORM); setEditEntry(null); }}
+              disabled={saving}
             >
               Cancel
             </button>
-            <button className={`${shared.btn} ${shared.btnPrimary}`} onClick={handleSave}>
-              {editEntry ? 'Save Changes' : 'Add Judge'}
+            <button className={`${shared.btn} ${shared.btnPrimary}`} onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving...' : (editEntry ? 'Save Changes' : 'Add Judge')}
             </button>
           </div>
         </DashboardModal>
@@ -400,16 +450,16 @@ const DashboardJudges = () => {
         <DashboardModal title="Judge Profile" onClose={() => setViewEntry(null)}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
             <div className={styles.judgeAvatar} style={{ width: 70, height: 70, fontSize: 26 }}>
-              {viewEntry.photoPreview
-                ? <img src={viewEntry.photoPreview} alt={viewEntry.fullName} />
-                : (viewEntry.fullName || '?')[0]
+              {viewEntry.photo
+                ? <img src={viewEntry.photo} alt={viewEntry.first_name} />
+                : (viewEntry.first_name || '?')[0]
               }
             </div>
             <div>
               <div style={{ fontFamily: 'Playfair Display, serif', fontSize: 18, fontWeight: 700, color: '#e8f5e8', marginBottom: 4 }}>
-                {viewEntry.fullName}
+                {viewEntry.first_name} {viewEntry.last_name}
               </div>
-              <span className={ROLE_CLASS[viewEntry.role]}>{viewEntry.role}</span>
+              <span className={POSITION_CLASS[viewEntry.position] || styles.roleGuest}>{viewEntry.position}</span>
               {' '}
               <span className={viewEntry.status === 'Active' ? styles.statusActive : styles.statusInactive}>
                 {viewEntry.status}
@@ -419,11 +469,10 @@ const DashboardJudges = () => {
 
           <div className={shared.formGrid}>
             {[
-              { label: 'Email',       value: viewEntry.email       },
+              { label: 'Location',    value: viewEntry.location       },
               { label: 'Phone',       value: viewEntry.phone       },
-              { label: 'Speciality',  value: viewEntry.speciality  },
               { label: 'Nationality', value: viewEntry.nationality },
-              { label: 'Instagram',   value: viewEntry.instagram   },
+              { label: 'Instagram',   value: viewEntry.instagram_handle   },
             ].map(row => (
               <div className={shared.formGroup} key={row.label}>
                 <span className={shared.label}>{row.label}</span>
@@ -448,7 +497,7 @@ const DashboardJudges = () => {
             </button>
             <button
               className={`${shared.btn} ${shared.btnOutline}`}
-              onClick={() => { handleToggleStatus(viewEntry.id); setViewEntry(null); }}
+              onClick={() => { handleToggleStatus(viewEntry._id, viewEntry.status); setViewEntry(null); }}
             >
               {viewEntry.status === 'Active' ? '⏸ Set Inactive' : '▶ Set Active'}
             </button>
