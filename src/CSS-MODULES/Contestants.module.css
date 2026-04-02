@@ -54,12 +54,38 @@
   overflow: hidden;
   transition: all 0.3s ease;
   border: 1px solid #222;
+  position: relative;
 }
 
 .imageWrapper {
   position: relative;
   height: 380px;
   overflow: hidden;
+}
+
+.imageOverlay { display: none; }
+
+.cardActions {
+  display: flex;
+  gap: 8px;
+}
+
+.voteNowBtn {
+  flex: 1;
+  background: #008751;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.voteNowBtn:hover {
+  background: #FFD700;
+  color: #000;
 }
 
 .photo {
@@ -83,31 +109,6 @@
   font-weight: bold;
 }
 
-/* Vote Overlay on Hover */
-.voteOverlay {
-  position: absolute;
-  bottom: -60px;
-  width: 100%;
-  background: rgba(0, 135, 81, 0.9);
-  padding: 15px;
-  transition: 0.3s;
-  display: flex;
-  justify-content: center;
-}
-
-.contestantCard:hover .voteOverlay {
-  bottom: 0;
-}
-
-.voteBtnQuick {
-  background: white;
-  color: #008751;
-  border: none;
-  padding: 8px 25px;
-  font-weight: 900;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 .details { padding: 20px; }
 
@@ -132,6 +133,7 @@
 .loc { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
 
 .profileBtn {
+  flex: 1;
   width: 100%;
   background: transparent;
   color: white;

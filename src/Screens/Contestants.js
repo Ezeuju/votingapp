@@ -3,9 +3,10 @@ import styles from '../CSS-MODULES/Contestants.module.css';
 import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
 import api from '../services/api';
-import {Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Contestants = () => {
+  const navigate = useNavigate();
   const [searchTerm,    setSearchTerm]    = useState('');
   const [category,      setCategory]      = useState('All');
   const [visibleCount,  setVisibleCount]  = useState(8);
@@ -75,6 +76,10 @@ const Contestants = () => {
     setVisibleCount(prev => prev + 4);
   };
 
+  const handleVoteNow = (contestantId) => {
+    navigate(`/vote/${contestantId}`);
+  };
+
   return (
     <>
       <Navbar />
@@ -123,6 +128,8 @@ const Contestants = () => {
                       <div className={styles.idBadge}>#{item.contestant_number || 'N/A'}</div>
                     </div>
 
+
+
                     <div className={styles.details}>
                       <div className={styles.nameRow}>
                         <h3>{item.first_name} {item.last_name}</h3>
@@ -130,9 +137,17 @@ const Contestants = () => {
                       </div>
                       <p className={styles.talentTag}>{item.talent_category || 'N/A'}</p>
                       <p className={styles.loc}>📍 {item.state || item.location || 'N/A'}</p>
-                      <Link to={`/contestantprofile/${item._id}`}>
-                        <button className={styles.profileBtn}>View Full Profile</button>
-                      </Link>
+                      <div className={styles.cardActions}>
+                        <Link to={`/contestantprofile/${item._id}`}>
+                          <button className={styles.profileBtn}>View Full Profile</button>
+                        </Link>
+                        <button
+                          className={styles.voteNowBtn}
+                          onClick={() => handleVoteNow(item._id)}
+                        >
+                          Vote Now
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}

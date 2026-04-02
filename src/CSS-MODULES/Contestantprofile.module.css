@@ -168,6 +168,25 @@
   flex-wrap: wrap;
 }
 
+.voteNowBtn {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #008751, #00a562);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.voteNowBtn:hover {
+  background: linear-gradient(135deg, #006b40, #008751);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 135, 81, 0.35);
+}
+
 /* ── PROFILE BODY GRID ───────────────────────────────────────────────────── */
 .profileBody {
   display: grid;

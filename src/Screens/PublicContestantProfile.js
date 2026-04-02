@@ -133,13 +133,20 @@ const PublicContestantProfile = () => {
                 <div className={styles.profileVoteBarFill} style={{ width: `${pct}%` }} />
               </div>
 
-              {instagram && (
-                <div className={styles.profileHeroActions}>
+              <div className={styles.profileHeroActions}>
+                <button
+                  className={styles.voteNowBtn}
+                  onClick={() => navigate(`/vote/${id}`)}
+                  type="button"
+                >
+                  🗳️ Vote Now
+                </button>
+                {instagram && (
                   <button className={`${shared.btn} ${shared.btnOutline}`}>
                     📸 {instagram}
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
 
