@@ -152,7 +152,6 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                   <th>Country / Location</th>
                   <th>Category</th>
                   <th>Date & Time</th>
-                  <th>Plan</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -170,11 +169,6 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                       <br />
                       <span style={{ color: '#FFD700', fontSize: 11 }}>
                         {new Date(a.date).toLocaleTimeString()}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`${styles.badge} ${styles[getPlanBadge(a.audition_plan)]}`}>
-                        {a.audition_plan || 'N/A'}
                       </span>
                     </td>
                     <td>
@@ -202,7 +196,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
                 ))}
                 {data.length === 0 && (
                   <tr>
-                    <td colSpan={9} className={styles.emptyRow}>No audition registrations found</td>
+                    <td colSpan={8} className={styles.emptyRow}>No audition registrations found</td>
                   </tr>
                 )}
               </tbody>

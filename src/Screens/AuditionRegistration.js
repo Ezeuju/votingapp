@@ -4,7 +4,6 @@ import styles from "../CSS-MODULES/Auditiony.module.css";
 import Navbar from "../COMPONENTS/Navbar";
 import Footer from "../COMPONENTS/Footer";
 import { paymentApi } from "../services/paymentApi";
-import { planApi } from "../services/planApi";
 import { useToast } from "../COMPONENTS/Toast";
 import api from "../services/api";
 
@@ -72,9 +71,6 @@ const AuditionRegistration = () => {
   const [step, setStep] = useState(1);
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [plans, setPlans] = useState([]);
-  const [plansLoading, setPlansLoading] = useState(false);
-  const [plansError, setPlansError] = useState(null);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -86,7 +82,6 @@ const AuditionRegistration = () => {
     phone: "",
     category: "",
     customCategory: "",
-    audition_plan_id: "",
     photo: "",
     photoPreview: null,
   });
@@ -96,49 +91,11 @@ const AuditionRegistration = () => {
 
   useEffect(() => {
     const reference = searchParams.get("reference");
-    const planId = searchParams.get("plan");
 
     if (reference) {
       verifyPayment(reference);
     }
-
-    if (planId) {
-      setStep(2);
-    }
   }, [searchParams]);
-
-  useEffect(() => {
-    const fetchPlans = async () => {
-      setPlansLoading(true);
-      setPlansError(null);
-      try {
-        const response = await planApi.getAll("audition");
-        const fetchedPlans = response?.data?.data || response?.data || [];
-        setPlans(fetchedPlans);
-
-        const planId = searchParams.get("plan");
-        if (planId) {
-          setFormData((prev) => ({ ...prev, audition_plan_id: planId }));
-        } else if (fetchedPlans.length > 0) {
-          setFormData((prev) => ({
-            ...prev,
-            audition_plan_id: fetchedPlans[0]._id,
-          }));
-        }
-      } catch (err) {
-        setPlansError(
-          "Unable to load audition plans. Please refresh and try again.",
-        );
-        showToast(
-          "Unable to load audition plans. Please refresh and try again.",
-          "error",
-        );
-      } finally {
-        setPlansLoading(false);
-      }
-    };
-    fetchPlans();
-  }, [searchParams, showToast]);
 
   const verifyPayment = async (reference) => {
     setLoading(true);
@@ -238,7 +195,6 @@ const removeVideo = () => {
           formData.category === "Other"
             ? formData.customCategory
             : formData.category,
-        audition_plan_id: formData.audition_plan_id,
         video: formData.video,
       };
       const response = await paymentApi.initialize(payload);
@@ -564,86 +520,23 @@ const removeVideo = () => {
   )}
 </div>
 
-                  <div className={styles.field}>
-                    <label>Audition Plan *</label>
-                    {plansLoading ? (
-                      <select disabled>
-                        <option>Loading plans...</option>
-                      </select>
-                    ) : plansError ? (
-                      <p style={{ color: "red", fontSize: "14px" }}>
-                        {plansError}
-                      </p>
-                    ) : (
-                      <select
-                        name="audition_plan_id"
-                        value={formData.audition_plan_id}
-                        onChange={handleInputChange}
-                        required
-                      >
-                        <option value="">Select an audition plan...</option>
-                        {plans.map((plan) => (
-                          <option key={plan._id} value={plan._id}>
-                            {plan.title} — ₦{plan.amount?.toLocaleString()}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                    {formData.audition_plan_id &&
-                      plans.length > 0 &&
-                      (() => {
-                        const selected = plans.find(
-                          (p) => p._id === formData.audition_plan_id,
-                        );
-                        return selected?.description ? (
-                          <p
-                            style={{
-                              marginTop: "6px",
-                              fontSize: "13px",
-                              color: "#666",
-                            }}
-                          >
-                            {selected.description}
-                          </p>
-                        ) : null;
-                      })()}
-                  </div>
+
                 </form>
 
                 {/* RIGHT: Order Summary */}
                 <div className={styles.orderSummary}>
                   <h3>Your Registration</h3>
                   <div className={styles.summaryTable}>
-                    {(() => {
-                      const selectedPlan = plans.find(
-                        (p) => p._id === formData.audition_plan_id,
-                      );
-                      const amount = selectedPlan?.amount;
-                      const label =
-                        selectedPlan?.title || "NTS Season 4 Audition";
-                      return (
-                        <>
-                          <div className={styles.summaryRow}>
-                            <span>{label} × 1</span>
-                            <span>
-                              {amount != null
-                                ? `₦${amount.toLocaleString()}.00`
-                                : "—"}
-                            </span>
-                          </div>
-                          <div
-                            className={`${styles.summaryRow} ${styles.totalRow}`}
-                          >
-                            <span>Total</span>
-                            <span>
-                              {amount != null
-                                ? `₦${amount.toLocaleString()}.00`
-                                : "—"}
-                            </span>
-                          </div>
-                        </>
-                      );
-                    })()}
+                    <div className={styles.summaryRow}>
+                      <span>NTS Season 4 Audition × 1</span>
+                      <span>₦10,000.00</span>
+                    </div>
+                    <div
+                      className={`${styles.summaryRow} ${styles.totalRow}`}
+                    >
+                      <span>Total</span>
+                      <span>₦10,000.00</span>
+                    </div>
                   </div>
 
                   <div className={styles.paymentNotice}>
@@ -654,20 +547,9 @@ const removeVideo = () => {
                     type="submit"
                     form="audition-form"
                     className={styles.confirmBtn}
-                    disabled={
-                      loading || !formData.audition_plan_id || plansLoading
-                    }
+                    disabled={loading}
                   >
-                    {loading
-                      ? "Processing..."
-                      : (() => {
-                          const selectedPlan = plans.find(
-                            (p) => p._id === formData.audition_plan_id,
-                          );
-                          return selectedPlan
-                            ? `Confirm ₦${selectedPlan.amount?.toLocaleString()}.00`
-                            : "Select a Plan";
-                        })()}
+                    {loading ? "Processing..." : "Confirm ₦10,000.00"}
                   </button>
                 </div>
               </div>
