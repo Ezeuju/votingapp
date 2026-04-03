@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../CSS-MODULES/Audition.module.css';
+import audcomingImage from '../assets/audcoming.jpeg';
 
 const Audition = () => {
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ const Audition = () => {
             Audition is from September 5th Through November 29th 2026
           </p>
 
-          <div className={styles.comingSoon}>COMING SOON</div>
+          <div className={styles.comingSoon}>
+            <div className={styles.audy}>
+              <img src={audcomingImage} alt="Audition Coming Soon" />
+            </div>
+          </div>
 
           <div className={styles.actionRow}>
             <div className={styles.priceBadge}>
