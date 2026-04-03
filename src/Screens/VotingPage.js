@@ -182,33 +182,42 @@ const VotingPage = () => {
 
           {/* Step 3 — Voter Details */}
           <div className={styles.voterForm}>
-            <div className={styles.voterFormTitle}>Step 3 — Your Details</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,215,0,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  Full Name
-                </label>
-                <input
-                  style={{ background: 'rgba(0,30,15,0.8)', border: '1px solid rgba(0,135,81,0.3)', borderRadius: 8, padding: '10px 14px', color: '#e8f5e8', fontSize: 14, fontFamily: 'DM Sans, sans-serif', outline: 'none' }}
-                  placeholder="e.g. Emeka Okafor"
-                  value={voterName}
-                  onChange={e => setVoterName(e.target.value)}
-                />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,215,0,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                  Email Address
-                </label>
-                <input
-                  style={{ background: 'rgba(0,30,15,0.8)', border: '1px solid rgba(0,135,81,0.3)', borderRadius: 8, padding: '10px 14px', color: '#e8f5e8', fontSize: 14, fontFamily: 'DM Sans, sans-serif', outline: 'none' }}
-                  type="email"
-                  placeholder="e.g. emeka@email.com"
-                  value={voterEmail}
-                  onChange={e => setVoterEmail(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
+  <div className={styles.voterFormTitle}>Step 3 — Your Details</div>
+  <div style={{
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 20,
+    background: 'rgba(0,30,15,0.8)',
+    border: '1px solid rgba(0,135,81,0.3)',
+    borderRadius: 12,
+    padding: 20,
+  }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,215,0,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        Full Name
+      </label>
+      <input
+        style={{ background: 'rgba(0,30,15,0.8)', border: '1px solid rgba(0,135,81,0.3)', borderRadius: 8, padding: '10px 14px', color: '#e8f5e8', fontSize: 14, fontFamily: 'DM Sans, sans-serif', outline: 'none', width: '100%', boxSizing: 'border-box' }}
+        placeholder="e.g. Emeka Okafor"
+        value={voterName}
+        onChange={e => setVoterName(e.target.value)}
+      />
+    </div>
+    <br/>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,215,0,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        Email Address
+      </label>
+      <input
+        style={{ background: 'rgba(0,30,15,0.8)', border: '1px solid rgba(0,135,81,0.3)', borderRadius: 8, padding: '10px 14px', color: '#e8f5e8', fontSize: 14, fontFamily: 'DM Sans, sans-serif', outline: 'none', width: '100%', boxSizing: 'border-box' }}
+        type="email"
+        placeholder="e.g. emeka@email.com"
+        value={voterEmail}
+        onChange={e => setVoterEmail(e.target.value)}
+      />
+    </div>
+  </div>
+</div>
 
           {/* Order Summary */}
           {(selectedPlan || selectedContestant) && (
