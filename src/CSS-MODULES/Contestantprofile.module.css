@@ -266,7 +266,7 @@
 /* ══════════════════════════════════════════════════════════════════════════ */
 
 .votingPage {
-  max-width: 900px;
+  width: 100%;
 }
 
 .votingTitle {
@@ -499,6 +499,10 @@
   border-radius: 12px;
   padding: 22px;
   margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  
 }
 
 .voterFormTitle {
@@ -713,7 +717,12 @@
   .contestantOption { padding: 10px; }
 
   /* Voter form */
-  .voterForm { padding: 16px 14px; }
+  .voterForm { 
+    padding: 16px 14px; 
+    display: flex;
+    flex-direction: column;
+  
+  }
   .voterFormTitle { font-size: 11px; }
 
   /* Order summary */

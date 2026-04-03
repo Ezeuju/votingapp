@@ -16,6 +16,7 @@ const Audition = () => {
           <p className={styles.description}>
             Registration for NAIJA TALENT SHOW – Season 4 is now open. Don't miss your chance to audition,
             get mentored by industry professionals, and compete for life-changing rewards on a global stage.
+            Audition is from September 5th Through November 29th 2026
           </p>
 
           <div className={styles.comingSoon}>COMING SOON</div>
