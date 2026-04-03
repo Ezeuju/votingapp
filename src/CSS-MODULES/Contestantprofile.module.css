@@ -376,9 +376,13 @@
 
 .contestantOptions {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 10px;
 }
+
+.contestantOptions[data-count="1"] { grid-template-columns: 1fr; }
+.contestantOptions[data-count="2"] { grid-template-columns: repeat(2, 1fr); }
+.contestantOptions[data-count="3"] { grid-template-columns: repeat(3, 1fr); }
+.contestantOptions[data-count="4"], .contestantOptions:not([data-count]) { grid-template-columns: repeat(4, 1fr); }
 
 .contestantOption {
   background: rgba(0, 20, 10, 0.7);
@@ -501,8 +505,6 @@
   margin-bottom: 24px;
   display: flex;
   flex-direction: column;
-  width: 80%;
-  
 }
 
 .voterFormTitle {
@@ -512,6 +514,12 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
   margin-bottom: 14px;
+}
+
+.voterDetailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 /* ── PAYSTACK BUTTON ─────────────────────────────────────────────────────── */
@@ -631,12 +639,18 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* Contestant options — 2 columns */
-  .contestantOptions {
+  /* Contestant options — max 2 per row on tablet */
+  .contestantOptions[data-count="3"],
+  .contestantOptions[data-count="4"],
+  .contestantOptions:not([data-count]) {
     grid-template-columns: repeat(2, 1fr);
   }
 
   .votingTitle { font-size: 19px; }
+
+  .voterDetailsGrid {
+    grid-template-columns: 1fr;
+  }
 
   .orderSummaryTitle { font-size: 14px; }
   .orderTotalValue   { font-size: 18px; }
@@ -709,9 +723,9 @@
   .packagePrice     { font-size: 15px; }
   .packagePriceNote { font-size: 10px; }
 
-  /* Contestant options — 1 column on very small screens */
+  /* Contestant options — automatically collapse to 1 per row on mobile */
   .contestantOptions {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
 
   .contestantOption { padding: 10px; }

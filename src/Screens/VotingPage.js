@@ -154,7 +154,7 @@ const VotingPage = () => {
                 Loading contestants...
               </div>
             ) : (
-              <div className={styles.contestantOptions}>
+              <div className={styles.contestantOptions} data-count={Math.min(contestants.length, 4)}>
                 {contestants.map(c => (
                   <div
                     key={c._id}
@@ -185,7 +185,7 @@ const VotingPage = () => {
           {/* Step 3 — Voter Details */}
           <div className={styles.voterForm}>
             <div className={styles.voterFormTitle}>Step 3 — Your Details</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div className={styles.voterDetailsGrid}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <label style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,215,0,0.7)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                   Full Name
