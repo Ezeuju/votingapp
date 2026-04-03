@@ -43,12 +43,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
     return user.country;
   };
 
-  const getPlanBadge = (plan) => {
-    if (plan?.includes('Silver')) return 'badgeInfo';
-    if (plan?.includes('Gold')) return 'badgeWarning';
-    if (plan?.includes('VIP')) return 'badgeGreen';
-    return 'badgeInfo';
-  };
+
 
   const handleViewDetails = async (userId) => {
     try {
@@ -74,9 +69,6 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
 
   const counts = {
     total: stats?.total_registrations || 0,
-    silver: stats?.total_silver || 0,
-    gold: stats?.total_gold || 0,
-    vip: stats?.total_vip || 0,
     confirmed: stats?.total_confirmed || 0,
     pending: stats?.total_pending || 0,
   };
@@ -91,19 +83,9 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
           <div className={styles.statLabel}>Total Registrations</div>
         </div>
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>🥈</div>
-          <div className={styles.statValue}>{counts.silver}</div>
-          <div className={styles.statLabel}>Silver Pass</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statIcon}>🥇</div>
-          <div className={styles.statValue}>{counts.gold}</div>
-          <div className={styles.statLabel}>Gold Pass</div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={styles.statIcon}>💎</div>
-          <div className={styles.statValue}>{counts.vip}</div>
-          <div className={styles.statLabel}>VIP Pass</div>
+          <div className={styles.statIcon}>💳</div>
+          <div className={styles.statValue}>₦10,000</div>
+          <div className={styles.statLabel}>Audition Fee</div>
         </div>
         <div className={styles.statCard}>
           <div className={styles.statIcon}>✅</div>
@@ -130,7 +112,7 @@ const DashboardAuditions = ({ setData: setDashboardData }) => {
         <span className={styles.searchIcon}>🔍</span>
         <input
           className={styles.searchInput}
-          placeholder="Search by name, email, country or plan..."
+          placeholder="Search by name, email or country..."
           value={searchInput}
           onChange={e => setSearchInput(e.target.value)}
         />

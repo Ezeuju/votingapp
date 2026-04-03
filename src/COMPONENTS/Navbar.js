@@ -32,10 +32,6 @@ const Navbar = () => {
             <li><a href="/sponsor" className={styles.goldLink} onClick={() => setMenuOpen(false)}>Become a Sponsor</a></li>
           </ul>
 
-          <div className={styles.authBox}>
-            <button className={styles.signInBtn}>Sign In</button>
-            <button className={styles.joinBtn}>Join as Talent</button>
-          </div>
         </div>
       </div>
     </nav>

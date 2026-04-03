@@ -26,13 +26,16 @@
 
 .ticketContainer {
   display: grid;
-  /* Desktop: Exactly 2 equal columns */
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   justify-content: center;
   gap: 30px;
-  /* Added margin to center the grid if the container is wider than the cards */
-  max-width: 900px; 
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Last card centered below when it's alone on its row */
+.ticketContainer > *:last-child:nth-child(3n + 1) {
+  grid-column: 2 / 3;
 }
 
 .ticketCard {
@@ -146,17 +149,35 @@
 
 
 @media (max-width: 1024px) {
-.ticketContainer {
-  
-    grid-template-columns: 1fr;
-    max-width: 450px; 
+  .ticketContainer {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 700px;
   }
-  
+
+  /* On 2-col layout, center last card if alone */
+  .ticketContainer > *:last-child:nth-child(2n + 1) {
+    grid-column: 1 / -1;
+    max-width: 320px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .ticketCard {
-    transform: scale(1) !important; 
+    transform: scale(1) !important;
   }
 
   .vipCard {
-    margin: 15px 0; 
+    margin: 15px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ticketContainer {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+  }
+
+  .ticketContainer > *:last-child:nth-child(3n + 1) {
+    grid-column: auto;
   }
 }

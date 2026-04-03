@@ -17,6 +17,7 @@ const VotingPage = () => {
   const [selectedContestant, setSelectedContestant] = useState(null);
   const [voterName, setVoterName] = useState('');
   const [voterEmail, setVoterEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
 
@@ -65,7 +66,8 @@ const VotingPage = () => {
     loadData();
   }, [fetchContestants, fetchPlans]);
 
-  const canPay = selectedPlan && selectedContestant && voterEmail && voterName;
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+  const canPay = selectedPlan && selectedContestant && voterName && voterEmail && isValidEmail(voterEmail);
 
   const handlePayment = async () => {
     if (!canPay) return;
@@ -200,12 +202,34 @@ const VotingPage = () => {
                   Email Address
                 </label>
                 <input
-                  style={{ background: 'rgba(0,30,15,0.8)', border: '1px solid rgba(0,135,81,0.3)', borderRadius: 8, padding: '10px 14px', color: '#e8f5e8', fontSize: 14, fontFamily: 'DM Sans, sans-serif', outline: 'none' }}
+                  style={{
+                    background: 'rgba(0,30,15,0.8)',
+                    border: `1px solid ${emailError ? '#ff4444' : 'rgba(0,135,81,0.3)'}`,
+                    borderRadius: 8,
+                    padding: '10px 14px',
+                    color: '#e8f5e8',
+                    fontSize: 14,
+                    fontFamily: 'DM Sans, sans-serif',
+                    outline: 'none'
+                  }}
                   type="email"
                   placeholder="e.g. emeka@email.com"
                   value={voterEmail}
-                  onChange={e => setVoterEmail(e.target.value)}
+                  onChange={e => {
+                    const val = e.target.value;
+                    setVoterEmail(val);
+                    if (val && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim())) {
+                      setEmailError('Please enter a valid email address');
+                    } else {
+                      setEmailError('');
+                    }
+                  }}
                 />
+                {emailError && (
+                  <span style={{ color: '#ff4444', fontSize: 11, marginTop: 2 }}>
+                    ⚠ {emailError}
+                  </span>
+                )}
               </div>
             </div>
           </div>
