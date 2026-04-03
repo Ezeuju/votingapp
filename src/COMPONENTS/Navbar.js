@@ -33,8 +33,8 @@ const Navbar = () => {
           </ul>
 
           <div className={styles.authBox}>
-            <button className={styles.signInBtn}>Sign In</button>
-            <button className={styles.joinBtn}>Join as Talent</button>
+            <a href="/auditiony"><button className={styles.signInBtn}>Sign In</button></a>
+            <a href="/auditiony"><button className={styles.joinBtn}>Join as Talent</button></a>
           </div>
         </div>
       </div>

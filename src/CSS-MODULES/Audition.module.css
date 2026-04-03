@@ -4,7 +4,21 @@
   color: #fff;
   text-align: center;
 }
+.audy{
+  width:70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
+}
+.audy img{
+  width: 100%;
+}
+.comingSoon{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
 .container {
   max-width: 1200px;
   margin: 0 auto;

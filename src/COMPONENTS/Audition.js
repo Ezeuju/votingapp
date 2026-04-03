@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../CSS-MODULES/Audition.module.css';
 import { planApi } from '../services';
+import audcoming from "../assets/audcoming.jpeg"
 
 const Audition = () => {
   const navigate = useNavigate();
@@ -33,9 +34,13 @@ const Audition = () => {
           <p className={styles.description}>
             Registration for NAIJA TALENT SHOW – Season 4 is now open. Don’t miss your chance to audition,
             get mentored by industry professionals, and compete for life-changing rewards on a global stage.
+            Audition is from September 5th Through November 29th 2026
           </p>
 
-          <div className={styles.comingSoon}>COMING SOON</div>
+          <div className={styles.comingSoon}>
+           <div className={styles.audy}>
+            <img src={audcoming} alt="audcoming" />  </div>        
+           </div>
           <button className={styles.mainRegisterBtn} onClick={() => navigate('/auditiony')}>Register for Auditions</button>
         </div>
 
