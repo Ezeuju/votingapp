@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../CSS-MODULES/Auditiony.module.css";
 import Navbar from "../COMPONENTS/Navbar";
 import Footer from "../COMPONENTS/Footer";
-import { paymentApi } from "../services/paymentApi";
 import { useToast } from "../COMPONENTS/Toast";
 import api from "../services/api";
+import { uploadFile } from "../services/fileApi";
 
 const AFRICAN_COUNTRIES = [
   { code: "DZ", name: "Algeria" },
@@ -66,7 +66,6 @@ const AFRICAN_COUNTRIES = [
 
 const AuditionRegistration = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { showToast } = useToast();
   const [step, setStep] = useState(1);
   const [agreed, setAgreed] = useState(false);
@@ -79,6 +78,7 @@ const AuditionRegistration = () => {
     street_address: "",
     town: "",
     state: "",
+    state_of_origin: "",
     phone: "",
     category: "",
     customCategory: "",
@@ -86,31 +86,6 @@ const AuditionRegistration = () => {
     photoPreview: null,
   });
   const [uploading, setUploading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState(null);
-
-  useEffect(() => {
-    const reference = searchParams.get("reference");
-
-    if (reference) {
-      verifyPayment(reference);
-    }
-  }, [searchParams]);
-
-  const verifyPayment = async (reference) => {
-    setLoading(true);
-    try {
-      const response = await paymentApi.verify(reference);
-      const status = response.data.data?.status || response.data.status;
-      setPaymentStatus(status);
-      setShowModal(true);
-    } catch (error) {
-      setPaymentStatus("failed");
-      setShowModal(true);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -122,61 +97,52 @@ const AuditionRegistration = () => {
 
   
 
-const handleVideoUpload = async (e) => {
+const handlePhotoUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  if (file.size > 50 * 1024 * 1024) {
-    showToast("Video too large. Max size is 50MB.", "error");
+  if (file.size > 5 * 1024 * 1024) {
+    showToast("Image too large. Max size is 5MB.", "error");
     return;
   }
 
   setUploading(true);
   try {
-    const formDataUpload = new FormData();
-    formDataUpload.append("file", file);
-
-    const response = await api.post("/files", formDataUpload, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    const videoUrl = response.data.url;
-
+    const response = await uploadFile(file);
+    const photoUrl = response.data.url;
     const previewUrl = URL.createObjectURL(file);
 
     setFormData((prev) => ({
       ...prev,
-      video: videoUrl,
-      videoPreview: previewUrl,
+      photo: photoUrl,
+      photoPreview: previewUrl,
     }));
 
-    showToast("Video uploaded successfully!", "success");
+    showToast("Photo uploaded successfully!", "success");
   } catch (error) {
     console.error("Upload error:", error);
-    showToast("Failed to upload video. Please try again.", "error");
+    showToast("Failed to upload photo. Please try again.", "error");
   } finally {
     setUploading(false);
   }
 };
 
-const removeVideo = () => {
-
-  if (formData.videoPreview) {
-    URL.revokeObjectURL(formData.videoPreview);
+const removePhoto = () => {
+  if (formData.photoPreview) {
+    URL.revokeObjectURL(formData.photoPreview);
   }
-
   setFormData((prev) => ({
     ...prev,
-    video: "",
-    videoPreview: null,
+    photo: "",
+    photoPreview: null,
   }));
 };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.video) {
-      showToast("Please upload your video to proceed.", "error");
+    if (!formData.photo) {
+      showToast("Please upload your photo to proceed.", "error");
       return;
     }
 
@@ -190,29 +156,20 @@ const removeVideo = () => {
         street_address: formData.street_address,
         town: formData.town,
         state: formData.state,
+        state_of_origin: formData.state_of_origin,
         phone: formData.phone,
         talent_category:
           formData.category === "Other"
             ? formData.customCategory
             : formData.category,
-        video: formData.video,
+        photo: formData.photo,
       };
-      const response = await paymentApi.initialize(payload);
-      console.log("Full response:", response);
-      const authUrl =
-        response?.data?.data?.authorization_url ||
-        response?.data?.authorization_url;
-      if (authUrl) {
-        window.location.href = authUrl;
-      } else {
-        throw new Error("No authorization URL received");
-      }
+      await api.post("/users/audition/register", payload);
+      showToast("Registration successful!", "success");
+      navigate("/");
     } catch (error) {
-      console.log(error);
       showToast(
-        error.response?.data?.message ||
-          error.message ||
-          "Payment initialization failed",
+        error.response?.data?.message || error.message || "Registration failed",
         "error",
       );
     } finally {
@@ -324,10 +281,7 @@ const removeVideo = () => {
                 ← Back to Rules
               </button>
 
-              <div className={styles.checkoutFlex}>
-                {/* LEFT: Form fields */}
-                <form
-                  id="audition-form"
+              <form
                   className={styles.regForm}
                   onSubmit={handleSubmit}
                 >
@@ -387,7 +341,7 @@ const removeVideo = () => {
                   </div>
 
                   <div className={styles.field}>
-                    <label>Phone *</label>
+                    <label>Phone (Whatsapp number) *</label>
                     <input
                       type="tel"
                       name="phone"
@@ -404,6 +358,7 @@ const removeVideo = () => {
                       value={formData.category}
                       onChange={handleInputChange}
                       required
+                      style={{ height: "52px", padding: "14px 12px" }}
                     >
                       <option value="">Select a category...</option>
                       <option value="Singer">Singer</option>
@@ -467,6 +422,55 @@ const removeVideo = () => {
                     </div>
                   </div>
 
+                  <div className={styles.field}>
+                    <label>State of Origin *</label>
+                    <select
+                      name="state_of_origin"
+                      value={formData.state_of_origin}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="">Select state of origin...</option>
+                      <option>Abia</option>
+                      <option>Adamawa</option>
+                      <option>Akwa Ibom</option>
+                      <option>Anambra</option>
+                      <option>Bauchi</option>
+                      <option>Bayelsa</option>
+                      <option>Benue</option>
+                      <option>Borno</option>
+                      <option>Cross River</option>
+                      <option>Delta</option>
+                      <option>Ebonyi</option>
+                      <option>Edo</option>
+                      <option>Ekiti</option>
+                      <option>Enugu</option>
+                      <option>FCT - Abuja</option>
+                      <option>Gombe</option>
+                      <option>Imo</option>
+                      <option>Jigawa</option>
+                      <option>Kaduna</option>
+                      <option>Kano</option>
+                      <option>Katsina</option>
+                      <option>Kebbi</option>
+                      <option>Kogi</option>
+                      <option>Kwara</option>
+                      <option>Lagos</option>
+                      <option>Nasarawa</option>
+                      <option>Niger</option>
+                      <option>Ogun</option>
+                      <option>Ondo</option>
+                      <option>Osun</option>
+                      <option>Oyo</option>
+                      <option>Plateau</option>
+                      <option>Rivers</option>
+                      <option>Sokoto</option>
+                      <option>Taraba</option>
+                      <option>Yobe</option>
+                      <option>Zamfara</option>
+                    </select>
+                  </div>
+
                 <div className={styles.uploadSection}>
   <label
     style={{
@@ -475,45 +479,43 @@ const removeVideo = () => {
       display: "block",
     }}
   >
-    Audition Video *
+    Audition Photo *
   </label>
   {uploading ? (
     <div className={styles.uploadArea}>
       <div className={styles.uploadIcon}>⏳</div>
-      <div className={styles.uploadText}>Uploading Video...</div>
+      <div className={styles.uploadText}>Uploading Photo...</div>
     </div>
-  ) : formData.videoPreview ? (
+  ) : formData.photoPreview ? (
     <div className={styles.uploadPreview}>
-      <video
-        src={formData.videoPreview}
+      <img
+        src={formData.photoPreview}
+        alt="Audition"
         className={styles.uploadPreviewImg}
-        controls
       />
-      <span className={styles.uploadPreviewName}>
-        Video Ready
-      </span>
+      <span className={styles.uploadPreviewName}>Photo Ready</span>
       <button
         type="button"
         className={styles.uploadPreviewRemove}
-        onClick={removeVideo}
+        onClick={removePhoto}
       >
         ✕
       </button>
     </div>
   ) : (
     <div className={styles.uploadArea}>
-      <div className={styles.uploadIcon}>🎥</div>
+      <div className={styles.uploadIcon}>📷</div>
       <div className={styles.uploadText}>
-        Click to upload your audition video
+        Click to upload your audition photo
       </div>
       <div className={styles.uploadSub}>
-        MP4, WebM or MOV · Max 2-Minutes · Max 100MB
+        JPG, PNG or WEBP · Max 5MB
       </div>
       <input
         type="file"
-        accept="video/*"
+        accept="image/*"
         className={styles.uploadInput}
-        onChange={handleVideoUpload}
+        onChange={handlePhotoUpload}
         required
       />
     </div>
@@ -521,86 +523,20 @@ const removeVideo = () => {
 </div>
 
 
-                </form>
-
-                {/* RIGHT: Order Summary */}
-                <div className={styles.orderSummary}>
-                  <h3>Your Registration</h3>
-                  <div className={styles.summaryTable}>
-                    <div className={styles.summaryRow}>
-                      <span>NTS Season 4 Audition × 1</span>
-                      <span>₦10,000.00</span>
-                    </div>
-                    <div
-                      className={`${styles.summaryRow} ${styles.totalRow}`}
-                    >
-                      <span>Total</span>
-                      <span>₦10,000.00</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.paymentNotice}>
-                    <p>Secure payment via Paystack.</p>
-                  </div>
-
-                  <button
-                    type="submit"
-                    form="audition-form"
-                    className={styles.confirmBtn}
-                    disabled={loading}
-                  >
-                    {loading ? "Processing..." : "Confirm ₦10,000.00"}
-                  </button>
-                </div>
-              </div>
+                <button
+                  type="submit"
+                  className={styles.confirmBtn}
+                  disabled={loading}
+                >
+                  {loading ? "Processing..." : "Register"}
+                </button>
+              </form>
             </div>
           )}
         </div>
       </section>
 
-      {/* Payment Modal */}
-      {showModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            {paymentStatus === "success" ? (
-              <>
-                <div className={styles.successIcon}>✓</div>
-                <h2>Payment Successful!</h2>
-                <p>Your registration has been completed successfully.</p>
-                <button
-                  className={styles.modalBtn}
-                  onClick={() => navigate("/")}
-                >
-                  Go to Homepage
-                </button>
-              </>
-            ) : (
-              <>
-                <div className={styles.failIcon}>✕</div>
-                <h2>Payment Failed</h2>
-                <p>We're sorry, but your transaction could not be processed.</p>
-                <div className={styles.modalBtnGroup}>
-                  <button
-                    className={styles.modalBtn}
-                    onClick={() => {
-                      setShowModal(false);
-                      setStep(2);
-                    }}
-                  >
-                    Retry Payment
-                  </button>
-                  <button
-                    className={styles.modalBtnSecondary}
-                    onClick={() => navigate("/")}
-                  >
-                    Go to Homepage
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+
 
       <Footer />
     </>
