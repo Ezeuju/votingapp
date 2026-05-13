@@ -65,6 +65,14 @@
   margin-bottom: 20px;
   cursor: pointer;
 }
+.checkboxLabelx {
+ 
+  margin-right: 10px;
+  font-weight: 600;
+  
+
+  cursor: pointer;
+}
 
 /* Form & Checkout Layout */
 .checkoutFlex {

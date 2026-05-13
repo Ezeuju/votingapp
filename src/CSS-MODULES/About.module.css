@@ -1,3 +1,4 @@
+/* ─── Page Wrapper ─────────────────────────────────────────── */
 .aboutPage {
   background-color: #fcfcfc;
   color: #222;
@@ -5,7 +6,7 @@
   overflow-x: hidden;
 }
 
-/* Header */
+/* ─── Section 1: Hero Header ────────────────────────────────── */
 .headerSection {
   background: linear-gradient(135deg, #004d00 0%, #008751 100%);
   color: white;
@@ -23,7 +24,13 @@
   color: #00ff88;
 }
 
-/* Flex Container General */
+.tagline {
+  margin-top: 16px;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* ─── Flex Container (shared) ───────────────────────────────── */
 .flexRow {
   display: flex;
   flex-wrap: wrap;
@@ -33,7 +40,7 @@
   align-items: center;
 }
 
-/* Evolution */
+/* ─── Section 2: Evolution ──────────────────────────────────── */
 .evolutionSection {
   padding: 80px 5%;
 }
@@ -56,11 +63,11 @@
 }
 
 .rewardCard {
-  flex: 0 1 20px;
+  flex: 0 1 280px;
   background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   text-align: center;
   border-top: 5px solid #008751;
 }
@@ -72,7 +79,7 @@
   margin: 15px 0;
 }
 
-/* Cards Section */
+/* ─── Section 3: Info Cards ─────────────────────────────────── */
 .aboutCards {
   padding: 60px 5%;
   background-color: #f4f4f4;
@@ -104,10 +111,16 @@
   margin-bottom: 15px;
 }
 
-/* Presence Section */
+/* ─── Section 4 & 6: Presence / Tour ───────────────────────── */
 .presenceSection {
   padding: 80px 5%;
   text-align: center;
+}
+
+.presenceSection h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
 }
 
 .presenceFlex {
@@ -119,16 +132,24 @@
 }
 
 .presenceBox {
-  flex: 1 1 400px;
+  flex: 1 1 280px;
   background: #001a0d;
   color: white;
   padding: 30px;
   border-radius: 10px;
+  text-align: left;
 }
 
 .presenceBox h4 {
   color: #00ff88;
   margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.presenceBox p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  opacity: 0.85;
 }
 
 .ownerInfo {
@@ -137,24 +158,29 @@
   border-radius: 8px;
   max-width: 800px;
   margin: 0 auto;
+  line-height: 1.7;
+  font-size: 1rem;
 }
 
-/* Goals Section */
+/* ─── Section 5: Goals & Benefits ───────────────────────────── */
 .goalsSection {
   padding: 80px 5%;
   background: white;
 }
 
-.goalsBox, .benefitsBox {
+.goalsBox,
+.benefitsBox {
   flex: 1;
   min-width: 300px;
 }
 
-.goalsBox h3, .benefitsBox h3 {
+.goalsBox h3,
+.benefitsBox h3 {
   color: #008751;
   border-left: 4px solid #008751;
   padding-left: 15px;
   margin-bottom: 20px;
+  font-size: 1.2rem;
 }
 
 .goalsSection ul {
@@ -174,12 +200,72 @@
   margin-right: 10px;
 }
 
-/* Footer CTA */
+/* ─── Section 7: Open Door Policy ───────────────────────────── */
+.openDoorSection {
+  padding: 80px 5%;
+  background: #f4f4f4;
+}
+
+.openDoorInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 0;
+}
+
+.openDoorSection h2 {
+  color: #008751;
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.openDoorSection p {
+  max-width: 750px;
+  margin: 0 auto 20px;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.openDoorLink {
+  margin-top: 24px;
+  font-weight: 700;
+  color: #008751;
+}
+
+.openDoorLink a {
+  color: #008751;
+  text-decoration: underline;
+}
+
+/* ─── Footer CTA ────────────────────────────────────────────── */
 .ctaFooter {
   background: #001a0d;
   color: white;
   padding: 80px 5%;
   text-align: center;
+}
+
+.ctaFooter h2 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+}
+
+.ctaFooter p {
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
 }
 
 .applyBtn {
@@ -191,7 +277,6 @@
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-top: 30px;
   transition: 0.3s;
 }
 
@@ -201,17 +286,44 @@
   transform: scale(1.05);
 }
 
-/* Mobile Adjustments */
+.partnerBtn {
+  display: inline-block;
+  padding: 18px 40px;
+  border: 2px solid #00ff88;
+  color: #00ff88;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.partnerBtn:hover {
+  background: #00ff88;
+  color: #001a0d;
+  transform: scale(1.05);
+}
+
+/* ─── Mobile ────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .flexRow {
     flex-direction: column;
   }
-  
+
   .headerSection {
     padding: 60px 5%;
   }
 
   .mainTitle {
     font-size: 2.2rem;
+  }
+
+  .presenceBox {
+    flex: 1 1 100%;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
   }
 }
