@@ -25,6 +25,7 @@ const Navbar = () => {
         <div className={`${styles.navContent} ${menuOpen ? styles.showMenu : ''}`}>
           <ul className={styles.navLinks}>
             <li><a href="/" onClick={() => setMenuOpen(false)}>Home</a></li>
+            <li><a href="/about" onClick={() => setMenuOpen(false)}>About</a></li>
             <li><a href="/timeline" onClick={() => setMenuOpen(false)}>Timeline</a></li>
             <li><a href="/auditiony" onClick={() => setMenuOpen(false)}>Auditions</a></li>
             <li><a href="/contestants" onClick={() => setMenuOpen(false)}>Contestants</a></li>

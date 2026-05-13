@@ -29,6 +29,7 @@ import ContestantProfile from './Screens/ContestantProfile';
 import PublicContestantProfile from './Screens/PublicContestantProfile';
 import VotingPage from './Screens/VotingPage';
 import VoteCallback from './Screens/VoteCallback';
+import About from './COMPONENTS/About';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/rules' element={<Rules />} />
+        <Route path='/about' element={<About />} />
         <Route path='/tickets' element={<TicketPage />} />
         <Route path='/contestants' element={<Contestants />} />
         <Route path='/sponsors' element={<Sponsors />} />

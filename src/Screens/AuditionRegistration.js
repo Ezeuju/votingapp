@@ -298,6 +298,17 @@ const removeVideo = () => {
               </div>
 
               <div className={styles.consentSection}>
+                <label className={styles.checkboxLabelx}>
+                  <input
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={() => setAgreed(!agreed)}
+                  />
+                            I hereby acknowledge that Naija Talent Show organisation is authorized to utilize my photograph, video content or any related information as a registered candidate for Naija Talent show.
+                </label>
+
+              </div>
+              <div className={styles.consentSection}>
                 <label className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
