@@ -167,7 +167,7 @@ const DashboardDonations = () => {
       </div>
 
       {/* Pagination */}
-      {metadata.pages > 1 && (
+      {metadata.pages < 1 && (
         <div className={styles.pagination}>
           <button
             className={styles.btn}

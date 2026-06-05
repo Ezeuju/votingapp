@@ -20,7 +20,7 @@ const Footer = () => {
             </p>
             <div className={styles.socialIcons}>
               {/* Updated with your specific URLs */}
-              <a href="https://www.instagram.com/naijatalentshows" target="_blank" rel="noopener noreferrer" title="Instagram">
+              <a href="https://www.instagram.com/naijatalentshow_01?igsh=MTl3ejZxbzB0OTR4OQ==" target="_blank" rel="noopener noreferrer" title="Instagram">
                 <FaInstagram />
               </a>
               <a href="https://x.com/naijat_show" target="_blank" rel="noopener noreferrer" title="X (Twitter)">
