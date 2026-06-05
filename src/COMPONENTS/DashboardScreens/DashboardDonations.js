@@ -42,7 +42,7 @@ const DashboardDonations = () => {
 
   useEffect(() => {
     fetchStats();
-  }, [donors]);
+  }, []);
 
   useEffect(() => {
     fetchDonors();
@@ -124,7 +124,15 @@ const DashboardDonations = () => {
             {loading ? (
               <tr><td colSpan={8} className={styles.emptyRow}>Loading...</td></tr>
             ) : donors.length === 0 ? (
-              <tr><td colSpan={8} className={styles.emptyRow}>No donations found</td></tr>
+              <tr>
+                <td colSpan={8} className={styles.emptyRow}>
+                  <div style={{ textAlign: 'center', padding: '40px', color: '#FFD700' }}>
+                    <div style={{ fontSize: 48 }}>💰</div>
+                    <div style={{ fontSize: 18, fontWeight: 600, marginTop: 8 }}>No Donations Found</div>
+                    <div style={{ fontSize: 13, color: '#aaa', marginTop: 4 }}>Donations will appear here once added.</div>
+                  </div>
+                </td>
+              </tr>
             ) : (
               donors.map(d => (
                 <tr key={d._id} className={styles.clickableRow} onClick={() => handleView(d._id)}>
