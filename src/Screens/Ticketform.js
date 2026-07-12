@@ -22,7 +22,7 @@ const TIER_STYLES = {
 
 const EMPTY_FORM = { name: '', email: '', ticketId: '' };
 
-const SELAR_URL = 'https://selar.com/57744hc123';
+const SELAR_URL = 'https://selar.com/h39441u317';
 const REDIRECT_DELAY = 5; // seconds
 
 const TicketForm = ({ onSubmit }) => {
