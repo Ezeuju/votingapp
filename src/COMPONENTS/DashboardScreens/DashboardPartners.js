@@ -16,9 +16,8 @@ const DashboardPartners = () => {
   const [viewEntry, setViewEntry] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [confirmId, setConfirmId] = useState(null);
-  const [logoFile, setLogoFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [logoPreview, setLogoPreview] = useState('');
   const [formData, setFormData] = useState({
     organization_name: '',
@@ -120,7 +119,6 @@ const DashboardPartners = () => {
         const uploadResponse = await uploadFile(file);
         const logoUrl = uploadResponse.data.url;
         setFormData({ ...formData, logo_url: logoUrl });
-        setLogoFile(file);
         const reader = new FileReader();
         reader.onload = (event) => setLogoPreview(event.target.result);
         reader.readAsDataURL(file);
@@ -148,7 +146,6 @@ const DashboardPartners = () => {
         partnership_goal: '',
         logo_url: ''
       });
-      setLogoFile(null);
       setLogoPreview('');
       fetchStats();
       fetchPartners();
@@ -427,7 +424,6 @@ const DashboardPartners = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        setLogoFile(null);
                         setLogoPreview('');
                       }}
                       style={{
@@ -460,7 +456,6 @@ const DashboardPartners = () => {
             <div className={styles.modalActions}>
               <button type="button" className={`${styles.btn} ${styles.btnOutline}`} onClick={() => {
                 setShowAddModal(false);
-                setLogoFile(null);
                 setLogoPreview('');
               }}>
                 Cancel

@@ -10,7 +10,6 @@ const Sponsor = () => {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState("");
   const [formData, setFormData] = useState({
     organization_name: "",
@@ -48,7 +47,6 @@ const Sponsor = () => {
         const uploadResponse = await uploadFile(file);
         const logoUrl = uploadResponse.data.url;
         setFormData({ ...formData, logo_url: logoUrl });
-        setLogoFile(file);
         const reader = new FileReader();
         reader.onload = (event) => setLogoPreview(event.target.result);
         reader.readAsDataURL(file);
@@ -79,7 +77,6 @@ const Sponsor = () => {
         partnership_goal: "",
         logo_url: "",
       });
-      setLogoFile(null);
       setLogoPreview("");
       setTimeout(() => setSuccessMessage(""), 8000);
     } catch (error) {
@@ -282,7 +279,6 @@ const Sponsor = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          setLogoFile(null);
                           setLogoPreview("");
                         }}
                         style={{

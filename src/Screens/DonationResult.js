@@ -23,12 +23,10 @@ const DonationResult = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState(null);
-  const [reference, setReference] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const ref = searchParams.get('ref') || searchParams.get('reference') || '';
-    setReference(ref);
 
     const verify = async () => {
       if (!ref) {

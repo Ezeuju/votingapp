@@ -4,43 +4,43 @@ import Navbar from '../COMPONENTS/Navbar';
 import Footer from '../COMPONENTS/Footer';
 import { getPublicTimelines } from '../services/api';
 
+// Fallback/Default roadmap events in case there are no announcements yet
+const defaultEvents = [
+  {
+    date: "May 2026",
+    title: "Audition Registration Opens",
+    description: "Registration begins for all talent categories including singers, dancers, and innovators across Nigeria and the USA.",
+    status: "upcoming"
+  },
+  {
+    date: "July 15 - August 30, 2026",
+    title: "Nationwide Audition Tour",
+    description: "Live auditions take place in major hubs: Lagos, Abuja, Port Harcourt, Enugu, and Uyo.",
+    status: "upcoming"
+  },
+  {
+    date: "September 5, 2026",
+    title: "Shortlisting & Mentorship",
+    description: "Successful candidates are paired with professional mentors like Bishop Dr. Daniel Jack and Pastor Moses Eskor for coaching.",
+    status: "upcoming"
+  },
+  {
+    date: "October 2026",
+    title: "The Live Shows Begin",
+    description: "Contestants perform on the grand stage. Public voting opens for fans to support their favorites with NTS points.",
+    status: "upcoming"
+  },
+  {
+    date: "December 20, 2026",
+    title: "Grand Finale",
+    description: "The top-rated acts compete for the grand prize and international recognition in the ultimate talent-recovery showpiece.",
+    status: "upcoming"
+  }
+];
+
 const Timeline = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Fallback/Default roadmap events in case there are no announcements yet
-  const defaultEvents = [
-    {
-      date: "May 2026",
-      title: "Audition Registration Opens",
-      description: "Registration begins for all talent categories including singers, dancers, and innovators across Nigeria and the USA.",
-      status: "upcoming"
-    },
-    {
-      date: "July 15 - August 30, 2026",
-      title: "Nationwide Audition Tour",
-      description: "Live auditions take place in major hubs: Lagos, Abuja, Port Harcourt, Enugu, and Uyo.",
-      status: "upcoming"
-    },
-    {
-      date: "September 5, 2026",
-      title: "Shortlisting & Mentorship",
-      description: "Successful candidates are paired with professional mentors like Bishop Dr. Daniel Jack and Pastor Moses Eskor for coaching.",
-      status: "upcoming"
-    },
-    {
-      date: "October 2026",
-      title: "The Live Shows Begin",
-      description: "Contestants perform on the grand stage. Public voting opens for fans to support their favorites with NTS points.",
-      status: "upcoming"
-    },
-    {
-      date: "December 20, 2026",
-      title: "Grand Finale",
-      description: "The top-rated acts compete for the grand prize and international recognition in the ultimate talent-recovery showpiece.",
-      status: "upcoming"
-    }
-  ];
 
   useEffect(() => {
     const fetchAnnouncementsForTimeline = async () => {

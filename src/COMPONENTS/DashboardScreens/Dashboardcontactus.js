@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../../CSS-MODULES/Contactus.module.css';
 import shared from './Dashboardshared.module.css';
 import DashboardModal from './Dashboardmodal';
@@ -21,12 +21,7 @@ const DashboardContactUs = () => {
   const [filter, setFilter] = useState('All');
   const [confirmId, setConfirmId] = useState(null);
 
-  useEffect(() => {
-    fetchMessages();
-    fetchStats();
-  }, [filter, search]);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     setLoading(true);
     try {
       const params = { search };
@@ -38,16 +33,21 @@ const DashboardContactUs = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter, search, showToast]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await contactApi.admin.getStats();
       setStats(response.data || { total_messages: 0, total_unread: 0, total_read: 0 });
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchMessages();
+    fetchStats();
+  }, [fetchMessages, fetchStats]);
 
   const handleDelete = async () => {
     const id = confirmId;

@@ -19,7 +19,6 @@ const PublicContestantProfile = () => {
   const navigate = useNavigate();
 
   const [contestant, setContestant] = useState(null);
-  const [allContestants, setAllContestants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rank, setRank] = useState(null);
 
@@ -33,7 +32,6 @@ const PublicContestantProfile = () => {
         else if (data.data && Array.isArray(data.data)) data = data.data;
 
         const list = Array.isArray(data) ? data : [];
-        setAllContestants(list);
 
         // Sort by votes to determine rank
         const sorted = [...list].sort((a, b) => (b.votes || 0) - (a.votes || 0));

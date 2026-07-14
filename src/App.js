@@ -25,7 +25,6 @@ import ProtectedRoute from './COMPONENTS/ProtectedRoute';
 import Thankyou from './Screens/Thankyou';
 import TwitchStream from './Screens/TwitchStream';
 import TicketForm from './Screens/Ticketform';
-import ContestantProfile from './Screens/ContestantProfile';
 import PublicContestantProfile from './Screens/PublicContestantProfile';
 import VotingPage from './Screens/VotingPage';
 import VoteCallback from './Screens/VoteCallback';

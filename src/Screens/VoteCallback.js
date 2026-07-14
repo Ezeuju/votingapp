@@ -57,7 +57,6 @@ const VoteCallback = () => {
 
   const isSuccess = result?.payment_status === 'success' || result?.status === 'success';
   const votesAdded = result?.votes_added || 0;
-  const contestantId = result?.contestant_id || result?.user_id;
 
   return (
     <>

@@ -4,7 +4,6 @@ import { getPublicJudges } from '../services/api';
 
 const Judges = () => {
   const [judges, setJudges] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   // Default mystery seats if not enough judges are returned
   const defaultSeats = [
@@ -23,8 +22,6 @@ const Judges = () => {
         setJudges(data);
       } catch (err) {
         console.error("Failed to load judges", err);
-      } finally {
-        setLoading(false);
       }
     };
     fetchJudges();

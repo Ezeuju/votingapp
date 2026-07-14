@@ -6,7 +6,6 @@ import { STATUS_MAP } from './Dashboarddata';
 import { adminApi } from '../../services/adminApi';
 import { planApi } from '../../services';
 
-const TICKET_TYPE_BADGE = {};
 const getBadge = (ticketType) => {
   if (!ticketType) return 'badgeInfo';
   const l = ticketType.toLowerCase();
@@ -43,7 +42,7 @@ const DashboardTickets = () => {
   const [searchInput, setSearchInput] = useState('');
   const [pageNo, setPageNo]           = useState(1);
   const [totalPages, setTotalPages]   = useState(1);
-  const [totalCount, setTotalCount]   = useState(0);
+  const [, setTotalCount]   = useState(0);
   const limitNo = 10;
 
   // Modals
